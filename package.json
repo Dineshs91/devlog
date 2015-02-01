@@ -2,7 +2,7 @@
 	"name": "devlog",
 	"version": "0.0.1",
 	"description": "A log book for developers",
-	"repository": "",
+	"repository": "https://github.com/Dineshs91/devlog",
 	"license": "",
 	"devDependencies": {
 		"bower": "^1.3.1",
