@@ -20,7 +20,7 @@
         "update-webdriver": "webdriver-manager update",
         "e2e": "protractor test/protractor-conf.js",
         "pree2e": "npm run update-webdriver",
-        "unittest": "node node_modules/karma/bin/karma start test/karma.conf",
+        "unittest": "node node_modules/karma/bin/karma start test/karma.conf.js",
         "unittest-single-run": "node_modules/karma/bin/karma start test/karma.conf.js --single-run"
     }
 }
