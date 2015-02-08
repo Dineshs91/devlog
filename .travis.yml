@@ -1,0 +1,10 @@
+language: node_js
+node_js:
+  - 0.10
+
+before_script:
+  - npm run update-webdriver
+
+script:
+  - npm run unittest
+  - npm run e2e
