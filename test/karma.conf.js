@@ -17,7 +17,6 @@ module.exports = function(config) {
         browsers: ['NodeWebkit'],
 
         plugins: [
-            'karma-chrome-launcher',
             'karma-jasmine',
             'karma-nodewebkit-launcher'
         ],
