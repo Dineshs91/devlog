@@ -10,7 +10,8 @@
         "nodewebkit": "~0.11.6",
         "karma": "^0.12.16",
         "karma-nodewebkit-launcher": "~0.0.6",
-        "protractor": "~1.0.0"	    
+        "protractor": "~1.0.0",
+        "nedb": "~1.1.1"
     },
     "scripts": {
         "postinstall": "bower install",
