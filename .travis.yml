@@ -8,5 +8,4 @@ before_script:
   - npm run update-webdriver
 
 script:
-  - npm run unittest-single-run
   - npm run e2e
