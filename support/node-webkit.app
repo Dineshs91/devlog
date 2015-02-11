@@ -1,1 +1,0 @@
-../node_modules/nodewebkit/nodewebkit/node-webkit.app

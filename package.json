@@ -12,14 +12,19 @@
         "karma-jasmine": "~0.1.5",
         "karma-nodewebkit-launcher": "~0.0.6",
         "protractor": "~1.0.0",
-        "nedb": "~1.1.1"
+        "nedb": "~1.1.1",
+        "grunt": "^0.4.5",
+        "lodash": "~2.4.1",
+        "tar.gz": "~0.1.1",
+        "unzip": "~0.1.9"
     },
     "scripts": {
+        "setup": "grunt setup",
         "postinstall": "bower install",
         "preupdate-webdriver": "npm install",
         "update-webdriver": "webdriver-manager update",
         "e2e": "protractor test/protractor-conf.js",
-        "pree2e": "npm run update-webdriver",
+        "pree2e": "npm run update-webdriver && npm run setup",
         "unittest": "node node_modules/karma/bin/karma start test/karma.conf.js",
         "unittest-single-run": "node_modules/karma/bin/karma start test/karma.conf.js --single-run"
     }

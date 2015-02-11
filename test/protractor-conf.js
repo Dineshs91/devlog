@@ -3,10 +3,10 @@
 var path = require('path');
 
 exports.config = {
-    chromeDriver: '../support/chromedriver', // relative path to node-webkit's chromedriver
+    chromeDriver: './support/chromedriver', // relative path to node-webkit's chromedriver
     directConnect: true, // starting Selenium server isn't required in our case
     specs: ['e2e/**/*.js'],
-    baseUrl: path.resolve('index.html'),
+    baseUrl: path.resolve('../index.html'),
     rootElement: 'html', // specify a correct element where you bootstrap your AngularJS app, 'body' by default
 
     onPrepare: function() {
