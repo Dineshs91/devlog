@@ -18,7 +18,6 @@ module.exports = function(grunt) {
 
         var done = this.async();
         var http = require('http');
-        var request = require('request');
         var unzip = require('unzip');
         var symLinkFile = config.devSymlink.file;
         var symLinkPath = path.normalize(config.devSymlink.path);
