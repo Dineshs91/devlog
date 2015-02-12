@@ -9,3 +9,4 @@ before_script:
 
 script:
   - npm run e2e
+  - npm run unittest-single-run
