@@ -18,13 +18,25 @@ module.exports = function(config) {
 
         plugins: [
             'karma-jasmine',
-            'karma-nodewebkit-launcher'
+            'karma-nodewebkit-launcher',
+            'karma-coverage'
         ],
+
+        preprocessors: {
+          '../app/js/**/*.js': 'coverage',
+        },
 
         junitReporter: {
             outputFile: 'test_out/unit.xml',
             suite: 'unit'
-        }
+        },
+
+        coverageReporter: {
+            type: 'text-summary',
+            dir: 'coverage/'
+        },
+
+        reporters: ['progress', 'coverage']
     
     });
 };
