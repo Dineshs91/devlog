@@ -33,7 +33,7 @@ module.exports = function(config) {
 
         coverageReporter: {
             type: 'text-summary',
-            dir: 'coverage/'
+            dir: 'test/coverage/'
         },
 
         reporters: ['progress', 'coverage']
