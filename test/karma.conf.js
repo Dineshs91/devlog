@@ -37,7 +37,9 @@ module.exports = function(config) {
             dir: 'test/coverage/'
         },
 
-        reporters: ['progress', 'coverage', 'junit']
+        reporters: ['progress', 'coverage', 'junit'],
+
+        logLevel: config.LOG_INFO
     
     });
 };
