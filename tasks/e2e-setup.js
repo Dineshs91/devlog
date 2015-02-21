@@ -65,7 +65,9 @@ module.exports = function(grunt) {
                     .on('finish', function() {
                         fs.chmodSync(chromeDriverFile, 0755);
                         grunt.log.writeln('e2e setup is complete.');
-                        cbdone();
+                        // Unzipped content has less size than the original size.
+                        // Surprisingly commenting cbdone(), fixes the issue.                         
+                        //cbdone();
                     });
             }
         };
