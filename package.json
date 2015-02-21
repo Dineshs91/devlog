@@ -12,6 +12,7 @@
         "karma-jasmine": "~0.2.0",
         "karma-nodewebkit-launcher": "https://github.com/nDmitry/karma-nodewebkit-launcher/tarball/master",
         "karma-coverage": "^0.2.6",
+        "karma-junit-reporter": "^0.2.2",
         "protractor": "~1.0.0",
         "nedb": "~1.1.1",
         "grunt": "^0.4.5",

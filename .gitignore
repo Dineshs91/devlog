@@ -4,3 +4,4 @@ bower_components/
 *.log
 test/support
 coverage
+test_out/

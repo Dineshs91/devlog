@@ -19,7 +19,8 @@ module.exports = function(config) {
         plugins: [
             'karma-jasmine',
             'karma-nodewebkit-launcher',
-            'karma-coverage'
+            'karma-coverage',
+            'karma-junit-reporter'
         ],
 
         preprocessors: {
@@ -36,7 +37,7 @@ module.exports = function(config) {
             dir: 'test/coverage/'
         },
 
-        reporters: ['progress', 'coverage']
+        reporters: ['progress', 'coverage', 'junit']
     
     });
 };
