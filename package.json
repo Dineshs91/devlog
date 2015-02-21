@@ -33,8 +33,9 @@
     "update-webdriver": "webdriver-manager update",
     "pree2e": "npm run update-webdriver && npm run setup",
     "e2e": "protractor test/protractor-conf.js",
-    "preunittest": "grunt jshint",
     "unittest": "node node_modules/karma/bin/karma start test/karma.conf.js",
-    "unittest-single-run": "node_modules/karma/bin/karma start test/karma.conf.js --single-run"
+    "unittest-single-run": "node_modules/karma/bin/karma start test/karma.conf.js --single-run",
+    "pretest": "grunt jshint",
+    "test": "npm run unittest-single-run && npm run e2e"
   }
 }
