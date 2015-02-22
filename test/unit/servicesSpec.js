@@ -1,6 +1,7 @@
 describe("DevLog Services", function() {
     var dbService;
     var testKey;
+    var testDoc2Key;
 
     var testDoc = {
         'title': 'Test',
@@ -9,6 +10,14 @@ describe("DevLog Services", function() {
         'is_removed': false,
         'tags': ['test']
     };
+    
+    var testDoc2 = {
+        'title': 'Test 2',
+        'content': 'Test content 2',
+        'timestamp': '1424546853',
+        'is_removed': false,
+        'tags': ['update']
+    };
 
     var updateDoc = {
         'title': 'Test update',
@@ -16,6 +25,10 @@ describe("DevLog Services", function() {
         'timestamp': '1424546854',
         'is_removed': false,
         'tags': ['test', 'update']
+    };
+    
+    var testTag = {
+        'tag': 'test'
     };
 
     beforeEach(module('devLog'));
@@ -32,7 +45,7 @@ describe("DevLog Services", function() {
         var promise = dbService.insertLog(testDoc);
         
         promise.then(function(newDoc) {
-            testKey = newDoc._id;
+            testKey = newDoc.key;
             done();
         });
         
@@ -75,6 +88,15 @@ describe("DevLog Services", function() {
             done();
         });
     });
+    
+    it('should get all the logs with the given tag', function(done) {
+        var promise = dbService.getLogsWithTag('test');
+        
+        promise.then(function(logs) {
+            expect(logs.length).toBe(1);
+            done();
+        });
+    });
 
     it('should update log', function(done) {
         // Add key to updateDoc
@@ -92,6 +114,34 @@ describe("DevLog Services", function() {
                 expect(log.tags[i]).toBe(updateDoc.tags[i]);
             }
             expect(log.timestamp).toBe(updateDoc.timestamp);
+            done();
+        });
+    });
+    
+    it('should insert a second log', function(done) {
+        var promise = dbService.insertLog(testDoc2);
+        
+        promise.then(function(log) {
+            testDoc2Key = log.key;
+            done();
+        });
+    });
+    
+    it('should get all the logs with the given tag after update',
+    function(done) {
+        var promise = dbService.getLogsWithTag('update');
+        
+        promise.then(function(logs) {
+            expect(logs.length).toBe(2);
+            done();
+        });
+    });
+    
+    it('should permanently delete second log', function(done) {
+        var promise = dbService.permanentDelete(testDoc2Key);
+        
+        promise.then(function(numRemoved) {
+            expect(numRemoved).toBe(1);
             done();
         });
     });
@@ -116,6 +166,34 @@ describe("DevLog Services", function() {
             return getAllLogsPromise;
         }).then(function(logs) {
             expect(logs.length).toBe(0);
+            done();
+        });
+    });
+    
+    it('should insert a tag', function(done) {
+        var promise = dbService.insertTag(testTag);
+        
+        promise.then(function(tag) {
+            expect(tag.tag).toBe(testTag.tag);
+            done();
+        });
+    });
+    
+    it('should get all tags', function(done) {
+        var promise = dbService.getAllTags();
+        
+        promise.then(function(tags) {
+            expect(tags.length).toBe(1);
+            expect(tags[0].tag).toBe(testTag.tag);
+            done();
+        });
+    });
+    
+    it('should remove a tag', function(done) {
+        var promise = dbService.removeTag(testTag.tag);
+        
+        promise.then(function(numRemoved) {
+            expect(numRemoved).toBe(1);
             done();
         });
     });

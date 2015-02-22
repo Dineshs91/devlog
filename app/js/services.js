@@ -2,45 +2,70 @@ var path = require('path');
 var gui = require('nw.gui');
 var App = gui.App;
 var Datastore = require('nedb');
-var db = new Datastore({
+var db = {};
+
+/*
+    db that holds the logs.
+*/
+db.logs = new Datastore({
     filename: path.join(App.dataPath, 'db/log.db'),
     autoload: true
 });
 
+/*
+    db that holds only the unique tag names.
+*/
+db.tags = new Datastore({
+    filename: path.join(App.dataPath, 'db/tag.db'),
+    autoload: true
+});
+
+/*
+    Enforce an unique constraint on tag.
+*/
+db.tags.ensureIndex({ fieldName: 'tag', unique: true }, function(err) {
+    if(err) {
+        console.log(err);
+    }
+});
+
+/*
+    An angular service, for all db related transactions.
+*/
 devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
     
     /*
         Convert nedb's _id to key to be used in the view.
         nedb still uses _id.
     */
-    var convertIdToKey = function(logs) {
-        var convertedLogs = [];
-        var logLength = logs.length;
+    var convertIdToKey = function(docs) {
+        var convertedDocs = [];
+        var docLength = docs.length;
         
-        for (i = 0; i < logLength; i++) {
-            var log = logs[i];
-            convertedLog = {};
-            for ( var ele in log) {
-                if(!log.hasOwnProperty(ele)) {
+        for (i = 0; i < docLength; i++) {
+            var doc = docs[i];
+            convertedDoc = {};
+            for ( var ele in doc) {
+                if(!doc.hasOwnProperty(ele)) {
                     continue;
                 }
                 if(ele === '_id') {
-                    convertedLog.key = log[ele];
+                    convertedDoc.key = doc[ele];
                 } else {
-                    convertedLog[ele] = log[ele];
+                    convertedDoc[ele] = doc[ele];
                 }
             }
 
-            convertedLogs.push(convertedLog);
+            convertedDocs.push(convertedDoc);
         }
 
-        return convertedLogs;
+        return convertedDocs;
     };
     
     this.getLog = function(key) {
         var deferred = $q.defer();
 
-        db.findOne({_id: key}, function(err, doc) {
+        db.logs.findOne({_id: key}, function(err, doc) {
             if(!err) {
                 doc = convertIdToKey([doc])[0];
                 deferred.resolve(doc);
@@ -57,7 +82,7 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
     this.getLogs = function() {
         var deferred = $q.defer();
 
-        db.find({}, function(err, docs) {
+        db.logs.find({}, function(err, docs) {
             if(!err) {
                 docs = convertIdToKey(docs);
                 deferred.resolve(docs);
@@ -70,12 +95,30 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
 
         return deferred.promise;
     };
+    
+    this.getLogsWithTag = function(tag) {
+        var deferred = $q.defer();
+        
+        db.logs.find({tags: tag}, function(err, docs) {
+            if(!err) {
+                docs = convertIdToKey(docs);
+                deferred.resolve(docs);
+            } else {
+                deferred.reject(err);
+            }
+            
+            $rootScope.$apply();
+        });
+        
+        return deferred.promise;
+    };
 
     this.insertLog = function(doc) {
         var deferred = $q.defer();
 
-        db.insert(doc, function(err, newDoc) {
+        db.logs.insert(doc, function(err, newDoc) {
             if(!err) {
+                newDoc = convertIdToKey([newDoc])[0];
                 deferred.resolve(newDoc);
             } else {
                 deferred.reject(err);
@@ -90,7 +133,8 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
     this.updateLog = function(doc) {
         var deferred = $q.defer();
 
-        db.update({_id: doc.key}, {$set: {content: doc.content, title: doc.title, timestamp: doc.timestamp, tags: doc.tags}}, {},
+        db.logs.update({_id: doc.key}, {$set: {content: doc.content, title: doc.title,
+            timestamp: doc.timestamp, tags: doc.tags}}, {},
         function(err) {
             if(!err) {
                 deferred.resolve();
@@ -110,7 +154,7 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
     this.removeLog = function(key) {
         var deferred = $q.defer();
 
-        db.update({_id: key}, {$set: {is_removed: true}}, function(err) {
+        db.logs.update({_id: key}, {$set: {is_removed: true}}, function(err) {
             if(!err) {
                 deferred.resolve();
             } else {
@@ -132,9 +176,9 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
     this.permanentDelete = function(key) {
         var deferred = $q.defer();
 
-        db.remove({_id: key}, function(err) {
+        db.logs.remove({_id: key}, function(err, numRemoved) {
             if(!err) {
-                deferred.resolve();
+                deferred.resolve(numRemoved);
             } else {
                 deferred.reject(err);
             }
@@ -142,6 +186,54 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
             $rootScope.$apply();
         });
 
+        return deferred.promise;
+    };
+    
+    this.insertTag = function(tag) {
+        var deferred = $q.defer();
+        
+        db.tags.insert(tag, function(err, newDoc) {
+            if(!err) {
+                deferred.resolve(newDoc);
+            } else {
+                deferred.reject(err);
+            }
+            
+            $rootScope.$apply();
+        });
+        
+        return deferred.promise;
+    };
+    
+    this.removeTag = function(tag) {
+        var deferred = $q.defer();
+        
+        db.tags.remove({tag: tag}, function(err, numRemoved) {
+            if(!err) {
+                deferred.resolve(numRemoved);
+            } else {
+                deferred.reject();
+            }
+            
+            $rootScope.$apply();
+        });
+        
+        return deferred.promise;
+    };
+
+    this.getAllTags = function() {
+        var deferred = $q.defer();
+        
+        db.tags.find({}, function(err, tags) {
+            if(!err) {
+                deferred.resolve(tags);
+            } else {
+                deferred.reject(err);
+            }
+            
+            $rootScope.$apply();
+        });
+        
         return deferred.promise;
     };
 }]);
