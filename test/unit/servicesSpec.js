@@ -38,7 +38,7 @@ describe("DevLog Services", function() {
     }));
 
     it('should contain a dbService', function() {
-        expect(dbService).toBeDefined();
+        expect(dbService).not.toBe(null);
     });
 
     it('should insert a log', function(done) {
@@ -53,7 +53,7 @@ describe("DevLog Services", function() {
     });
 
     it('should get all the logs', function(done) {
-        var promise = dbService.getLogs();
+        var promise = dbService.getAllLogs();
 
         promise.then(function(logs) {
             expect(logs).toBeDefined();
@@ -160,7 +160,7 @@ describe("DevLog Services", function() {
     
     it('should remove log permanently', function(done) {
         var promise = dbService.permanentDelete(testKey);
-        var getAllLogsPromise = dbService.getLogs();
+        var getAllLogsPromise = dbService.getAllLogs();
 
         promise.then(function() {
             return getAllLogsPromise;

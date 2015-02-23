@@ -79,7 +79,7 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
         return deferred.promise;
     };
  
-    this.getLogs = function() {
+    this.getAllLogs = function() {
         var deferred = $q.defer();
 
         db.logs.find({}, function(err, docs) {
