@@ -65,10 +65,10 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
     this.getLog = function(key) {
         var deferred = $q.defer();
 
-        db.logs.findOne({_id: key}, function(err, doc) {
+        db.logs.findOne({_id: key}, function(err, log) {
             if(!err) {
-                doc = convertIdToKey([doc])[0];
-                deferred.resolve(doc);
+                log = convertIdToKey([log])[0];
+                deferred.resolve(log);
             } else {
                 deferred.reject(err);
             }
@@ -82,10 +82,10 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
     this.getAllLogs = function() {
         var deferred = $q.defer();
 
-        db.logs.find({}, function(err, docs) {
+        db.logs.find({}, function(err, logs) {
             if(!err) {
-                docs = convertIdToKey(docs);
-                deferred.resolve(docs);
+                logs = convertIdToKey(logs);
+                deferred.resolve(logs);
             } else {
                 deferred.reject(err);
             }
@@ -99,10 +99,10 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
     this.getLogsWithTag = function(tag) {
         var deferred = $q.defer();
         
-        db.logs.find({tags: tag}, function(err, docs) {
+        db.logs.find({tags: tag}, function(err, tags) {
             if(!err) {
-                docs = convertIdToKey(docs);
-                deferred.resolve(docs);
+                tags = convertIdToKey(tags);
+                deferred.resolve(tags);
             } else {
                 deferred.reject(err);
             }
@@ -113,13 +113,13 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
         return deferred.promise;
     };
 
-    this.insertLog = function(doc) {
+    this.insertLog = function(log) {
         var deferred = $q.defer();
 
-        db.logs.insert(doc, function(err, newDoc) {
+        db.logs.insert(log, function(err, newLog) {
             if(!err) {
-                newDoc = convertIdToKey([newDoc])[0];
-                deferred.resolve(newDoc);
+                newLog = convertIdToKey([newLog])[0];
+                deferred.resolve(newLog);
             } else {
                 deferred.reject(err);
             }
@@ -130,11 +130,11 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
         return deferred.promise;
     };
 
-    this.updateLog = function(doc) {
+    this.updateLog = function(log) {
         var deferred = $q.defer();
 
-        db.logs.update({_id: doc.key}, {$set: {content: doc.content, title: doc.title,
-            timestamp: doc.timestamp, tags: doc.tags}}, {},
+        db.logs.update({_id: log.key}, {$set: {content: log.content, title: log.title,
+            timestamp: log.timestamp, tags: log.tags}}, {},
         function(err) {
             if(!err) {
                 deferred.resolve();
@@ -192,9 +192,9 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
     this.insertTag = function(tag) {
         var deferred = $q.defer();
         
-        db.tags.insert(tag, function(err, newDoc) {
+        db.tags.insert(tag, function(err, newTag) {
             if(!err) {
-                deferred.resolve(newDoc);
+                deferred.resolve(newTag);
             } else {
                 deferred.reject(err);
             }
