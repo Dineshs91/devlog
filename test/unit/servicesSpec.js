@@ -16,7 +16,7 @@ describe("DevLog Services", function() {
         'content': 'Test content 2',
         'timestamp': '1424546853',
         'is_removed': false,
-        'tags': ['update']
+        'tags': ['new', 'doc2']
     };
 
     var updateDoc = {
@@ -24,11 +24,7 @@ describe("DevLog Services", function() {
         'content': 'Test updated content',
         'timestamp': '1424546854',
         'is_removed': false,
-        'tags': ['test', 'update']
-    };
-    
-    var testTag = {
-        'tag': 'test'
+        'tags': ['update']
     };
 
     beforeEach(module('devLog'));
@@ -36,13 +32,18 @@ describe("DevLog Services", function() {
     beforeEach(inject(function(_dbService_) {
         dbService = _dbService_;
     }));
+    
+    beforeEach(inject(function($rootScope) {
+        rootScope = $rootScope;
+        //$rootScope.$digest();
+    }));
 
     it('should contain a dbService', function() {
         expect(dbService).not.toBe(null);
     });
 
     it('should insert a log', function(done) {
-        var promise = dbService.insertLog(testDoc);
+        var promise = dbService.insertLogAndTag(testDoc);
         
         promise.then(function(newDoc) {
             testKey = newDoc.key;
@@ -54,20 +55,26 @@ describe("DevLog Services", function() {
 
     it('should get all the logs', function(done) {
         var promise = dbService.getAllLogs();
-
-        promise.then(function(logs) {
-            expect(logs).toBeDefined();
-            expect(logs.length).toBe(1);
-            var log = logs[0];
+        
+        
+        
+        inject(function($rootScope) {
+            $rootScope.$apply();
             
-            expect(log.title).toBe(testDoc.title);
-            expect(log.content).toBe(testDoc.content);
-            expect(log.tags[0]).toBe(testDoc.tags[0]);
+            promise.then(function(logs) {
+                expect(logs).toBeDefined();
+                expect(logs.length).toBe(1);
+                var log = logs[0];
             
-            // Test if _id is converted to key
-            expect(log.key).toBeDefined();
-            expect(log._id).toBeUndefined();
-            done();
+                expect(log.title).toBe(testDoc.title);
+                expect(log.content).toBe(testDoc.content);
+                expect(log.tags[0]).toBe(testDoc.tags[0]);
+            
+                // Test if _id is converted to key
+                expect(log.key).toBeDefined();
+                expect(log._id).toBeUndefined();
+                done();
+            });
         });
     });
     
@@ -101,7 +108,7 @@ describe("DevLog Services", function() {
     it('should update log', function(done) {
         // Add key to updateDoc
         updateDoc.key = testKey;
-        var promise = dbService.updateLog(updateDoc);
+        var promise = dbService.updateLogAndTag(updateDoc);
         var getLogPromise = dbService.getLog(testKey);
         
         promise.then(function() {
@@ -119,7 +126,7 @@ describe("DevLog Services", function() {
     });
     
     it('should insert a second log', function(done) {
-        var promise = dbService.insertLog(testDoc2);
+        var promise = dbService.insertLogAndTag(testDoc2);
         
         promise.then(function(log) {
             testDoc2Key = log.key;
@@ -129,10 +136,10 @@ describe("DevLog Services", function() {
     
     it('should get all the logs with the given tag after update',
     function(done) {
-        var promise = dbService.getLogsWithTag('update');
+        var promise = dbService.getLogsWithTag('test');
         
         promise.then(function(logs) {
-            expect(logs.length).toBe(2);
+            expect(logs.length).toBe(0);
             done();
         });
     });
@@ -170,30 +177,29 @@ describe("DevLog Services", function() {
         });
     });
     
-    it('should insert a tag', function(done) {
-        var promise = dbService.insertTag(testTag);
-        
-        promise.then(function(tag) {
-            expect(tag.tag).toBe(testTag.tag);
-            done();
-        });
-    });
-    
     it('should get all tags', function(done) {
         var promise = dbService.getAllTags();
         
         promise.then(function(tags) {
-            expect(tags.length).toBe(1);
-            expect(tags[0].tag).toBe(testTag.tag);
+            expect(tags.length).toBe(4);
             done();
         });
     });
     
     it('should remove a tag', function(done) {
-        var promise = dbService.removeTag(testTag.tag);
+        var promise = dbService.removeTag(testDoc.tags[0]);
         
         promise.then(function(numRemoved) {
             expect(numRemoved).toBe(1);
+            done();
+        });
+    });
+    
+    it('should find a tag', function(done) {
+        var promise = dbService.findTag('new');
+        
+        promise.then(function(tags) {
+            expect(tags.length).toBe(1);
             done();
         });
     });

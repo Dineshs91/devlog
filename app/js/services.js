@@ -73,7 +73,7 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
                 deferred.reject(err);
             }
             
-            $rootScope.$apply();
+            //$rootScope.$apply();
         });
 
         return deferred.promise;
@@ -90,7 +90,7 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
                 deferred.reject(err);
             }
             
-            $rootScope.$apply();
+            //$rootScope.$apply();
         });
 
         return deferred.promise;
@@ -99,15 +99,15 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
     this.getLogsWithTag = function(tag) {
         var deferred = $q.defer();
         
-        db.logs.find({tags: tag}, function(err, tags) {
+        db.logs.find({tags: tag}, function(err, logs) {
             if(!err) {
-                tags = convertIdToKey(tags);
-                deferred.resolve(tags);
+                logs = convertIdToKey(logs);
+                deferred.resolve(logs);
             } else {
                 deferred.reject(err);
             }
             
-            $rootScope.$apply();
+            //$rootScope.$apply();
         });
         
         return deferred.promise;
@@ -124,7 +124,7 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
                 deferred.reject(err);
             }
             
-            $rootScope.$apply();
+            //$rootScope.$apply();
         });
 
         return deferred.promise;
@@ -142,7 +142,7 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
                 deferred.reject(err);
             }
             
-            $rootScope.$apply();
+            //$rootScope.$apply();
         });
 
         return deferred.promise;
@@ -161,7 +161,7 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
                 deferred.reject(err);
             }
             
-            $rootScope.$apply();
+            //$rootScope.$apply();
         });
 
         return deferred.promise;
@@ -183,7 +183,7 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
                 deferred.reject(err);
             }
 
-            $rootScope.$apply();
+            //$rootScope.$apply();
         });
 
         return deferred.promise;
@@ -196,10 +196,30 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
             if(!err) {
                 deferred.resolve(newTag);
             } else {
-                deferred.reject(err);
+                if(err.errorType === 'uniqueViolated') {
+                    deferred.resolve();
+                } else {
+                    deferred.reject();
+                }
             }
             
-            $rootScope.$apply();
+            //$rootScope.$apply();
+        });
+        
+        return deferred.promise;
+    };
+    
+    this.findTag = function(tagName) {
+        var deferred = $q.defer();
+        
+        db.tags.find({tag: tagName}, function(err, tags) {
+            if(!err) {
+                deferred.resolve(tags);
+            } else {
+                deferred.reject();
+            }
+            
+            //$rootScope.$apply();
         });
         
         return deferred.promise;
@@ -215,7 +235,7 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
                 deferred.reject();
             }
             
-            $rootScope.$apply();
+            //$rootScope.$apply();
         });
         
         return deferred.promise;
@@ -231,7 +251,142 @@ devlog.service('dbService', ['$q', '$rootScope', function($q, $rootScope) {
                 deferred.reject(err);
             }
             
-            $rootScope.$apply();
+            //$rootScope.$apply();
+        });
+        
+        return deferred.promise;
+    };
+    
+    /*
+        Convert tags in array to a map.
+    
+        tags = ['test', 'sample'] => [{'tag': 'test'}, {'tag':'sample'}]
+        
+    */
+    var formTagDoc = function(tags) {
+        formedTags = [];
+        for (var i = 0; i < tags.length; i++) {
+            formedTags.push({'tag': tags[i]});
+        }
+        return formedTags;
+    };
+    
+    /*
+        Insert a log and the tags corresponding to it.
+    */
+    this.insertLogAndTag = function(log) {
+        var deferred = $q.defer();
+        
+        var insertLogPromise = this.insertLog(log);
+        
+        // We can get tags from log.tags.
+        var formedTags = formTagDoc(log.tags);
+        var insertTagPromises = [];
+        
+        for (var i = 0; i < formedTags.length; i++) {
+            var insertTagPromise = this.insertTag(formedTags[i]);
+            insertTagPromises.push(insertTagPromise);
+        } 
+        
+        var allTagPromises = $q.all(insertTagPromises);
+        var newLog;
+        
+        insertLogPromise.then(function(newDoc) {
+            newLog = newDoc;
+            return allTagPromises;
+        }).then(function() {
+            deferred.resolve(newLog);
+        });
+        
+        return deferred.promise;
+    };
+    
+    /*
+        Find the tags removed, during a log update.
+    */
+    this.tagsRemoved = function(log) {
+        var deferred = $q.defer();
+        var getLogPromise = this.getLog(log.key);
+        var newTags = log.tags;
+        var oldTags;
+        var removedTags = [];
+        
+        getLogPromise.then(function(log) {
+            oldTags = log.tags;
+            
+            for(var i = 0; i < oldTags.length; i++) {
+                var isRemoved = true;
+                for(var j = 0; j < newTags.length; j++) {
+                    if(oldTags[i] === newTags[j]) {
+                        isRemoved = false;
+                        break;
+                    }
+                }
+            
+                if(isRemoved) {
+                    removedTags.push(oldTags[i]);
+                }
+            }
+
+            deferred.resolve(removedTags);
+        });
+        
+        return deferred.promise;
+    };
+    
+    this.checkAndRemoveTags = function(removedTags) {
+        var deferred = $q.defer();
+        
+        // Check if removed tag is present in any other log
+        // If not present, delete the tag
+        
+        for(var i = 0; i < removedTags.length; i++) {
+            this.getLogsWithTag(removedTag).then(function(logs) {
+                if(logs.length === 0) {
+                    this.removeTag(removedTag);
+                }
+            });
+        }
+        
+        return deferred.promise;
+    };
+    
+    /*
+        Update a log and the tags corresponding to it.
+    */
+    this.updateLogAndTag = function(log) {
+        var deferred = $q.defer();
+        
+        // We can get tags from log.tags.
+        var formedTags = formTagDoc(log.tags);
+        
+        // Need to find if tags are removed in the update process.
+        // Return a array of tags being removed.
+        var removedTagsPromise = this.tagsRemoved(log);
+        
+        // Check and delete, removed tags from tag table
+        removedTagsPromise.then(function(removedTags) {
+            console.log(removedTags);
+            this.checkAndRemoveTags(removedTags);
+        }); 
+        
+        var updateLogPromise = this.updateLog(log);
+        
+        var insertTagPromises = [];
+        
+        for (var i = 0; i < formedTags.length; i++) {
+            
+            // insertOrUpdateTag(tag, isLogUpdate), isLogUpdate => true
+            var insertTagPromise = this.insertTag(formedTags[i]);
+            insertTagPromises.push(insertTagPromise);
+        }
+        
+        var allTagPromises = $q.all(insertTagPromises);
+        
+        updateLogPromise.then(function() {
+            return allTagPromises;
+        }).then(function() {
+            deferred.resolve();
         });
         
         return deferred.promise;
