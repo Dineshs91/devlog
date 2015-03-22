@@ -29,13 +29,18 @@ describe("DevLog Services", function() {
 
     beforeEach(module('devLog'));
 
+    beforeEach(function() {
+        module(function($provide) {
+            $provide.value('db', mockDb);
+        });
+    });
+
     beforeEach(inject(function(_dbService_) {
         dbService = _dbService_;
     }));
     
     beforeEach(inject(function($rootScope) {
         rootScope = $rootScope;
-        //$rootScope.$digest();
     }));
 
     it('should contain a dbService', function() {
@@ -44,40 +49,26 @@ describe("DevLog Services", function() {
 
     it('should insert a log', function(done) {
         var promise = dbService.insertLogAndTag(testDoc);
-        
+
         promise.then(function(newDoc) {
             testKey = newDoc.key;
             done();
         });
         
-        expect(promise).toBeDefined();
-    });
-
-    it('should get all the logs', function(done) {
-        var promise = dbService.getAllLogs();
-        
-        
-        
-        inject(function($rootScope) {
-            $rootScope.$apply();
-            
-            promise.then(function(logs) {
-                expect(logs).toBeDefined();
-                expect(logs.length).toBe(1);
-                var log = logs[0];
-            
-                expect(log.title).toBe(testDoc.title);
-                expect(log.content).toBe(testDoc.content);
-                expect(log.tags[0]).toBe(testDoc.tags[0]);
-            
-                // Test if _id is converted to key
-                expect(log.key).toBeDefined();
-                expect(log._id).toBeUndefined();
-                done();
-            });
-        });
+        rootScope.$apply();
     });
     
+    it('should get all logs', function(done) {
+        var promise = dbService.getAllLogs();
+        
+        promise.then(function(logs) {
+            expect(logs.length).toBeGreaterThan(0);
+            done();
+        });
+        
+        rootScope.$apply();
+    });
+
     it('should get a log', function(done) {
         var promise = dbService.getLog(testKey);
 
@@ -88,21 +79,25 @@ describe("DevLog Services", function() {
             expect(log.tags.length).toBe(testDoc.tags.length);
             expect(log.tags[0]).toBe(testDoc.tags[0]);
             expect(log.timestamp).toBe(testDoc.timestamp);
-            
+
             // Test if _id is converted to key
             expect(log.key).toBeDefined();
             expect(log._id).toBeUndefined();
             done();
         });
+        
+        rootScope.$apply();
     });
-    
+
     it('should get all the logs with the given tag', function(done) {
         var promise = dbService.getLogsWithTag('test');
-        
+
         promise.then(function(logs) {
             expect(logs.length).toBe(1);
             done();
         });
+        
+        rootScope.$apply();
     });
 
     it('should update log', function(done) {
@@ -110,7 +105,7 @@ describe("DevLog Services", function() {
         updateDoc.key = testKey;
         var promise = dbService.updateLogAndTag(updateDoc);
         var getLogPromise = dbService.getLog(testKey);
-        
+
         promise.then(function() {
             return getLogPromise;
         }).then(function(log) {
@@ -123,48 +118,58 @@ describe("DevLog Services", function() {
             expect(log.timestamp).toBe(updateDoc.timestamp);
             done();
         });
+        
+        rootScope.$apply();
     });
-    
+
     it('should insert a second log', function(done) {
         var promise = dbService.insertLogAndTag(testDoc2);
-        
+
         promise.then(function(log) {
             testDoc2Key = log.key;
             done();
         });
+        
+        rootScope.$apply();
     });
-    
+
     it('should get all the logs with the given tag after update',
     function(done) {
         var promise = dbService.getLogsWithTag('test');
-        
+
         promise.then(function(logs) {
             expect(logs.length).toBe(0);
             done();
         });
+        
+        rootScope.$apply();
     });
-    
+
     it('should permanently delete second log', function(done) {
         var promise = dbService.permanentDelete(testDoc2Key);
-        
+
         promise.then(function(numRemoved) {
             expect(numRemoved).toBe(1);
             done();
         });
+        
+        rootScope.$apply();
     });
-    
+
     it('should remove a log', function(done) {
         var promise = dbService.removeLog(testKey);
         var getLogPromise = dbService.getLog(testKey);
-        
+
         promise.then(function() {
             return getLogPromise;
         }).then(function(log) {
             expect(log.is_removed).toBe(true);
             done();
         });
+        
+        rootScope.$apply();
     });
-    
+
     it('should remove log permanently', function(done) {
         var promise = dbService.permanentDelete(testKey);
         var getAllLogsPromise = dbService.getAllLogs();
@@ -175,33 +180,41 @@ describe("DevLog Services", function() {
             expect(logs.length).toBe(0);
             done();
         });
+        
+        rootScope.$apply();
     });
-    
+
     it('should get all tags', function(done) {
         var promise = dbService.getAllTags();
-        
+
         promise.then(function(tags) {
             expect(tags.length).toBe(4);
             done();
         });
+        
+        rootScope.$apply();
     });
-    
+
     it('should remove a tag', function(done) {
         var promise = dbService.removeTag(testDoc.tags[0]);
-        
+
         promise.then(function(numRemoved) {
             expect(numRemoved).toBe(1);
             done();
         });
+        
+        rootScope.$apply();
     });
-    
+
     it('should find a tag', function(done) {
         var promise = dbService.findTag('new');
-        
+
         promise.then(function(tags) {
             expect(tags.length).toBe(1);
             done();
         });
+        
+        rootScope.$apply();
     });
-    
+
 });
