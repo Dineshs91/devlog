@@ -24,6 +24,7 @@
     "nodewebkit": "~0.11.6",
     "protractor": "~1.0.0",
     "tar.gz": "~0.1.1",
+    "underscore": "~1.4.4",
     "unzip": "~0.1.9"
   },
   "scripts": {
