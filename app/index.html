@@ -6,8 +6,11 @@
   <script src="bower_components/angular/angular.js"></script>
   <script src="js/controllers.js"></script>
   <script src="js/services.js"></script>
+  <script src="js/db/db.js"></script>
 </head>
 <body ng-controller="LogCtrl">
-  
+  <div id='logs' ng-repeat="log in logs">
+    {{ log.title }}
+  </div>
 </body>
 </html>
