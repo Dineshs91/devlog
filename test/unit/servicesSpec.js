@@ -1,9 +1,9 @@
 describe("DevLog Services", function() {
     var dbService;
-    var testKey;
+    var testDoc1Key;
     var testDoc2Key;
 
-    var testDoc = {
+    var testDoc1 = {
         'title': 'Test',
         'content': 'Test content',
         'timestamp': '1424546852',
@@ -19,7 +19,7 @@ describe("DevLog Services", function() {
         'tags': ['new', 'doc2']
     };
 
-    var updateDoc = {
+    var updateDoc1 = {
         'title': 'Test update',
         'content': 'Test updated content',
         'timestamp': '1424546854',
@@ -48,10 +48,10 @@ describe("DevLog Services", function() {
     });
 
     it('should insert a log', function(done) {
-        var promise = dbService.insertLogAndTag(testDoc);
+        var promise = dbService.insertLogAndTag(testDoc1);
 
         promise.then(function(newDoc) {
-            testKey = newDoc.key;
+            testDoc1Key = newDoc.key;
             done();
         });
         
@@ -70,15 +70,15 @@ describe("DevLog Services", function() {
     });
 
     it('should get a log', function(done) {
-        var promise = dbService.getLog(testKey);
+        var promise = dbService.getLog(testDoc1Key);
 
         promise.then(function(log) {
             expect(log).toBeDefined();
-            expect(log.title).toBe(testDoc.title);
-            expect(log.content).toBe(testDoc.content);
-            expect(log.tags.length).toBe(testDoc.tags.length);
-            expect(log.tags[0]).toBe(testDoc.tags[0]);
-            expect(log.timestamp).toBe(testDoc.timestamp);
+            expect(log.title).toBe(testDoc1.title);
+            expect(log.content).toBe(testDoc1.content);
+            expect(log.tags.length).toBe(testDoc1.tags.length);
+            expect(log.tags[0]).toBe(testDoc1.tags[0]);
+            expect(log.timestamp).toBe(testDoc1.timestamp);
 
             // Test if _id is converted to key
             expect(log.key).toBeDefined();
@@ -101,21 +101,21 @@ describe("DevLog Services", function() {
     });
 
     it('should update log', function(done) {
-        // Add key to updateDoc
-        updateDoc.key = testKey;
-        var promise = dbService.updateLogAndTag(updateDoc);
-        var getLogPromise = dbService.getLog(testKey);
+        // Add key to updateDoc1
+        updateDoc1.key = testDoc1Key;
+        var promise = dbService.updateLogAndTag(updateDoc1);
+        var getLogPromise = dbService.getLog(testDoc1Key);
 
         promise.then(function() {
             return getLogPromise;
         }).then(function(log) {
-            expect(log.title).toBe(updateDoc.title);
-            expect(log.content).toBe(updateDoc.content);
-            expect(log.tags.length).toBe(updateDoc.tags.length);
+            expect(log.title).toBe(updateDoc1.title);
+            expect(log.content).toBe(updateDoc1.content);
+            expect(log.tags.length).toBe(updateDoc1.tags.length);
             for (var i = 0; i < log.tags.length; i++) {
-                expect(log.tags[i]).toBe(updateDoc.tags[i]);
+                expect(log.tags[i]).toBe(updateDoc1.tags[i]);
             }
-            expect(log.timestamp).toBe(updateDoc.timestamp);
+            expect(log.timestamp).toBe(updateDoc1.timestamp);
             done();
         });
         
@@ -157,8 +157,8 @@ describe("DevLog Services", function() {
     });
 
     it('should remove a log', function(done) {
-        var promise = dbService.removeLog(testKey);
-        var getLogPromise = dbService.getLog(testKey);
+        var promise = dbService.removeLog(testDoc1Key);
+        var getLogPromise = dbService.getLog(testDoc1Key);
 
         promise.then(function() {
             return getLogPromise;
@@ -171,7 +171,7 @@ describe("DevLog Services", function() {
     });
 
     it('should remove log permanently', function(done) {
-        var promise = dbService.permanentDelete(testKey);
+        var promise = dbService.permanentDelete(testDoc1Key);
         var getAllLogsPromise = dbService.getAllLogs();
 
         promise.then(function() {
@@ -196,7 +196,7 @@ describe("DevLog Services", function() {
     });
 
     it('should remove a tag', function(done) {
-        var promise = dbService.removeTag(testDoc.tags[0]);
+        var promise = dbService.removeTag(testDoc1.tags[0]);
 
         promise.then(function(numRemoved) {
             expect(numRemoved).toBe(1);
