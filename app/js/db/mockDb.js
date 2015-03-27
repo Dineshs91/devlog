@@ -1,5 +1,5 @@
 /*
-    mockDatastore
+    MockDatastore
 */
 var MockDatastore = function Datastore(options) {
     this.data = [];
@@ -10,9 +10,31 @@ var MockDatastore = function Datastore(options) {
     All these are taken from nedb directly. Some parts are modified
     accordingly.
 
+    DB operation: EnsureIndex.
+*/
+MockDatastore.prototype.ensureIndex = function (options, cb) {
+    this.fieldName = options.fieldName;
+    this.unique = options.unique;
+}
+
+/*
     DB operation: Insert. 
 */
 MockDatastore.prototype.insert = function (doc, callback) {
+    // error object
+    error = {
+        errorType: 'uniqueViolated'
+    };
+
+    var field = this.fieldName;
+    if(this.unique === true) {
+        for(i = 0; i < this.data.length; i++) {
+            if(this.data[i][field] === doc[field]) {
+                return callback(error);
+            }
+        }
+    }
+    
     doc._id = this.key;
     
     // Increment key
@@ -23,7 +45,7 @@ MockDatastore.prototype.insert = function (doc, callback) {
     
     res = this.data[len - 1];
     
-    callback(null, res);
+    return callback(null, res);
 };
 
 /*
@@ -50,7 +72,7 @@ MockDatastore.prototype.find = function (query, projection, callback) {
         }
     }
 
-    callback(null, res);
+    return callback(null, res);
 };
 
 /*
@@ -77,7 +99,7 @@ MockDatastore.prototype.findOne = function (query, projection, callback) {
         }
     }
     
-    callback(null, res[0]);
+    return callback(null, res[0]);
 
 };
 
@@ -114,17 +136,17 @@ MockDatastore.prototype.update = function(query, updateQuery, options, cb) {
         this.data.push(modifications[i].newDoc);
     }
     
-    callback(null, numReplaced);
+    return callback(null, numReplaced);
 };
 
 /*
     DB operation: Remove
 */
 MockDatastore.prototype.remove = function (query, options, cb) {
-  var callback
-    , numRemoved = 0
-    , multi
-    , removedDocs = [];
+    var callback
+      , numRemoved = 0
+      , multi
+      , removedDocs = [];
     
     if (typeof options === 'function') { cb = options; options = {}; }
     callback = cb || function () {};
@@ -145,8 +167,8 @@ MockDatastore.prototype.remove = function (query, options, cb) {
         }
     }
     
-    callback(null, numRemoved);
-}
+    return callback(null, numRemoved);
+};
 
 var mockDb = {};
 
@@ -159,6 +181,15 @@ mockDb.logs = new MockDatastore();
     mock db for tags.
 */
 mockDb.tags = new MockDatastore();
+
+/*
+    Enforce an unique constraint on tag.
+*/
+mockDb.tags.ensureIndex({ fieldName: 'tag', unique: true }, function(err) {
+    if(err) {
+        console.log(err);
+    }
+});
 
 devlog.service('mockDb', [function($rootScope) {
 
