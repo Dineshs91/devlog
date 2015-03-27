@@ -267,6 +267,7 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
         }).then(function() {
             deferred.resolve(newLog);
         }).catch(function(err) {
+            console.log(err);
             deferred.reject(err);
         });
         
@@ -308,8 +309,8 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
     };
     
     /*
-        We check if the removed tags are present any other log. If not
-        remove the tag else do nothing.
+        We check if the removed tags are present in any other log. If not
+        remove the tag, else do nothing.
     */
     this.checkAndRemoveTags = function(removedTags, logKey) {
         var deferred = $q.defer();
@@ -338,6 +339,7 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
         }).then(function() {
             deferred.resolve();
         }).catch(function(err) {
+            console.log(err);
             deferred.reject(err);
         });
 
@@ -346,6 +348,8 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
     
     /*
         Update a log and the tags corresponding to it.
+        If during an update, tags are removed, we have
+        to remove the tags also.
     */
     this.updateLogAndTag = function(log) {
         var deferred = $q.defer();
