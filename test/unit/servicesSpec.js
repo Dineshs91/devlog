@@ -24,7 +24,7 @@ describe("DevLog Services", function() {
         'content': 'Test updated content',
         'timestamp': '1424546854',
         'is_removed': false,
-        'tags': ['update']
+        'tags': ['update', 'test']
     };
 
     beforeEach(module('devLog'));
@@ -104,9 +104,9 @@ describe("DevLog Services", function() {
         // Add key to updateDoc1
         updateDoc1.key = testDoc1Key;
         var promise = dbService.updateLogAndTag(updateDoc1);
-        var getLogPromise = dbService.getLog(testDoc1Key);
 
         promise.then(function() {
+            var getLogPromise = dbService.getLog(testDoc1Key);
             return getLogPromise;
         }).then(function(log) {
             expect(log.title).toBe(updateDoc1.title);
@@ -128,6 +128,9 @@ describe("DevLog Services", function() {
         promise.then(function(log) {
             testDoc2Key = log.key;
             done();
+        }, function(err) {
+            console.log(err);
+            done();
         });
         
         rootScope.$apply();
@@ -138,7 +141,7 @@ describe("DevLog Services", function() {
         var promise = dbService.getLogsWithTag('test');
 
         promise.then(function(logs) {
-            expect(logs.length).toBe(0);
+            expect(logs.length).toBe(1);
             done();
         });
         
@@ -158,9 +161,9 @@ describe("DevLog Services", function() {
 
     it('should remove a log', function(done) {
         var promise = dbService.removeLog(testDoc1Key);
-        var getLogPromise = dbService.getLog(testDoc1Key);
 
         promise.then(function() {
+            var getLogPromise = dbService.getLog(testDoc1Key);
             return getLogPromise;
         }).then(function(log) {
             expect(log.is_removed).toBe(true);
@@ -172,9 +175,9 @@ describe("DevLog Services", function() {
 
     it('should remove log permanently', function(done) {
         var promise = dbService.permanentDelete(testDoc1Key);
-        var getAllLogsPromise = dbService.getAllLogs();
 
         promise.then(function() {
+            var getAllLogsPromise = dbService.getAllLogs();
             return getAllLogsPromise;
         }).then(function(logs) {
             expect(logs.length).toBe(0);
@@ -194,6 +197,17 @@ describe("DevLog Services", function() {
         
         rootScope.$apply();
     });
+    
+    it('should find a tag', function(done) {
+        var promise = dbService.findTag('test');
+
+        promise.then(function(tags) {
+            expect(tags.length).toBe(1);
+            done();
+        });
+        
+        rootScope.$apply();
+    });
 
     it('should remove a tag', function(done) {
         var promise = dbService.removeTag(testDoc1.tags[0]);
@@ -206,15 +220,6 @@ describe("DevLog Services", function() {
         rootScope.$apply();
     });
 
-    it('should find a tag', function(done) {
-        var promise = dbService.findTag('new');
-
-        promise.then(function(tags) {
-            expect(tags.length).toBe(1);
-            done();
-        });
-        
-        rootScope.$apply();
-    });
+    
 
 });
