@@ -1,3 +1,5 @@
+// jshint ignore:start
+
 /**
  * Handle models (i.e. docs)
  * Serialization/deserialization
@@ -745,3 +747,5 @@ function matchQueryPart (obj, queryKey, queryValue, treatObjAsValue) {
 
   return true;
 }
+
+// jshint ignore:end

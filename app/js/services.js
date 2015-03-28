@@ -416,7 +416,7 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
         }).catch(function(err) {
             console.log(err);
             deferred.reject(err);
-        })
+        });
         
         return deferred.promise;
     };

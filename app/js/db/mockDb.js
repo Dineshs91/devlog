@@ -15,7 +15,9 @@ var MockDatastore = function Datastore(options) {
 MockDatastore.prototype.ensureIndex = function (options, cb) {
     this.fieldName = options.fieldName;
     this.unique = options.unique;
-}
+};
+
+// jshint ignore:start
 
 /*
     DB operation: Insert. 
@@ -169,6 +171,8 @@ MockDatastore.prototype.remove = function (query, options, cb) {
     
     return callback(null, numRemoved);
 };
+
+// jshint ignore:end
 
 var mockDb = {};
 
