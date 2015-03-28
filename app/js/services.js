@@ -327,7 +327,7 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
             for(i = 0; i < allLogs.length; i++) {
                 if(allLogs[i].length === 0) {
                     removeTagPromises.push(self.removeTag(removedTags[i]));
-                } else if(allLogs[i].length === 1 && allLogs[i].key === logKey) {
+                } else if(allLogs[i].length === 1 && allLogs[i][0].key === logKey) {
                     // Since we are updating the log, if no. of logs with tag
                     //  is 1 and if it is the same log that we are updating
                     // we have to remove the tag.
@@ -354,18 +354,19 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
     this.updateLogAndTag = function(log) {
         var deferred = $q.defer();
         
+        var self = this;
+        
         // We can get tags from log.tags.
         var formedTags = formTagDoc(log.tags);
+        var logKey = log.key;
         
         // Need to find if tags are removed in the update process.
         // Return a array of tags being removed.
         var removedTagsPromise = this.tagsRemoved(log);
-        var self = this;
         
-        // Check and delete, removed tags from tag table
-        var logKey = log.key;
-        removedTagsPromise.then(function(removedTags, logKey) {
-            return self.checkAndRemoveTags(removedTags);
+        removedTagsPromise.then(function(removedTags) {
+            // Check and delete, removed tags from tag table
+            return self.checkAndRemoveTags(removedTags, logKey);
         }).then(function() {
             return self.updateLog(log);
         }).then(function(numReplaced) {
@@ -384,6 +385,38 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
             console.error(err);
             deferred.reject(err);
         });
+        
+        return deferred.promise;
+    };
+    
+    /*
+        Remove log and corresponding tags if they are
+        not present in any other logs.
+    */
+    this.removeLogAndTag = function(key) {
+        var deferred = $q.defer();
+        
+        var self = this;
+        var logKey = key;
+        
+        getLogPromise = this.getLog(logKey);
+        
+        var log;
+        getLogPromise.then(function(doc) {
+            log = doc;
+            return self.removeLog(logKey);
+        }).then(function() {
+            var removedTags = log.tags;
+            
+            // We are not sending logKey, since the
+            // log is removed first. 
+            return self.checkAndRemoveTags(removedTags, logKey);
+        }).then(function() {
+            deferred.resolve();
+        }).catch(function(err) {
+            console.log(err);
+            deferred.reject(err);
+        })
         
         return deferred.promise;
     };
