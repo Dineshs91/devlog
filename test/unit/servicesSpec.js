@@ -160,7 +160,7 @@ describe("DevLog Services", function() {
     });
 
     it('should remove a log', function(done) {
-        var promise = dbService.removeLog(testDoc1Key);
+        var promise = dbService.removeLogAndTag(testDoc1Key);
 
         promise.then(function() {
             var getLogPromise = dbService.getLog(testDoc1Key);
@@ -191,7 +191,7 @@ describe("DevLog Services", function() {
         var promise = dbService.getAllTags();
 
         promise.then(function(tags) {
-            expect(tags.length).toBe(4);
+            expect(tags.length).toBe(2);
             done();
         });
         
@@ -199,7 +199,7 @@ describe("DevLog Services", function() {
     });
     
     it('should find a tag', function(done) {
-        var promise = dbService.findTag('test');
+        var promise = dbService.findTag('new');
 
         promise.then(function(tags) {
             expect(tags.length).toBe(1);
@@ -210,7 +210,7 @@ describe("DevLog Services", function() {
     });
 
     it('should remove a tag', function(done) {
-        var promise = dbService.removeTag(testDoc1.tags[0]);
+        var promise = dbService.removeTag(testDoc2.tags[0]);
 
         promise.then(function(numRemoved) {
             expect(numRemoved).toBe(1);
