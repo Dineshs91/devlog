@@ -9,12 +9,7 @@ module.exports = function(grunt) {
         var chromeDriverFile = path.resolve(support_dir, 'chromedriver');
 
         var supportDirExists = fs.existsSync(support_dir);
-        var symLinkExists = fs.existsSync(symLinkDest);
         var chromeDriverExists = fs.existsSync(chromeDriverFile);
-
-        if(supportDirExists && symLinkExists && chromeDriverExists) {
-            return;
-        }
 
         var done = this.async();
         var http = require('http');
@@ -77,9 +72,15 @@ module.exports = function(grunt) {
             fs.mkdir(support_dir);
         }
 
-        if(!symLinkExists) {
-            grunt.log.writeln('Creating symbolic link to node-webkit.');
+        grunt.log.writeln('Creating symbolic link to node-webkit.');
+        try {
             fs.symlinkSync(symLinkSrc, symLinkDest);
+        } catch(e) {
+            if(e.code === 'EEXIST') {
+                grunt.log.writeln('Symbolic link to node-webkit already exists');
+            } else {
+                console.log(e);
+            }
         }
 
         if(!chromeDriverExists) {
