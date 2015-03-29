@@ -182,7 +182,8 @@ describe("DevLog Controllers", function() {
     });
     
     it('should get all logs', function() {
-        $scope.getAll();
+        logCtrl.getAll();
+
         $scope.$apply();
         expect($scope.logs.length).toBe(2); 
     });
