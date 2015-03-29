@@ -9,6 +9,7 @@
   <script src="js/db/db.js"></script>
 </head>
 <body ng-controller="LogCtrl">
+  <span class="ui left floated date" current-time="format"></span>
   <div id='logs' ng-repeat="log in logs">
     {{ log.title }}
   </div>
