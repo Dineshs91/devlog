@@ -47,7 +47,6 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
     
     this.clickLogFn = function(key) {
         dbService.getLog(key).then(function(log) {
-            console.log(log);
             for(i = 0; i < log.tags.length; i++) {
                 tags = log.tags[i];
                 if(i != log.tags.length - 1) {
@@ -90,8 +89,9 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
     
     var formLogDoc = function() {
         tags = $scope.logTags;
+        tags = tags.toLowerCase();
         formedTags = tags.split(',');
-        
+
         log = {
             'title': $scope.title,
             'content': $scope.content,
