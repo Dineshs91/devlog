@@ -28,14 +28,83 @@ devlog.directive('currentTime', ['$interval', 'dateFilter',
     };
 }]);
 
-devlog.controller('LogCtrl', ['$scope', 'dbService', function($scope, dbService) {
+devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbService) {
     $scope.format = 'M/d/yy hh:mm:ss a';
     
-    this.getAll = function() {
+    var self = this;
+    
+    this.getAllLogs = function() {
         dbService.getAllLogs().then(function(logs) {
             $scope.logs = logs;
         });
     };
     
-    this.getAll();
+    this.getAllTags = function() {
+        dbService.getAllTags().then(function(tags) {
+            $scope.tags = tags;
+        })
+    };
+    
+    this.clickLogFn = function(key) {
+        dbService.getLog(key).then(function(log) {
+            console.log(log);
+            for(i = 0; i < log.tags.length; i++) {
+                tags = log.tags[i];
+                if(i != log.tags.length - 1) {
+                    tags += ","
+                }
+            }
+            $scope.logTags = tags;
+            $scope.title = log.title;
+            $scope.content = log.content;
+        });
+    };
+    
+    this.removeLogFn = function(key) {
+        dbService.removeLogAndTag(key).then(function() {
+            init();
+        });
+    };
+    
+    this.savefn = function() {
+        log = formLogDoc();
+        
+        dbService.insertLogAndTag(log).then(function() {
+            init();
+            clearEditor();
+        });
+    };
+    
+    this.clickTagFn = function(tagName) {
+        dbService.getLogsWithTag(tagName).then(function(logs) {
+            $scope.logs = logs;
+        });
+    }
+    
+    var init = function() {
+        self.getAllLogs();
+        self.getAllTags();
+    };
+    
+    init();
+    
+    var formLogDoc = function() {
+        tags = $scope.logTags;
+        formedTags = tags.split(',');
+        
+        log = {
+            'title': $scope.title,
+            'content': $scope.content,
+            'timestamp': (new Date).getTime(),
+            'is_removed': false,
+            'tags': formedTags
+        };
+        return log;
+    };
+    
+    var clearEditor = function() {
+        $scope.title = '';
+        $scope.logTags = '';
+        $scope.content = '';
+    };
 }]);
