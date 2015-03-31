@@ -7,11 +7,62 @@
   <script src="js/controllers.js"></script>
   <script src="js/services.js"></script>
   <script src="js/db/db.js"></script>
+  <script src="bower_components/jquery/dist/jquery.min.js">
+  <script src="bower_components/semantic-ui/dist/semantic.js"></script>
+  <link rel="stylesheet" type="text/css" href="bower_components/semantic-ui/dist/semantic.css">
 </head>
-<body ng-controller="LogCtrl">
-  <span class="ui left floated date" current-time="format"></span>
-  <div id='logs' ng-repeat="log in logs">
-    {{ log.title }}
+<body>
+  <div class="ui divided padded grid" ng-controller="LogController as logCtrl">
+    <!-- left float -->
+    <div class="seven wide left column">
+      <div class="ui vertical">
+        <h2 class="ui header">
+        <i class="inbox icon"></i>
+        Log Entry
+        <div class="ui right floated green button add">
+          Add
+        </div>
+        </h2>
+        <div class="ui divider"></div>
+      </div>
+      <div class="ui divided padded grid navi">
+        <div class="two wide left column" >
+        <!-- display all tags -->
+          <div class='ui divided very relaxed selection list' >
+            <a class="item" ng-repeat="tag in tags" ng-click="logCtrl.clickTagFn(tag.tag)">
+              {{ tag.tag }}
+            </a>
+          </div>
+        </div>
+
+        <div class="twelve wide right column">
+          <!-- display all logs -->
+          <div class="ui divided very relaxed selection list">
+            <a class="item" ng-repeat="log in logs | filter:{is_removed:false} | orderBy:timestamp">
+              <div class="right floated date">{{ log.timestamp | date:'MMM dd, yyyy' }}</div>
+              <div class="description" ng-click="logCtrl.clickLogFn(log.key)">
+                {{ log.title }}
+              </div>
+              <i class="right floated trash icon" ng-click="logCtrl.removeLogFn(log.key)"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nine wide right column">
+      <textarea id="title" ng-model="title"></textarea>
+      <span class="ui left floated date" current-time="format"></span>
+
+      <div id="tags">
+        <input ng-model="logTags"></input>
+      </div>
+      <span id="submit" class="ui right floated orange save button" ng-click="logCtrl.savefn()">Save</span>
+      <div class="ui divider"></div>
+      <textarea id="content" ng-model="content">
+
+      </textarea>
+    </div>
   </div>
 </body>
 </html>
