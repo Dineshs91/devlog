@@ -64,10 +64,10 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
         return deferred.promise;
     };
     
-    this.getLogsWithTag = function(tag) {
+    this.getLogsWithTag = function(tagName) {
         var deferred = $q.defer();
         
-        db.logs.find({tags: tag}, function(err, logs) {
+        db.logs.find({tags: tagName}, function(err, logs) {
             if(!err) {
                 logs = convertIdToKey(logs);
                 deferred.resolve(logs);
@@ -406,10 +406,8 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
             log = doc;
             return self.removeLog(logKey);
         }).then(function() {
-            var removedTags = log.tags;
-            
-            // We are not sending logKey, since the
-            // log is removed first. 
+            var removedTags = [];
+            removedTags = log.tags.slice();
             return self.checkAndRemoveTags(removedTags, logKey);
         }).then(function() {
             deferred.resolve();
