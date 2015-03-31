@@ -174,7 +174,7 @@ describe("DevLog Controllers", function() {
     beforeEach(inject(function($controller, $rootScope, _dbService_) {
         $scope = $rootScope.$new();
         dbService = _dbService_;
-        logCtrl = $controller('LogCtrl', {$scope: $scope, dbService: dbService});  
+        logCtrl = $controller('LogController', {$scope: $scope, dbService: dbService});
     }));
 
     it('should have a LogCtrl controller', function() {
@@ -182,7 +182,7 @@ describe("DevLog Controllers", function() {
     });
     
     it('should get all logs', function() {
-        logCtrl.getAll();
+        logCtrl.getAllLogs();
 
         $scope.$apply();
         expect($scope.logs.length).toBe(2); 
