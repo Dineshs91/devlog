@@ -50,7 +50,7 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
     this.getAllLogs = function() {
         var deferred = $q.defer();
 
-        db.logs.find({}, function(err, logs) {
+        db.logs.find({is_removed: false}, function(err, logs) {
             if(!err) {
                 logs = convertIdToKey(logs);
                 deferred.resolve(logs);
@@ -67,7 +67,7 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
     this.getLogsWithTag = function(tagName) {
         var deferred = $q.defer();
         
-        db.logs.find({tags: tagName}, function(err, logs) {
+        db.logs.find({tags: tagName, is_removed: false}, function(err, logs) {
             if(!err) {
                 logs = convertIdToKey(logs);
                 deferred.resolve(logs);
