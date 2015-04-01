@@ -1,31 +1,6 @@
 describe("DevLog Services", function() {
     var dbService;
-    var testDoc1Key;
-    var testDoc2Key;
-
-    var testDoc1 = {
-        'title': 'Test',
-        'content': 'Test content',
-        'timestamp': '1424546852',
-        'is_removed': false,
-        'tags': ['test']
-    };
     
-    var testDoc2 = {
-        'title': 'Test 2',
-        'content': 'Test content 2',
-        'timestamp': '1424546853',
-        'is_removed': false,
-        'tags': ['new', 'doc2']
-    };
-
-    var updateDoc1 = {
-        'title': 'Test update',
-        'content': 'Test updated content',
-        'timestamp': '1424546854',
-        'is_removed': false,
-        'tags': ['update', 'test']
-    };
 
     beforeEach(module('devLog'));
 
@@ -46,180 +21,257 @@ describe("DevLog Services", function() {
     it('should contain a dbService', function() {
         expect(dbService).not.toBe(null);
     });
-
+    
+    /* Insert */
+    
+    var log1 = {
+        'title': 'log1 title',
+        'content': 'log1 content',
+        'timestamp': '12345678',
+        'tags': ['log1'],
+        'is_removed': false
+    };
+    
+    var log1Key;
+    
     it('should insert a log', function(done) {
-        var promise = dbService.insertLogAndTag(testDoc1);
-
-        promise.then(function(newDoc) {
-            testDoc1Key = newDoc.key;
+        dbService.insertLogAndTag(log1).then(function(log) {
+            log1Key = log.key;
+            expect(log1Key).toBeDefined();
+            
+            // To check if _id is converted to key.
+            expect(log._id).toBeUndefined();
+            expect(log1.title).toBe(log.title);
+            expect(log1.content).toBe(log.content);
+            expect(log1.timestamp).toBe(log.timestamp);
+            expect(log1.tags.length).toBe(log.tags.length);
+            for(i = 0; i < log.tags.length; i++) {
+                expect(log1.tags[i]).toBe(log.tags[i]);
+            }
+            expect(log.is_removed).toBe(log1.is_removed);
             done();
         });
         
         rootScope.$apply();
     });
     
-    it('should get all logs', function(done) {
-        var promise = dbService.getAllLogs();
-        
-        promise.then(function(logs) {
-            expect(logs.length).toBeGreaterThan(0);
+    it('should have inserted all tags to tags table', function(done) {
+        dbService.getAllTags().then(function(tags) {
+            expect(tags.length).toBe(1);
+            expect(tags[0].tag).toBe(log1.tags[0]);
             done();
         });
         
         rootScope.$apply();
     });
-
-    it('should get a log', function(done) {
-        var promise = dbService.getLog(testDoc1Key);
-
-        promise.then(function(log) {
-            expect(log).toBeDefined();
-            expect(log.title).toBe(testDoc1.title);
-            expect(log.content).toBe(testDoc1.content);
-            expect(log.tags.length).toBe(testDoc1.tags.length);
-            expect(log.tags[0]).toBe(testDoc1.tags[0]);
-            expect(log.timestamp).toBe(testDoc1.timestamp);
-
-            // Test if _id is converted to key
+    
+    it('should get the inserted log', function(done) {
+        dbService.getLog(log1Key).then(function(log) {
             expect(log.key).toBeDefined();
+            
+            // To check if _id is converted to key.
             expect(log._id).toBeUndefined();
-            done();
-        });
-        
-        rootScope.$apply();
-    });
-
-    it('should get all the logs with the given tag', function(done) {
-        var promise = dbService.getLogsWithTag('test');
-
-        promise.then(function(logs) {
-            expect(logs.length).toBe(1);
-            done();
-        });
-        
-        rootScope.$apply();
-    });
-
-    it('should update log', function(done) {
-        // Add key to updateDoc1
-        updateDoc1.key = testDoc1Key;
-        var promise = dbService.updateLogAndTag(updateDoc1);
-
-        promise.then(function() {
-            var getLogPromise = dbService.getLog(testDoc1Key);
-            return getLogPromise;
-        }).then(function(log) {
-            expect(log.title).toBe(updateDoc1.title);
-            expect(log.content).toBe(updateDoc1.content);
-            expect(log.tags.length).toBe(updateDoc1.tags.length);
-            for (var i = 0; i < log.tags.length; i++) {
-                expect(log.tags[i]).toBe(updateDoc1.tags[i]);
+            expect(log1.title).toBe(log.title);
+            expect(log1.content).toBe(log.content);
+            expect(log1.timestamp).toBe(log.timestamp);
+            expect(log1.tags.length).toBe(log.tags.length);
+            for(i = 0; i < log.tags.length; i++) {
+                expect(log1.tags[i]).toBe(log.tags[i]);
             }
-            expect(log.timestamp).toBe(updateDoc1.timestamp);
+            expect(log1.is_removed).toBe(log.is_removed);
             done();
         });
         
         rootScope.$apply();
     });
-
-    it('should insert a second log', function(done) {
-        var promise = dbService.insertLogAndTag(testDoc2);
-
-        promise.then(function(log) {
-            testDoc2Key = log.key;
-            done();
-        }, function(err) {
-            console.log(err);
+    
+    /* Update */
+    
+    //1. Update log without any changes to tags.
+    var log1Update = {
+        'title': 'log1 title update',
+        'content': 'log1 content update',
+        'timestamp': '123456789',
+        'tags': ['log1'],
+        'is_removed': false
+    };
+    
+    it('should update a log', function(done) {
+        // Insert log1Key to log1Update.
+        log1Update.key = log1Key;
+        
+        dbService.updateLogAndTag(log1Update).then(function(returnValue) {
+            expect(returnValue.numLogsUpdated).toBe(1);
+            expect(returnValue.insertedTags[0]).toBeUndefined();
+            expect(returnValue.numTagsRemoved[0]).toBe(0);
             done();
         });
         
         rootScope.$apply();
     });
-
-    it('should get all the logs with the given tag after update',
-    function(done) {
-        var promise = dbService.getLogsWithTag('test');
-
-        promise.then(function(logs) {
-            expect(logs.length).toBe(1);
+    
+    
+    
+    // 2. Update log and insert a tag.
+    it('should update a log', function(done) {
+        // Remove tags from log1Update
+        var newTag = 'log1update';
+        log1Update.tags.push(newTag);
+        
+        dbService.updateLogAndTag(log1Update).then(function(returnValue) {
+            expect(returnValue.numLogsUpdated).toBe(1);
+            
+            // InsertedTags is an array of objects.
+            // First tag is undefined because, first tag ['log1'] already
+            // exists in tag table.
+            expect(returnValue.insertedTags[1].tag).toBe(newTag);
+            expect(returnValue.numTagsRemoved[0]).toBe(0);
             done();
         });
         
         rootScope.$apply();
     });
-
-    it('should permanently delete second log', function(done) {
-        var promise = dbService.permanentDelete(testDoc2Key);
-
-        promise.then(function(numRemoved) {
-            expect(numRemoved).toBe(1);
+    
+    // 3. Update log and remove a tag.
+    it('should update a log', function(done) {
+        // Remove tags from log1Update
+        log1Update.tags = ['log1'];
+        
+        dbService.updateLogAndTag(log1Update).then(function(returnValue) {
+            expect(returnValue.numLogsUpdated).toBe(1);
+            expect(returnValue.insertedTags[0]).toBeUndefined();
+            expect(returnValue.numTagsRemoved[0]).toBe(1);
             done();
         });
         
         rootScope.$apply();
     });
-
+    
+    // Just to make sure if the log is updated.
+    it('should get the updated log', function(done) {
+        dbService.getLog(log1Key).then(function(log) {
+            expect(log.key).toBeDefined();
+            
+            // To check if _id is converted to key.
+            expect(log._id).toBeUndefined();
+            expect(log1Update.title).toBe(log.title);
+            expect(log1Update.content).toBe(log.content);
+            expect(log1Update.timestamp).toBe(log.timestamp);
+            expect(log1Update.tags.length).toBe(log.tags.length);
+            for(i = 0; i < log.tags.length; i++) {
+                expect(log1Update.tags[i]).toBe(log.tags[i]);
+            }
+            expect(log1Update.is_removed).toBe(log.is_removed);
+            done();
+        });
+        
+        rootScope.$apply();
+    });
+    
+    /* Remove */
+    
+    // 1. We remove the updated log.
     it('should remove a log', function(done) {
-        var promise = dbService.removeLogAndTag(testDoc1Key);
-
-        promise.then(function() {
-            var getLogPromise = dbService.getLog(testDoc1Key);
-            return getLogPromise;
-        }).then(function(log) {
-            expect(log.is_removed).toBe(true);
+        dbService.removeLogAndTag(log1Key).then(function(returnValue) {
+            expect(returnValue.numLogsRemoved).toBe(1);
+            expect(returnValue.numTagsRemoved[0]).toBe(1);
             done();
         });
         
         rootScope.$apply();
     });
-
-    it('should remove log permanently', function(done) {
-        var promise = dbService.permanentDelete(testDoc1Key);
-
-        promise.then(function() {
-            var getAllLogsPromise = dbService.getAllLogs();
-            return getAllLogsPromise;
-        }).then(function(logs) {
+    
+    // At this point, there should be no logs.
+    it('should get all logs', function(done) {
+        dbService.getAllLogs().then(function(logs) {
             expect(logs.length).toBe(0);
             done();
         });
         
         rootScope.$apply();
     });
-
+    
+    // 2. We insert two logs having same tag.
+    // Remove one log and see if tag is there.
+    // Ideally the tag should be there.
+    it('should insert first log', function(done) {
+        dbService.insertLogAndTag(log1).then(function(log) {
+            // updating log1Key
+            log1Key = log.key;
+            done();
+        });
+        
+        rootScope.$apply();
+    });
+    
+    var log2 = {
+        'title': 'log2 title',
+        'content': 'log2 content',
+        'timestamp': '12345671',
+        'tags': ['log1'],
+        'is_removed': false
+    };
+    var log2Key;
+    
+    it('should insert second log', function(done) {
+        dbService.insertLogAndTag(log2).then(function(log) {
+            log2Key = log.key;
+            done();
+        });
+        
+        rootScope.$apply();
+    });
+    
+    // At this point, there should be 2 logs.
+    it('should get all logs', function(done) {
+        dbService.getAllLogs().then(function(logs) {
+            expect(logs.length).toBe(2);
+            done();
+        });
+        
+        rootScope.$apply();
+    });
+    
+    it('should remove first log', function(done) {
+        dbService.removeLogAndTag(log1Key).then(function(returnValue) {
+            expect(returnValue.numLogsRemoved).toBe(1);
+            expect(returnValue.numTagsRemoved[0]).toBe(0);
+            done();
+        });
+        
+        rootScope.$apply();
+    });
+    
+    it('should remove second log', function(done) {
+        dbService.removeLogAndTag(log2Key).then(function(returnValue) {
+            expect(returnValue.numLogsRemoved).toBe(1);
+            
+            // Now the tag should be removed since it is not
+            // used in any other log.
+            expect(returnValue.numTagsRemoved[0]).toBe(1);
+            done();
+        });
+        
+        rootScope.$apply();
+    });
+    
+    // Finally logs and tags should be 0
+    it('should get all logs', function(done) {
+        dbService.getAllLogs().then(function(logs) {
+            expect(logs.length).toBe(0);
+            done();
+        });
+        
+        rootScope.$apply();
+    });
+    
     it('should get all tags', function(done) {
-        var promise = dbService.getAllTags();
-
-        promise.then(function(tags) {
-            expect(tags.length).toBe(2);
+        dbService.getAllTags().then(function(tags) {
+            expect(tags.length).toBe(0);
             done();
         });
         
         rootScope.$apply();
     });
-    
-    it('should find a tag', function(done) {
-        var promise = dbService.findTag('new');
-
-        promise.then(function(tags) {
-            expect(tags.length).toBe(1);
-            done();
-        });
-        
-        rootScope.$apply();
-    });
-
-    it('should remove a tag', function(done) {
-        var promise = dbService.removeTag(testDoc2.tags[0]);
-
-        promise.then(function(numRemoved) {
-            expect(numRemoved).toBe(1);
-            done();
-        });
-        
-        rootScope.$apply();
-    });
-
-    
 
 });
