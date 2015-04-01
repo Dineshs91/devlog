@@ -26,11 +26,13 @@
         <div class="ui divider"></div>
       </div>
       <div class="ui divided padded grid navi">
-        <div class="two wide left column" >
+        <div class="three wide left column" >
         <!-- display all tags -->
           <div class='ui divided very relaxed selection list' >
             <a class="item" ng-repeat="tag in tags" ng-click="logCtrl.clickTagFn(tag.tag)">
-              {{ tag.tag }}
+              <div class="description">
+                {{ tag.tag }}
+              </div>
             </a>
           </div>
         </div>
