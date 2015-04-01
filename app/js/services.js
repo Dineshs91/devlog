@@ -288,7 +288,7 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
         getLogPromise.then(function(log) {
             oldTags = log.tags;
             
-            for(var i = 0; oldTags != undefined && i < oldTags.length; i++) {
+            for(var i = 0; oldTags !== undefined && i < oldTags.length; i++) {
                 var isRemoved = true;
                 for(var j = 0; j < newTags.length; j++) {
                     if(oldTags[i] === newTags[j]) {

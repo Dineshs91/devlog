@@ -42,7 +42,7 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
     this.getAllTags = function() {
         dbService.getAllTags().then(function(tags) {
             $scope.tags = tags;
-        })
+        });
     };
     
     this.clickLogFn = function(key) {
@@ -50,7 +50,7 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
             for(i = 0; i < log.tags.length; i++) {
                 tags = log.tags[i];
                 if(i != log.tags.length - 1) {
-                    tags += ","
+                    tags += ",";
                 }
             }
             $scope.logTags = tags;
@@ -78,7 +78,7 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         dbService.getLogsWithTag(tagName).then(function(logs) {
             $scope.logs = logs;
         });
-    }
+    };
     
     var init = function() {
         self.getAllLogs();
@@ -95,7 +95,7 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         log = {
             'title': $scope.title,
             'content': $scope.content,
-            'timestamp': (new Date).getTime(),
+            'timestamp': (new Date()).getTime(),
             'is_removed': false,
             'tags': formedTags
         };
