@@ -122,9 +122,9 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
     this.removeLog = function(key) {
         var deferred = $q.defer();
 
-        db.logs.update({_id: key}, {$set: {is_removed: true}}, function(err) {
+        db.logs.update({_id: key}, {$set: {is_removed: true}}, function(err, numRemoved) {
             if(!err) {
-                deferred.resolve();
+                deferred.resolve(numRemoved);
             } else {
                 deferred.reject(err);
             }
@@ -288,7 +288,7 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
         getLogPromise.then(function(log) {
             oldTags = log.tags;
             
-            for(var i = 0; i < oldTags.length; i++) {
+            for(var i = 0; oldTags != undefined && i < oldTags.length; i++) {
                 var isRemoved = true;
                 for(var j = 0; j < newTags.length; j++) {
                     if(oldTags[i] === newTags[j]) {
@@ -322,8 +322,8 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
             getLogsPromises.push(this.getLogsWithTag(removedTags[i]));
         }
         
+        var removeTagPromises = [];
         $q.all(getLogsPromises).then(function(allLogs) {
-            var removeTagPromises = [];
             for(i = 0; i < allLogs.length; i++) {
                 if(allLogs[i].length === 0) {
                     removeTagPromises.push(self.removeTag(removedTags[i]));
@@ -336,8 +336,14 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
             }
 
             return $q.all(removeTagPromises);
-        }).then(function() {
-            deferred.resolve();
+        }).then(function(numRemoved) {
+
+            // This is safe, because if removedTagPromises is 0
+            // then we do not remove anything.
+            if(removeTagPromises.length === 0) {
+                numRemoved = [0];
+            }
+            deferred.resolve(numRemoved);
         }).catch(function(err) {
             console.log(err);
             deferred.reject(err);
@@ -360,6 +366,13 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
         var formedTags = formTagDoc(log.tags);
         var logKey = log.key;
         
+        var returnValue = {
+            numLogsUpdated : 0,
+            numTagsRemoved : 0,
+            insertedTags : undefined
+        };
+        var insertTagPromises = [];
+
         // Need to find if tags are removed in the update process.
         // Return a array of tags being removed.
         var removedTagsPromise = this.tagsRemoved(log);
@@ -367,11 +380,11 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
         removedTagsPromise.then(function(removedTags) {
             // Check and delete, removed tags from tag table
             return self.checkAndRemoveTags(removedTags, logKey);
-        }).then(function() {
+        }).then(function(numRemoved) {
+            returnValue.numTagsRemoved = numRemoved;
             return self.updateLog(log);
         }).then(function(numReplaced) {
-            var insertTagPromises = [];
-
+            returnValue.numLogsUpdated = numReplaced;
             for (var i = 0; i < formedTags.length; i++) {
                 var insertTagPromise = self.insertTag(formedTags[i]);
                 insertTagPromises.push(insertTagPromise);
@@ -379,8 +392,12 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
 
             allTagPromises = $q.all(insertTagPromises);
             return allTagPromises;
-        }).then(function(newTag) {
-            deferred.resolve();
+        }).then(function(insertedTags) {
+            if(insertTagPromises.length === 0) {
+                insertedTags = [0];
+            }
+            returnValue.insertedTags = insertedTags;
+            deferred.resolve(returnValue);
         }).catch(function(err) {
             console.error(err);
             deferred.reject(err);
@@ -398,19 +415,26 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
         
         var self = this;
         var logKey = key;
+        var log;
+        var returnValue = {
+            numLogsRemoved: 0,
+            numTagsRemoved: 0
+        };
         
         getLogPromise = this.getLog(logKey);
         
-        var log;
         getLogPromise.then(function(doc) {
             log = doc;
             return self.removeLog(logKey);
-        }).then(function() {
+        }).then(function(numRemoved) {
+            returnValue.numLogsRemoved = numRemoved;
+
             var removedTags = [];
             removedTags = log.tags.slice();
             return self.checkAndRemoveTags(removedTags, logKey);
-        }).then(function() {
-            deferred.resolve();
+        }).then(function(numRemoved) {
+            returnValue.numTagsRemoved = numRemoved;
+            deferred.resolve(returnValue);
         }).catch(function(err) {
             console.log(err);
             deferred.reject(err);
