@@ -57,8 +57,8 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
                 }
             }
             $scope.logTags = tags;
-            $scope.title = log.title;
-            $scope.content = log.content;
+            $scope.logTitle = log.title;
+            $scope.logContent = log.content;
         });
     };
     
@@ -98,7 +98,8 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
     init();
     
     var formLogDoc = function() {
-        tags = $scope.logTags;
+        var tags = $scope.logTags;
+        
         if(tags === null || tags === undefined || tags === "") {
             formedTags = [];
         } else {
@@ -107,8 +108,8 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         }
 
         log = {
-            'title': $scope.title,
-            'content': $scope.content,
+            'title': $scope.logTitle,
+            'content': $scope.logContent,
             'timestamp': (new Date()).getTime(),
             'is_removed': false,
             'tags': formedTags
@@ -117,8 +118,8 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
     };
     
     var clearEditor = function() {
-        $scope.title = '';
+        $scope.logTitle = '';
         $scope.logTags = '';
-        $scope.content = '';
+        $scope.logContent = '';
     };
 }]);
