@@ -50,8 +50,10 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
     
     this.clickLogFn = function(key) {
         dbService.getLog(key).then(function(log) {
+            var tags = '';
+
             for(i = 0; i < log.tags.length; i++) {
-                tags = log.tags[i];
+                tags += log.tags[i];
                 if(i != log.tags.length - 1) {
                     tags += ",";
                 }
