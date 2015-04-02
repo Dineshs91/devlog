@@ -100,10 +100,10 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
     var formLogDoc = function() {
         var tags = $scope.logTags;
         
-        if(tags === null || tags === undefined || tags === "") {
+        if(tags === null || tags === undefined || tags.trim() === "") {
             formedTags = [];
         } else {
-            tags = tags.trim.toLowerCase();
+            tags = tags.trim().toLowerCase();
             formedTags = tags.split(',');
         }
 
