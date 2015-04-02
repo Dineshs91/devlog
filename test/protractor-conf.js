@@ -3,11 +3,11 @@
 var path = require('path');
 
 exports.config = {
-    chromeDriver: './support/chromedriver', // relative path to node-webkit's chromedriver
-    directConnect: true, // starting Selenium server isn't required in our case
+    chromeDriver: './support/chromedriver',
+    directConnect: true,
     specs: ['e2e/**/*.js'],
-    baseUrl: path.resolve('../index.html'),
-    rootElement: 'html', // specify a correct element where you bootstrap your AngularJS app, 'body' by default
+    baseUrl: 'file://' + path.resolve('app/index.html'),
+    rootElement: 'html',
 
     onPrepare: function() {
 
@@ -20,5 +20,6 @@ exports.config = {
         // This isn't required and used to avoid ‘Cannot extract package’ error showed
         // before Protractor have redirected node-webkit to resetUrl.
         browser.driver.get('file://');
+        browser.driver.get('file://' + path.resolve('app/index.html'));
     }
 };
