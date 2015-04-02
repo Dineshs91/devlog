@@ -28,7 +28,7 @@
       <div class="ui divided padded grid navi">
         <div class="three wide left column" >
         <!-- display all tags -->
-          <div class='ui divided very relaxed selection list' >
+          <div class='ui divided very relaxed animated selection list' >
             <a class="item" ng-repeat="tag in tags | orderBy:'+tag'" ng-click="logCtrl.clickTagFn(tag.tag)">
               <div class="description">
                 {{ tag.tag }}
@@ -39,7 +39,7 @@
 
         <div class="twelve wide right column">
           <!-- display all logs -->
-          <div class="ui divided very relaxed selection list">
+          <div class="ui divided very relaxed animated selection list">
             <a class="item" ng-repeat="log in logs | filter:{is_removed:false} | orderBy:'-timestamp'">
               <div class="right floated date">{{ log.timestamp | date:'MMM dd, yyyy' }}</div>
               <div class="description" ng-click="logCtrl.clickLogFn(log.key)">
