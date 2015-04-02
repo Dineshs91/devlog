@@ -40,7 +40,7 @@
         <div class="twelve wide right column">
           <!-- display all logs -->
           <div class="ui divided very relaxed selection list">
-            <a class="item" ng-repeat="log in logs | filter:{is_removed:false} | orderBy:timestamp">
+            <a class="item" ng-repeat="log in logs | filter:{is_removed:false} | orderBy:'-timestamp'">
               <div class="right floated date">{{ log.timestamp | date:'MMM dd, yyyy' }}</div>
               <div class="description" ng-click="logCtrl.clickLogFn(log.key)">
                 {{ log.title }}
