@@ -24,7 +24,7 @@ module.exports = function(config) {
         ],
 
         preprocessors: {
-          'app/js/**/*.js': 'coverage',
+          'app/js/**/!(db|model).js': 'coverage',
         },
 
         junitReporter: {
