@@ -89,8 +89,12 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
     
     var formLogDoc = function() {
         tags = $scope.logTags;
-        tags = tags.toLowerCase();
-        formedTags = tags.split(',');
+        if(tags === null || tags === undefined || tags === "") {
+            formedTags = [];
+        } else {
+            tags = tags.trim.toLowerCase();
+            formedTags = tags.split(',');
+        }
 
         log = {
             'title': $scope.title,

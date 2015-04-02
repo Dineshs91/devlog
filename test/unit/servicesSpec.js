@@ -273,5 +273,47 @@ describe("DevLog Services", function() {
         
         rootScope.$apply();
     });
+    
+    /* Check what happens if there are no tags */
+    it('should insert a log', function(done) {
+        log1.tags = [];
+        
+        dbService.insertLogAndTag(log1).then(function(log) {
+            log1Key = log.key;
+            expect(log1Key).toBeDefined();
+            
+            // To check if _id is converted to key.
+            expect(log._id).toBeUndefined();
+            expect(log1.title).toBe(log.title);
+            expect(log1.content).toBe(log.content);
+            expect(log1.timestamp).toBe(log.timestamp);
+            expect(log1.tags.length).toBe(log.tags.length);
+            for(i = 0; i < log.tags.length; i++) {
+                expect(log1.tags[i]).toBe(log.tags[i]);
+            }
+            expect(log.is_removed).toBe(log1.is_removed);
+            done();
+        });
+        
+        rootScope.$apply();
+    });
+    
+    it('should get all logs', function(done) {
+        dbService.getAllLogs().then(function(logs) {
+            expect(logs.length).toBe(1);
+            done();
+        });
+        
+        rootScope.$apply();
+    });
+    
+    it('should get all tags', function(done) {
+        dbService.getAllTags().then(function(tags) {
+            expect(tags.length).toBe(0);
+            done();
+        });
+        
+        rootScope.$apply();
+    });
 
 });
