@@ -41,6 +41,9 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
     
     this.getAllTags = function() {
         dbService.getAllTags().then(function(tags) {
+            tags.push({
+                'tag': 'all'
+            });
             $scope.tags = tags;
         });
     };
@@ -75,9 +78,16 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
     };
     
     this.clickTagFn = function(tagName) {
-        dbService.getLogsWithTag(tagName).then(function(logs) {
-            $scope.logs = logs;
-        });
+        if(tagName === 'all') {
+            dbService.getAllLogs().then(function(logs) {
+                $scope.logs = logs;
+            });
+        } else {
+            dbService.getLogsWithTag(tagName).then(function(logs) {
+                $scope.logs = logs;
+            });
+        }
+        
     };
     
     var init = function() {
