@@ -29,7 +29,7 @@
         <div class="three wide left column" >
         <!-- display all tags -->
           <div class='ui divided very relaxed animated selection list' >
-            <a class="item" ng-repeat="tag in tags | orderBy:'+tag'" ng-click="logCtrl.clickTagFn(tag.tag)">
+            <a class="item" ng-repeat="tag in tags | orderBy:'+tag'" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: $index == tagSelectedIndex }">
               <div class="description">
                 {{ tag.tag }}
               </div>
@@ -40,9 +40,9 @@
         <div class="twelve wide right column">
           <!-- display all logs -->
           <div class="ui divided very relaxed animated selection list">
-            <a class="item" ng-repeat="log in logs | filter:{is_removed:false} | orderBy:'-timestamp'">
+            <a class="item" ng-repeat="log in logs | filter:{is_removed:false} | orderBy:'-timestamp'" ng-class="{ active: $index == logSelectedIndex }">
               <div class="right floated date">{{ log.timestamp | date:'MMM dd, yyyy' }}</div>
-              <div class="description" ng-click="logCtrl.clickLogFn(log.key)">
+              <div class="description" ng-click="logCtrl.clickLogFn($index, log.key)">
                 {{ log.title }}
               </div>
               <i class="right floated trash icon" ng-click="logCtrl.removeLogFn(log.key)"></i>

@@ -30,6 +30,8 @@ devlog.directive('currentTime', ['$interval', 'dateFilter',
 
 devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbService) {
     $scope.format = 'M/d/yy hh:mm:ss a';
+    $scope.logSelectedIndex = -1;
+    $scope.tagSelectedIndex = -1;
     
     var self = this;
     
@@ -65,7 +67,8 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         });
     };
     
-    this.clickLogFn = function(key) {
+    this.clickLogFn = function($index, key) {
+        $scope.logSelectedIndex = $index;
         displayLog(key);
     };
 
@@ -84,7 +87,10 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         });
     };
     
-    this.clickTagFn = function(tagName) {
+    this.clickTagFn = function($index, tagName) {
+        $scope.tagSelectedIndex = $index;
+        $scope.logSelectedIndex = 0;
+
         if(tagName === 'all') {
             dbService.getAllLogs().then(function(logs) {
                 $scope.logs = logs;
