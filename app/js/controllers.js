@@ -143,7 +143,8 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
             formedTags = [];
         } else {
             tags = tags.trim().toLowerCase();
-            formedTags = tags.split(',');
+            var re = /\s*,\s*/;
+            formedTags = tags.split(re);
         }
 
         log = {
