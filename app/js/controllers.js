@@ -64,6 +64,7 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
             $scope.logTags = tags;
             $scope.logTitle = log.title;
             $scope.logContent = log.content;
+            $scope.logKey = log.key;
         });
     };
     
@@ -81,10 +82,18 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
     this.savefn = function() {
         log = formLogDoc();
         
-        dbService.insertLogAndTag(log).then(function() {
-            init();
-            clearEditor();
-        });
+        var logKey = $scope.logKey;
+        if(logKey !== null && logKey !== undefined && logKey.trim() !== '') {
+            log.key = logKey;
+            dbService.updateLogAndTag(log).then(function() {
+                self.getAllTags();
+            });
+        } else {
+            dbService.insertLogAndTag(log).then(function() {
+                init();
+                clearEditor();
+            });
+        }
     };
     
     this.clickTagFn = function($index, tagName) {
