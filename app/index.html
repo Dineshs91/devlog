@@ -43,7 +43,8 @@
             <a class="item" ng-repeat="log in logs | filter:{is_removed:false} | orderBy:'-timestamp'" ng-class="{ active: $index == logSelectedIndex }">
               <div class="right floated date">{{ log.timestamp | date:'MMM dd, yyyy' }}</div>
               <div class="description" ng-click="logCtrl.clickLogFn($index, log.key)">
-                {{ log.title }}
+                <span ng-show="$index != logSelectedIndex">{{ log.title }}</span>
+                <span ng-hide="$index != logSelectedIndex">{{ logTitle }}</span>
               </div>
               <i class="right floated trash icon" ng-click="logCtrl.removeLogFn(log.key)"></i>
             </a>

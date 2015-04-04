@@ -91,7 +91,8 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         if(logKey !== null && logKey !== undefined && logKey.trim() !== '') {
             log.key = logKey;
             dbService.updateLogAndTag(log).then(function() {
-                self.getAllTags();
+                init();
+                $scope.logSelectedIndex = 0;
             });
         } else {
             dbService.insertLogAndTag(log).then(function() {
@@ -134,7 +135,13 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         self.getAllTags();
     };
     
-    init();
+    var start = function() {
+        init();
+        $scope.tagSelectedIndex = 0;
+        $scope.logSelectedIndex = 0;
+    }
+    
+    start();
     
     var formLogDoc = function() {
         var tags = $scope.logTags;
