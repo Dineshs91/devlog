@@ -53,18 +53,22 @@
     </div>
 
     <div class="nine wide right column">
-      <input type="hidden" id="logKey" ng-model="logKey"></input>
-      <textarea id="title" ng-model="logTitle"></textarea>
-      <span class="ui left floated date" current-time="format"></span>
-
-      <div id="tags">
-        <input ng-model="logTags"></input>
+      <div class="ui vertical">
+        <input type="hidden" id="logKey" ng-model="logKey"></input>
+        <h2 class="ui header">
+          <textarea id="title" ng-model="logTitle"></textarea>
+        </h2>
+        <div id="tags">
+          <input ng-model="logTags"></input>
+        </div>
+        <span class="ui left floated date" current-time="format"></span>
+        <span class="ui right floated orange save button" ng-click="logCtrl.savefn()">Save</span>
+        
+        <div class="ui divider"></div>
+        <div class="ui vertical"></div>
+        
+        <textarea id="content" ng-model="logContent"></textarea>
       </div>
-      <span id="submit" class="ui right floated orange save button" ng-click="logCtrl.savefn()">Save</span>
-      <div class="ui divider"></div>
-      <textarea id="content" ng-model="logContent">
-
-      </textarea>
     </div>
   </div>
 </body>
