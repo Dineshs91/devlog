@@ -14,12 +14,12 @@
 <body>
   <div class="ui divided padded grid" ng-controller="LogController as logCtrl">
     <!-- left float -->
-    <div class="seven wide left column">
+    <div class="six wide left column">
       <div class="ui vertical">
         <h2 class="ui header">
         <i class="inbox icon"></i>
         Log Entry
-        <div class="ui right floated green button add">
+        <div class="ui right floated green button add" ng-click="logCtrl.Add()">
           Add
         </div>
         </h2>
@@ -53,14 +53,25 @@
       </div>
     </div>
 
-    <div class="nine wide right column">
+    <div class="ten wide right column">
       <div class="ui vertical">
         <input type="hidden" id="logKey" ng-model="logKey"></input>
-        <h2 class="ui header">
-          <textarea id="title" ng-model="logTitle"></textarea>
-        </h2>
-        <div id="tags">
-          <input ng-model="logTags"></input>
+
+        <div class="ui right labeled fluid input">
+          <input ng-model="logTitle" placeholder="title..."></input>
+          <div class="ui label">
+            Title
+          </div>
+        </div>
+        
+        <div id="tags" style="margin-top: 15px; margin-bottom: 15px;">
+          <div class="ui right labeled left icon input">
+            <i class="tags icon"></i>
+            <input type="text" placeholder="Tags" ng-model="logTags">
+            <div class="ui tag label">
+              Tags
+            </div>
+          </div>
         </div>
         <span class="ui left floated date" current-time="format"></span>
         <span class="ui right floated orange save button" ng-click="logCtrl.savefn()">Save</span>
@@ -68,7 +79,11 @@
         <div class="ui divider"></div>
         <div class="ui vertical"></div>
         
-        <textarea id="content" ng-model="logContent"></textarea>
+        <div class="ui form">
+          <div class="field">
+            <textarea ng-model="logContent"></textarea>
+          </div>
+        </div>
       </div>
     </div>
   </div>

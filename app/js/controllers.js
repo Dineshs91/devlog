@@ -63,7 +63,7 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
             for(i = 0; i < log.tags.length; i++) {
                 tags += log.tags[i];
                 if(i != log.tags.length - 1) {
-                    tags += ",";
+                    tags += ", ";
                 }
             }
             $scope.logTags = tags;
