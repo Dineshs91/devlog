@@ -11,7 +11,7 @@
   <script src="bower_components/semantic-ui/dist/semantic.js"></script>
   <link rel="stylesheet" type="text/css" href="bower_components/semantic-ui/dist/semantic.css">
 </head>
-<body>
+<body style="height: 100%;">
   <div class="ui divided padded grid" ng-controller="LogController as logCtrl">
     <!-- left float -->
     <div class="six wide left column">
@@ -25,10 +25,10 @@
         </h2>
         <div class="ui divider"></div>
       </div>
-      <div class="ui divided padded grid navi">
+      <div class="ui divided padded grid">
         <div class="three wide left column" >
         <!-- display all tags -->
-          <div class='ui divided very relaxed animated selection list' >
+          <div class="ui divided very relaxed animated selection list">
             <a class="item" ng-repeat="tag in tags | orderBy:'+tag'" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: $index == tagSelectedIndex }">
               <div class="description">
                 {{ tag.tag }}
@@ -36,7 +36,6 @@
             </a>
           </div>
         </div>
-
         <div class="twelve wide right column">
           <!-- display all logs -->
           <div class="ui divided very relaxed animated selection list">
