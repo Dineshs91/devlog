@@ -39,10 +39,7 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         dbService.getAllLogs().then(function(logs) {
             $scope.logs = logs;
 
-            // Sorting logs in descending order based on timestamp.
-            logs.sort(function(a, b) {
-                return parseFloat(b.timestamp) - parseFloat(a.timestamp);
-            });
+            logs = sortLogs(logs);
             displayLog(logs[0].key);
         });
     };
@@ -110,20 +107,14 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
             dbService.getAllLogs().then(function(logs) {
                 $scope.logs = logs;
 
-                // Sorting logs in descending order based on timestamp.
-                logs.sort(function(a, b) {
-                    return parseFloat(b.timestamp) - parseFloat(a.timestamp);
-                });
+                logs = sortLogs(logs);
                 displayLog(logs[0].key);
             });
         } else {
             dbService.getLogsWithTag(tagName).then(function(logs) {
                 $scope.logs = logs;
 
-                // Sorting logs in descending order based on timestamp.
-                logs.sort(function(a, b) {
-                    return parseFloat(b.timestamp) - parseFloat(a.timestamp);
-                });
+                logs = sortLogs(logs);
                 displayLog(logs[0].key);
             });
         }
@@ -185,4 +176,14 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         $scope.logContent = '';
         $scope.logKey = '';
     };
+
+    var sortLogs = function(logs) {
+        // Sorting logs in descending order based on timestamp.
+        logs.sort(function(a, b) {
+            return parseFloat(b.timestamp) - parseFloat(a.timestamp);
+        });
+
+        return logs;
+    };
+
 }]);
