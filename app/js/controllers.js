@@ -84,7 +84,7 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         });
     };
     
-    this.savefn = function() {
+    this.saveFn = function() {
         log = formLogDoc();
         
         var logKey = $scope.logKey;
