@@ -130,6 +130,21 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         
     };
     
+    this.addFn = function() {
+        log = {
+            'title': '',
+            'content': '',
+            'timestamp': (new Date()).getTime(),
+            'is_removed': false,
+            'tags': []
+        };
+
+        logs = $scope.logs;
+        logs.push(log);
+        $scope.logs = logs;
+        clearEditor();
+    };
+
     var init = function() {
         self.getAllLogs();
         self.getAllTags();
@@ -139,7 +154,7 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         init();
         $scope.tagSelectedIndex = 0;
         $scope.logSelectedIndex = 0;
-    }
+    };
     
     start();
     
@@ -168,5 +183,6 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         $scope.logTitle = '';
         $scope.logTags = '';
         $scope.logContent = '';
+        $scope.logKey = '';
     };
 }]);
