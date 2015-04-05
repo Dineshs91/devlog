@@ -88,12 +88,11 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         if(logKey !== null && logKey !== undefined && logKey.trim() !== '') {
             log.key = logKey;
             dbService.updateLogAndTag(log).then(function() {
-                init();
-                $scope.logSelectedIndex = 0;
+                start();
             });
         } else {
             dbService.insertLogAndTag(log).then(function() {
-                init();
+                start();
                 clearEditor();
             });
         }
