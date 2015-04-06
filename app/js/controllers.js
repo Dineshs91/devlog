@@ -198,9 +198,7 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
             'tag': 'all'
         };
 
-        dbService.findTag(tag.tag).then(function(tags) {
-            return dbService.insertTag(tag);
-        }).then(function() {
+        dbService.insertTag(tag).then(function(tag) {
             init();
         });
     };
