@@ -46,7 +46,9 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
     
     this.getAllTags = function() {
         dbService.getAllTags().then(function(tags) {
-            tags.push({
+            tags = sortTags(tags);
+
+            tags.unshift({
                 'tag': 'all'
             });
             $scope.tags = tags;
@@ -183,6 +185,23 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         });
 
         return logs;
+    };
+
+    var sortTags = function(tags) {
+        // Sorting tags alphabetically.
+        tags.sort(function(a, b) {
+            var tagA = a.tag.toLowerCase();
+            var tagB = b.tag.toLowerCase();
+            if(tagA < tagB) {
+                return -1;
+            }
+            if(tagA > tagB) {
+                return 1;
+            }
+            return 0;
+        });
+
+        return tags;
     };
 
 }]);

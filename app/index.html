@@ -29,7 +29,7 @@
         <div class="three wide left column" >
         <!-- display all tags -->
           <div class="ui divided very relaxed animated selection list">
-            <a class="item" ng-repeat="tag in tags | orderBy:'+tag'" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: $index == tagSelectedIndex }">
+            <a class="item" ng-repeat="tag in tags" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: $index == tagSelectedIndex }">
               <div class="description">
                 {{ tag.tag }}
               </div>
