@@ -55,23 +55,6 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         });
     };
     
-    var displayLog = function(key) {
-        dbService.getLog(key).then(function(log) {
-            var tags = '';
-
-            for(i = 0; i < log.tags.length; i++) {
-                tags += log.tags[i];
-                if(i != log.tags.length - 1) {
-                    tags += ", ";
-                }
-            }
-            $scope.logTags = tags;
-            $scope.logTitle = log.title;
-            $scope.logContent = log.content;
-            $scope.logKey = log.key;
-        });
-    };
-    
     this.clickLogFn = function($index, key) {
         $scope.logSelectedIndex = $index;
         displayLog(key);
@@ -137,18 +120,22 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         clearEditor();
     };
 
-    var init = function() {
-        self.getAllLogs();
-        self.getAllTags();
+    var displayLog = function(key) {
+        dbService.getLog(key).then(function(log) {
+            var tags = '';
+
+            for(i = 0; i < log.tags.length; i++) {
+                tags += log.tags[i];
+                if(i != log.tags.length - 1) {
+                    tags += ", ";
+                }
+            }
+            $scope.logTags = tags;
+            $scope.logTitle = log.title;
+            $scope.logContent = log.content;
+            $scope.logKey = log.key;
+        });
     };
-    
-    var start = function() {
-        init();
-        $scope.tagSelectedIndex = 0;
-        $scope.logSelectedIndex = 0;
-    };
-    
-    start();
     
     var formLogDoc = function() {
         var tags = $scope.logTags;
@@ -203,5 +190,18 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
 
         return tags;
     };
+
+    var init = function() {
+        self.getAllLogs();
+        self.getAllTags();
+    };
+
+    var start = function() {
+        init();
+        $scope.tagSelectedIndex = 0;
+        $scope.logSelectedIndex = 0;
+    };
+
+    start();
 
 }]);
