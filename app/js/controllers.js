@@ -48,9 +48,11 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         dbService.getAllTags().then(function(tags) {
             tags = sortTags(tags);
 
-            tags.unshift({
-                'tag': 'all'
-            });
+            var index = tags.map(function(tag) { return tag.tag; }).indexOf('all');
+            var allTag = tags[index];
+            tags.splice(index, 1);
+
+            tags.unshift(allTag);
             $scope.tags = tags;
         });
     };
@@ -191,13 +193,26 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         return tags;
     };
 
+    var insertAllTag = function() {
+        var tag = {
+            'tag': 'all'
+        };
+
+        dbService.findTag(tag.tag).then(function(tags) {
+            return dbService.insertTag(tag);
+        }).then(function() {
+            init();
+        });
+    };
+
     var init = function() {
         self.getAllLogs();
         self.getAllTags();
     };
 
     var start = function() {
-        init();
+        insertAllTag();
+
         $scope.tagSelectedIndex = 0;
         $scope.logSelectedIndex = 0;
     };
