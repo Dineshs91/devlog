@@ -29,12 +29,10 @@ describe("DevLog Controllers", function() {
             
             mockDbService.tags = [
                 {
-                    '_id': '442477',
                     'key': 'wrmvg5c2ZuzGLxbh',
                     'tag': 'test'
                 },
                 {
-                    '_id': '197223',
                     'key': 'rtYsgTmnaQz9Ldbv',
                     'tag': 'update'
                 }
@@ -168,6 +166,18 @@ describe("DevLog Controllers", function() {
                 
                 return deferred.promise;
             };
+
+            mockDbService.findTag = function(tagname) {
+                var deferred = $q.defer();
+
+                for (var tag in this.tags) {
+                    if(tag.tag === tagname) {
+                        deferred.resolve(tag);
+                    }
+                }
+
+                return deferred.promise;
+            };
         });
     });
     
@@ -180,11 +190,19 @@ describe("DevLog Controllers", function() {
     it('should have a LogCtrl controller', function() {
         expect(logCtrl).not.toBe(null);
     });
-    
+
     it('should get all logs', function() {
         logCtrl.getAllLogs();
 
         $scope.$apply();
         expect($scope.logs.length).toBe(2); 
+    });
+
+    it('should get all tags', function() {
+        logCtrl.getAllTags();
+
+        $scope.$apply();
+        expect($scope.tags.length).toBe(3);
+        expect($scope.tags[0].tag).toBe('all');
     });
 });
