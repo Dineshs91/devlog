@@ -32,6 +32,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     $scope.format = 'M/d/yy hh:mm:ss a';
     $scope.logSelectedIndex = -1;
     $scope.tagSelectedIndex = -1;
+    var currentSelectedTag = '';
     
     var self = this;
     
@@ -78,17 +79,51 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         if(logKey !== null && logKey !== undefined && logKey.trim() !== '') {
             log.key = logKey;
             dbService.updateLogAndTag(log).then(function() {
-                start();
+                save();
             });
         } else {
             dbService.insertLogAndTag(log).then(function() {
-                start();
-                clearEditor();
+                save();
             });
         }
     };
     
+    var save = function() {
+        self.getAllTags();
+        if(currentSelectedTag !== null && currentSelectedTag !== undefined) {
+            if(currentSelectedTag === '' || currentSelectedTag === 'all') {
+                self.getAllLogs();
+
+                $scope.logSelectedIndex = 0;
+
+                for(var i = 0; i < $scope.tags.length; i++) {
+                    if($scope.tags[i].tag === currentSelectedTag) {
+                        $scope.tagSelectedIndex = i;
+                        break;
+                    }
+                }
+            } else {
+               dbService.getLogsWithTag(currentSelectedTag).then(function(logs) {
+                   logs = sortLogs(logs);
+
+                   $scope.logs = logs;
+                   displayLog(logs[0].key);
+                   $scope.logSelectedIndex = 0;
+
+                   for(var i = 0; i < $scope.tags.length; i++) {
+                       if($scope.tags[i].tag === currentSelectedTag) {
+                           $scope.tagSelectedIndex = i;
+                           break;
+                       }
+                   }
+               });
+            }
+        }
+    };
+
     this.clickTagFn = function($index, tagName) {
+        currentSelectedTag = $scope.tags[$index].tag;
+
         $scope.tagSelectedIndex = $index;
         $scope.logSelectedIndex = 0;
 
@@ -123,6 +158,10 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         logs.push(log);
         $scope.logs = logs;
         clearEditor();
+
+        if(currentSelectedTag !== '') {
+            $scope.logTags = currentSelectedTag;
+        }
     };
 
     this.changedFn = function() {
