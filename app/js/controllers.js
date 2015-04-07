@@ -64,6 +64,9 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
 
     this.removeLogFn = function(key) {
         dbService.removeLogAndTag(key).then(function() {
+            $scope.tagSelectedIndex = 0;
+            $scope.logSelectedIndex = 0;
+
             init();
         });
     };
