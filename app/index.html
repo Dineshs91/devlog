@@ -58,7 +58,7 @@
         <input type="hidden" id="logKey" ng-model="logKey"></input>
 
         <div class="ui right labeled fluid input">
-          <input ng-model="logTitle" placeholder="title..."></input>
+          <input ng-model="logTitle" placeholder="title..." ng-keypress="logCtrl.changedFn()"></input>
           <div class="ui label">
             Title
           </div>
@@ -67,7 +67,7 @@
         <div id="tags" style="margin-top: 15px; margin-bottom: 15px;">
           <div class="ui right labeled left icon input">
             <i class="tags icon"></i>
-            <input type="text" placeholder="Tags" ng-model="logTags">
+            <input type="text" placeholder="Tags" ng-model="logTags" ng-keypress="logCtrl.changedFn()">
             <div class="ui tag label">
               Tags
             </div>
@@ -81,7 +81,7 @@
         
         <div class="ui form">
           <div class="field">
-            <textarea ng-model="logContent"></textarea>
+            <textarea ng-model="logContent" ng-keypress="logCtrl.changedFn()"></textarea>
           </div>
         </div>
       </div>

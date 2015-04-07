@@ -28,7 +28,7 @@ devlog.directive('currentTime', ['$interval', 'dateFilter',
     };
 }]);
 
-devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbService) {
+devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function($scope, $timeout, dbService) {
     $scope.format = 'M/d/yy hh:mm:ss a';
     $scope.logSelectedIndex = -1;
     $scope.tagSelectedIndex = -1;
@@ -124,6 +124,26 @@ devlog.controller('LogController', ['$scope', 'dbService', function($scope, dbSe
         $scope.logs = logs;
         clearEditor();
     };
+
+    this.changedFn = function() {
+        myTimer.clear();
+
+        myTimer.set();
+    };
+
+    var myTimer = function(){
+        var timer;
+
+        this.set = function() {
+            timer = $timeout(self.saveFn, 3000);
+        };
+
+        this.clear = function() {
+          $timeout.cancel(timer);
+        };
+
+        return this;
+    }();
 
     var displayLog = function(key) {
         dbService.getLog(key).then(function(log) {
