@@ -37,112 +37,30 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     var self = this;
     
     this.getAllLogs = function() {
-        dbService.getAllLogs().then(function(logs) {
+        return dbService.getAllLogs().then(function(logs) {
             $scope.logs = logs;
 
-            logs = sortLogs(logs);
-            displayLog(logs[0].key);
+            if(logs.length === 0) {
+                clearEditor();
+            } else {
+                logs = sortLogs(logs);
+                displayLog(logs[0].key);
+            }
         });
     };
     
     this.getAllTags = function() {
-        dbService.getAllTags().then(function(tags) {
+        return dbService.getAllTags().then(function(tags) {
             tags = sortTags(tags);
 
             var index = tags.map(function(tag) { return tag.tag; }).indexOf('all');
             var allTag = tags[index];
             tags.splice(index, 1);
 
+            // Move 'ALL' tag to the beginning.
             tags.unshift(allTag);
             $scope.tags = tags;
         });
-    };
-    
-    this.clickLogFn = function($index, key) {
-        $scope.logSelectedIndex = $index;
-        displayLog(key);
-    };
-
-    this.removeLogFn = function(key) {
-        dbService.removeLogAndTag(key).then(function() {
-            $scope.tagSelectedIndex = 0;
-            $scope.logSelectedIndex = 0;
-
-            init();
-        });
-    };
-    
-    this.saveFn = function() {
-        log = formLogDoc();
-        
-        var logKey = $scope.logKey;
-        if(logKey !== null && logKey !== undefined && logKey.trim() !== '') {
-            log.key = logKey;
-            dbService.updateLogAndTag(log).then(function() {
-                save();
-            });
-        } else {
-            dbService.insertLogAndTag(log).then(function() {
-                save();
-            });
-        }
-    };
-    
-    var save = function() {
-        self.getAllTags();
-        if(currentSelectedTag !== null && currentSelectedTag !== undefined) {
-            if(currentSelectedTag === '' || currentSelectedTag === 'all') {
-                self.getAllLogs();
-
-                $scope.logSelectedIndex = 0;
-
-                for(var i = 0; i < $scope.tags.length; i++) {
-                    if($scope.tags[i].tag === currentSelectedTag) {
-                        $scope.tagSelectedIndex = i;
-                        break;
-                    }
-                }
-            } else {
-               dbService.getLogsWithTag(currentSelectedTag).then(function(logs) {
-                   logs = sortLogs(logs);
-
-                   $scope.logs = logs;
-                   displayLog(logs[0].key);
-                   $scope.logSelectedIndex = 0;
-
-                   for(var i = 0; i < $scope.tags.length; i++) {
-                       if($scope.tags[i].tag === currentSelectedTag) {
-                           $scope.tagSelectedIndex = i;
-                           break;
-                       }
-                   }
-               });
-            }
-        }
-    };
-
-    this.clickTagFn = function($index, tagName) {
-        currentSelectedTag = $scope.tags[$index].tag;
-
-        $scope.tagSelectedIndex = $index;
-        $scope.logSelectedIndex = 0;
-
-        if(tagName === 'all') {
-            dbService.getAllLogs().then(function(logs) {
-                $scope.logs = logs;
-
-                logs = sortLogs(logs);
-                displayLog(logs[0].key);
-            });
-        } else {
-            dbService.getLogsWithTag(tagName).then(function(logs) {
-                $scope.logs = logs;
-
-                logs = sortLogs(logs);
-                displayLog(logs[0].key);
-            });
-        }
-        
     };
     
     this.addFn = function() {
@@ -159,31 +77,136 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         $scope.logs = logs;
         clearEditor();
 
-        if(currentSelectedTag !== '') {
+        if(currentSelectedTag !== ''  && currentSelectedTag !== 'all') {
             $scope.logTags = currentSelectedTag;
         }
     };
+    
+    this.clickTagFn = function($index, tagName) {
+        currentSelectedTag = $scope.tags[$index].tag;
 
+        $scope.tagSelectedIndex = $index;
+        $scope.logSelectedIndex = 0;
+
+        if(tagName === 'all') {
+            self.getAllLogs();
+        } else {
+            dbService.getLogsWithTag(tagName).then(function(logs) {
+                $scope.logs = logs;
+
+                logs = sortLogs(logs);
+                displayLog(logs[0].key);
+            });
+        }
+        
+    };
+    
+    this.clickLogFn = function($index, key) {
+        $scope.logSelectedIndex = $index;
+        displayLog(key);
+    };
+    
+    this.removeLogFn = function(key) {
+        dbService.removeLogAndTag(key).then(function() {
+            if(currentSelectedTag !== 'all') {
+                $scope.tagSelectedIndex = findTagIndex($scope.tags, currentSelectedTag);
+
+                dbService.getLogsWithTag(currentSelectedTag).then(function(logs) {
+                    $scope.logs = logs;
+                    
+                    if(logs.length === 0) {
+                        clearEditor();
+                        $scope.tagSelectedIndex = 0;
+                        self.getAllLogs();
+                    } else {
+                        logs = sortLogs(logs);
+                        displayLog(logs[0].key);
+                    }
+                });
+            } else {
+                $scope.tagSelectedIndex = 0;
+                self.getAllLogs();
+            }
+
+            $scope.logSelectedIndex = 0;
+
+            self.getAllTags();
+        });
+    };
+    
+    this.saveFn = function() {
+        log = formLogDoc();
+        
+        // check if selectedTag is present
+        // if removed select the first tag
+        // in the log
+        if(currentSelectedTag !== 'all' && log.tags.indexOf(currentSelectedTag) === -1) {
+            currentSelectedTag = log.tags[0];
+        }
+        
+        var logKey = $scope.logKey;
+        if(logKey !== null && logKey !== undefined && logKey.trim() !== '') {
+            log.key = logKey;
+            dbService.updateLogAndTag(log).then(function() {
+                save();
+            });
+        } else {
+            dbService.insertLogAndTag(log).then(function() {
+                save();
+            });
+        }
+    };
+    
     this.changedFn = function() {
         myTimer.clear();
-
         myTimer.set();
     };
 
-    var myTimer = function(){
+    var myTimer = function() {
         var timer;
-
         this.set = function() {
             timer = $timeout(self.saveFn, 3000);
         };
 
         this.clear = function() {
-          $timeout.cancel(timer);
+            $timeout.cancel(timer);
         };
 
         return this;
     }();
 
+    var save = function() {
+        self.getAllTags();
+        
+        if(currentSelectedTag === '' || currentSelectedTag === 'all') {
+            self.getAllLogs();
+
+            $scope.logSelectedIndex = 0;
+
+            $scope.tagSelectedIndex = findTagIndex($scope.tags, currentSelectedTag);
+        } else {
+            dbService.getLogsWithTag(currentSelectedTag).then(function(logs) {
+                logs = sortLogs(logs);
+
+                $scope.logs = logs;
+                displayLog(logs[0].key);
+                $scope.logSelectedIndex = 0;
+
+                $scope.tagSelectedIndex = findTagIndex($scope.tags, currentSelectedTag);
+            });
+        }
+    };
+    
+    var findTagIndex = function(tags, value) {
+        for(var i = 0; i < tags.length; i++) {
+            if(tags[i].tag === value) {
+                return i;
+            }
+        }
+        
+        return -1;
+    };
+    
     var displayLog = function(key) {
         dbService.getLog(key).then(function(log) {
             var tags = '';
@@ -199,6 +222,13 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
             $scope.logContent = log.content;
             $scope.logKey = log.key;
         });
+    };
+    
+    var clearEditor = function() {
+        $scope.logTitle = '';
+        $scope.logTags = '';
+        $scope.logContent = '';
+        $scope.logKey = '';
     };
     
     var formLogDoc = function() {
@@ -222,25 +252,20 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         return log;
     };
     
-    var clearEditor = function() {
-        $scope.logTitle = '';
-        $scope.logTags = '';
-        $scope.logContent = '';
-        $scope.logKey = '';
-    };
-
+    /*
+        Sorting logs in descending order based on timestamp.
+    */
     var sortLogs = function(logs) {
-        // Sorting logs in descending order based on timestamp.
-        logs.sort(function(a, b) {
+        return logs.sort(function(a, b) {
             return parseFloat(b.timestamp) - parseFloat(a.timestamp);
         });
-
-        return logs;
     };
-
+    
+    /*
+        Sorting tags alphabetically.
+    */
     var sortTags = function(tags) {
-        // Sorting tags alphabetically.
-        tags.sort(function(a, b) {
+        return tags.sort(function(a, b) {
             var tagA = a.tag.toLowerCase();
             var tagB = b.tag.toLowerCase();
             if(tagA < tagB) {
@@ -251,32 +276,42 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
             }
             return 0;
         });
-
-        return tags;
     };
-
+    
+    /*
+        Insert ALL tag when the app starts.
+    */
     var insertAllTag = function() {
         var tag = {
             'tag': 'all'
         };
+        
+        return dbService.findTag('all').then(function(tags) {
+            if(tags.length === 0) {
+                return dbService.insertTag(tag);
+            }
+        });
 
-        dbService.insertTag(tag).then(function(tag) {
-            init();
+    };
+    
+    /*
+        Initialize the app. Display the latest log in 'ALL' tag.
+        Selection: 'ALL' tag and latest log.
+    
+        Used only when the app starts.
+    */
+    var init = function() {
+        insertAllTag().then(function() {
+            self.getAllLogs().then(function() {
+                $scope.logSelectedIndex = 0;
+            });
+            
+            self.getAllTags().then(function() {
+                $scope.tagSelectedIndex = 0;
+                currentSelectedTag = $scope.tags[0].tag;
+            });
         });
     };
-
-    var init = function() {
-        self.getAllLogs();
-        self.getAllTags();
-    };
-
-    var start = function() {
-        insertAllTag();
-
-        $scope.tagSelectedIndex = 0;
-        $scope.logSelectedIndex = 0;
-    };
-
-    start();
-
+    
+    init();
 }]);

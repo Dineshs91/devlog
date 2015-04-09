@@ -135,7 +135,7 @@ describe("DevLog Controllers", function() {
             
             mockDbService.insertTag = function(tag) {
                 var deferred = $q.defer();
-                
+
                 tag.key = getRandomInt;
                 this.tags.push(tag);
                 
@@ -161,7 +161,7 @@ describe("DevLog Controllers", function() {
             
             mockDbService.getAllTags = function() {
                 var deferred = $q.defer();
-                
+
                 deferred.resolve(this.tags);
                 
                 return deferred.promise;
@@ -173,6 +173,8 @@ describe("DevLog Controllers", function() {
                 for (var tag in this.tags) {
                     if(tag.tag === tagname) {
                         deferred.resolve(tag);
+                    } else {
+                        deferred.resolve([]);
                     }
                 }
 
@@ -195,14 +197,16 @@ describe("DevLog Controllers", function() {
         logCtrl.getAllLogs();
 
         $scope.$apply();
-        expect($scope.logs.length).toBe(2); 
+        expect($scope.logs.length).toBe(2);
     });
 
     it('should get all tags', function() {
-        logCtrl.getAllTags();
+        logCtrl.getAllTags().then(function(tags) {
+            expect($scope.tags.length).toBe(3);
+            expect($scope.tags[0].tag).toBe('all');
+        });
 
         $scope.$apply();
-        expect($scope.tags.length).toBe(3);
-        expect($scope.tags[0].tag).toBe('all');
+        
     });
 });
