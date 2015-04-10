@@ -6,3 +6,12 @@ body {
 #wrapper {
     margin-bottom: 35px;
 }
+
+#tags {
+     margin-top: 15px;
+     margin-bottom: 15px;
+}
+
+#logContent {
+    height: 35em;
+}

@@ -65,7 +65,7 @@
           </div>
         </div>
         
-        <div id="tags" style="margin-top: 15px; margin-bottom: 15px;">
+        <div id="tags">
           <div class="ui right labeled left icon input">
             <i class="tags icon"></i>
             <input type="text" placeholder="Tags" ng-model="logTags" ng-keyup="logCtrl.changedFn()">
@@ -85,7 +85,7 @@
         
         <div class="ui form">
           <div class="field">
-            <textarea ng-model="logContent" ng-keyup="logCtrl.changedFn()"></textarea>
+            <textarea id="logContent" ng-model="logContent" ng-keyup="logCtrl.changedFn()"></textarea>
           </div>
         </div>
       </div>
