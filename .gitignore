@@ -1,7 +1,9 @@
-node_modules/
 .DS_Store
-bower_components/
 *.log
-test/support
-coverage
+build/
+bower_components/
+cache/
+coverage/
+node_modules/
 test_out/
+test/support
