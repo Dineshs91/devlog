@@ -118,8 +118,12 @@ module.exports = function(grunt) {
         'exec:build_win64_release'
     ]);
     
+    grunt.registerTask('release', [
+        'github-release'
+    ]);
+    
     grunt.registerTask('publish', [
         'build-all',
-        'github-release'
+        'release'
     ]);
 }
