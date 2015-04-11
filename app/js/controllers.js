@@ -165,7 +165,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     var myTimer = function() {
         var timer;
         this.set = function() {
-            timer = $timeout(self.saveFn, 3000);
+            timer = $timeout(self.saveFn, 1000);
         };
 
         this.clear = function() {
