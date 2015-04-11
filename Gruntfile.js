@@ -9,7 +9,10 @@ module.exports = function(grunt) {
         grunt.loadTasks('tasks');
     }
     
+    grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-contrib-jshint');
+    grunt.loadNpmTasks('grunt-exec');
+    grunt.loadNpmTasks('grunt-github-releaser');
     grunt.loadNpmTasks('grunt-node-webkit-builder');
 
     grunt.initConfig({
@@ -29,16 +32,94 @@ module.exports = function(grunt) {
 	        src: [
                 './**/*',
                 '!./test/**',
-                '!./node_modules/**',
+                '!./node_modules/grunt-*/**',
+                '!./node_modules/grunt/**',
+                '!./node_modules/karma-*/**',
+                '!./node_modules/karma/**',
+                '!./node_modules/nodewebkit/**',
+                '!./node_modules/protractor/**',
                 '!./test_out/**',
                 '!./cache/**'
             ]
     	},
+        clean: {
+            build: ['build/'],
+        },
+        exec: {
+            build_osx64_release: {
+                command: "./scripts/build_osx64.sh",
+                cwd: './',
+                stdout: true,
+                stderr: true
+            },
+            build_linux64_release: {
+                command: "./scripts/build_linux64.sh",
+                cwd: './',
+                stdout: true,
+                stderr: true
+            },
+            build_win64_release: {
+                command: "./scripts/build_win64.sh",
+                cwd: './',
+                stdout: true,
+                stderr: true
+            }
+        },
+        "github-release": {
+            options: {
+                repository: 'Dineshs91/devlog',
+                auth: {
+                    user: 'Dineshs91',
+                    password: ''
+                },
+                release: {
+                    tag_name: pkg.version,
+                    name: pkg.version,
+                    draft: true,
+                    prerelease: false
+                }
+            },
+            files: {
+                src: [
+                    "./build/devlog-linux64.tar.gz",
+                    "./build/devlog-osx64.dmg",
+                    "./build/devlog-win64.zip"
+                ],
+            },
+        }
     });
     
     grunt.registerTask('setup', [
        'e2e-setup'
     ]);
     
-    grunt.registerTask('default', ['nodewebkit']);
+    grunt.registerTask('default', [
+        'clean:build',
+        'nodewebkit'
+    ]);
+    
+    // Release tasks
+    grunt.registerTask('build-osx64', [
+        'exec:build_osx64_release'
+    ]);
+    
+    grunt.registerTask('build-linux32', [
+        'exec:build_linux64_release'
+    ]);
+    
+    grunt.registerTask('build-win64', [
+        'exec:build_win64_release'
+    ]);
+    
+    grunt.registerTask('build-all', [
+        'default',
+        'exec:build_osx64_release',
+        'exec:build_linux64_release',
+        'exec:build_win64_release'
+    ]);
+    
+    grunt.registerTask('publish', [
+        'build-all',
+        'github-release'
+    ]);
 }
