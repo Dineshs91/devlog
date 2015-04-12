@@ -44,8 +44,7 @@
             <a class="item" ng-repeat="log in logs | orderBy:'-timestamp'" ng-class="{ active: $index == logSelectedIndex }">
               <div class="right floated date">{{ log.timestamp | date:'MMM dd, yyyy' }}</div>
               <div class="description" ng-click="logCtrl.clickLogFn($index, log)">
-                <span ng-show="$index != logSelectedIndex">{{ log.title }}</span>
-                <span ng-hide="$index != logSelectedIndex">{{ logTitle }}</span>
+                {{ log.title }}
               </div>
               <i class="right floated trash icon" ng-click="logCtrl.removeLogFn(log.key)"></i>
             </a>
@@ -56,10 +55,10 @@
 
     <div class="ten wide right column">
       <div class="ui vertical">
-        <input type="hidden" id="logKey" ng-model="logKey"></input>
+        <input type="hidden" id="logKey" ng-model="logs[logSelectedIndex].key"></input>
 
         <div class="ui right labeled fluid input">
-          <input ng-model="logTitle" placeholder="title..." ng-keyup="logCtrl.changedFn()"></input>
+          <input ng-model="logs[logSelectedIndex].title" placeholder="title..." ng-keyup="logCtrl.changedFn()"></input>
           <div class="ui label">
             Title
           </div>
@@ -68,7 +67,7 @@
         <div id="tags">
           <div class="ui right labeled left icon input">
             <i class="tags icon"></i>
-            <input type="text" placeholder="Tags" ng-model="logTags" ng-keyup="logCtrl.changedFn()">
+            <input type="text" placeholder="Tags" ng-model="logs[logSelectedIndex].tags" ng-keyup="logCtrl.changedFn()">
             <div class="ui tag label">
               Tags
             </div>
@@ -85,7 +84,7 @@
         
         <div class="ui form">
           <div class="field">
-            <textarea id="logContent" ng-model="logContent" ng-keyup="logCtrl.changedFn()"></textarea>
+            <textarea id="logContent" ng-model="logs[logSelectedIndex].content" ng-keyup="logCtrl.changedFn()"></textarea>
           </div>
         </div>
       </div>
