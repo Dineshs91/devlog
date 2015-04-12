@@ -280,3 +280,19 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     
     init();
 }]);
+
+devlog.controller('RemovedLogController', ['$scope', 'dbService', function($scope, dbService) {
+    var self = this;
+    
+    this.getAllRemovedLogs = function() {
+        return dbService.getAllRemovedLogs().then(function(remLogs) {
+            $scope.remLogs = remLogs;
+        });
+    };
+    
+    var init = function() {
+        self.getAllRemovedLogs();
+    };
+    
+    init();
+}]);
