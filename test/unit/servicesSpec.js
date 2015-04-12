@@ -316,4 +316,16 @@ describe("DevLog Services", function() {
         rootScope.$apply();
     });
 
+    /* We have removed 3 logs if you count. */
+    it('should get all removed logs', function(done) {
+        dbService.getAllRemovedLogs().then(function(remLogs) {
+            expect(remLogs.length).toBe(3);
+            for(var i = 0; i < remLogs.length; i++) {
+                expect(remLogs[i].is_removed).toBe(true);
+            }
+            done();
+        });
+
+        rootScope.$apply();
+    });
 });

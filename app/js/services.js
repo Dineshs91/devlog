@@ -63,7 +63,22 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
 
         return deferred.promise;
     };
-    
+
+    this.getAllRemovedLogs = function() {
+        var deferred = $q.defer();
+
+        db.logs.find({is_removed: true}, function(err, logs) {
+            if(!err) {
+                logs = convertIdToKey(logs);
+                deferred.resolve(logs);
+            } else {
+                deferred.reject(err);
+            }
+        });
+
+        return deferred.promise;
+    };
+
     this.getLogsWithTag = function(tagName) {
         var deferred = $q.defer();
         
