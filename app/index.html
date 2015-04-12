@@ -43,7 +43,7 @@
           <div class="ui divided very relaxed animated selection list">
             <a class="item" ng-repeat="log in logs | orderBy:'-timestamp'" ng-class="{ active: $index == logSelectedIndex }">
               <div class="right floated date">{{ log.timestamp | date:'MMM dd, yyyy' }}</div>
-              <div class="description" ng-click="logCtrl.clickLogFn($index, log.key)">
+              <div class="description" ng-click="logCtrl.clickLogFn($index, log)">
                 <span ng-show="$index != logSelectedIndex">{{ log.title }}</span>
                 <span ng-hide="$index != logSelectedIndex">{{ logTitle }}</span>
               </div>

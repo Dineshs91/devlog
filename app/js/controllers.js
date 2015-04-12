@@ -44,7 +44,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
                 clearEditor();
             } else {
                 logs = sortLogs(logs);
-                displayLog(logs[0].key);
+                displayLog(logs[0]);
             }
         });
     };
@@ -95,15 +95,15 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
                 $scope.logs = logs;
 
                 logs = sortLogs(logs);
-                displayLog(logs[0].key);
+                displayLog(logs[0]);
             });
         }
         
     };
     
-    this.clickLogFn = function($index, key) {
+    this.clickLogFn = function($index, log) {
         $scope.logSelectedIndex = $index;
-        displayLog(key);
+        displayLog(log);
     };
     
     this.removeLogFn = function(key) {
@@ -120,7 +120,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
                         self.getAllLogs();
                     } else {
                         logs = sortLogs(logs);
-                        displayLog(logs[0].key);
+                        displayLog(logs[0]);
                     }
                 });
             } else {
@@ -189,7 +189,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
                 logs = sortLogs(logs);
 
                 $scope.logs = logs;
-                displayLog(logs[0].key);
+                displayLog(logs[0]);
                 $scope.logSelectedIndex = 0;
 
                 $scope.tagSelectedIndex = findTagIndex($scope.tags, currentSelectedTag);
@@ -207,21 +207,19 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         return -1;
     };
     
-    var displayLog = function(key) {
-        dbService.getLog(key).then(function(log) {
-            var tags = '';
+    var displayLog = function(log) {
+        var tags = '';
 
-            for(i = 0; i < log.tags.length; i++) {
-                tags += log.tags[i];
-                if(i != log.tags.length - 1) {
-                    tags += ", ";
-                }
+        for(i = 0; i < log.tags.length; i++) {
+            tags += log.tags[i];
+            if(i != log.tags.length - 1) {
+                tags += ", ";
             }
-            $scope.logTags = tags;
-            $scope.logTitle = log.title;
-            $scope.logContent = log.content;
-            $scope.logKey = log.key;
-        });
+        }
+        $scope.logTags = tags;
+        $scope.logTitle = log.title;
+        $scope.logContent = log.content;
+        $scope.logKey = log.key;
     };
     
     var clearEditor = function() {
