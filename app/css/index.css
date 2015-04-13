@@ -15,3 +15,10 @@ body {
 #logContent {
     height: 35em;
 }
+
+#saveStatus {
+    height: 1em;
+    text-align: center;
+    margin-top: 10px;
+    color: #349160;
+}

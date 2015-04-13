@@ -21,14 +21,14 @@
         <h2 class="ui header">
         <i class="inbox icon"></i>
         Log Entry
-        <div class="ui right floated green button add" ng-click="logCtrl.addFn()">
-          Add
+        <div class="ui right floated basic button add" ng-click="logCtrl.addFn()">
+          Add <i class="plus icon"></i>
         </div>
         </h2>
         <div class="ui divider"></div>
       </div>
       <div class="ui divided padded grid">
-        <div class="three wide left column" >
+        <div class="three wide left column">
         <!-- display all tags -->
           <div class="ui divided very relaxed animated selection list">
             <a class="item" ng-repeat="tag in tags" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: $index == tagSelectedIndex }">
@@ -77,7 +77,15 @@
         <div id="wrapper">
           <span class="ui left floated date" current-time="format"></span>
           <span class="ui right floated orange save button" ng-click="logCtrl.saveFn()">Save</span>
-        </div>
+          
+          <div id="saveStatus">
+            <span ng-show="isSaving">
+              Saving...
+            </span>
+            <span ng-show="isSaved">
+              Saved
+            </span>
+          </div>
         
         <div class="ui divider"></div>
         <div class="ui vertical"></div>

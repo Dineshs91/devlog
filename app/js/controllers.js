@@ -155,6 +155,8 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     var myTimer = function() {
         var timer;
         this.set = function() {
+            $scope.isSaved = false;
+            $scope.isSaving = true;
             timer = $timeout(self.saveFn, 1000);
         };
 
@@ -166,6 +168,12 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     }();
 
     var save = function() {
+        $scope.isSaving = false;
+        $scope.isSaved = true;
+        $timeout(function() {
+            $scope.isSaved = false;
+        }, 3000);
+
         self.getAllTags();
         
         if(currentSelectedTag === '' || currentSelectedTag === 'all') {
