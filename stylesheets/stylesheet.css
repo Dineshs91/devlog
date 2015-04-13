@@ -243,3 +243,18 @@ a {
 @media screen and (max-width: 42em) {
   .site-footer {
     font-size: 0.9rem; } }
+    
+/* Customization */
+
+h1.project-name a {
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.binaries {
+    font-size: 0.8rem;
+}
+
+.size {
+    float: right;
+}
