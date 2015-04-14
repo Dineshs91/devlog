@@ -116,8 +116,8 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
     this.updateLog = function(log) {
         var deferred = $q.defer();
 
-        db.logs.update({_id: log.key}, {$set: {content: log.content, title: log.title,
-            timestamp: log.timestamp, tags: log.tags}}, {},
+        db.logs.update({_id: log.key}, {$set: {title: log.title, content: log.content,
+            timestamp: log.timestamp, tags: log.tags, is_removed: log.is_removed}}, {},
         function(err, numReplaced) {
             if(!err) {
                 deferred.resolve(numReplaced);

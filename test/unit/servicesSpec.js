@@ -1,6 +1,5 @@
 describe("DevLog Services", function() {
     var dbService;
-    
 
     beforeEach(module('devLog'));
 
@@ -323,6 +322,42 @@ describe("DevLog Services", function() {
             for(var i = 0; i < remLogs.length; i++) {
                 expect(remLogs[i].is_removed).toBe(true);
             }
+            done();
+        });
+
+        rootScope.$apply();
+    });
+
+    /*
+        Restore a removed log. log2Key is removed.
+        We are restoring it here.
+    */
+    it('should restore a removed log', function(done) {
+        log2.key = log2Key;
+        log2.is_removed = false;
+
+        dbService.updateLogAndTag(log2).then(function(returnValue) {
+            expect(returnValue.numLogsUpdated).toBe(1);
+            done();
+        });
+
+        rootScope.$apply();
+    });
+
+    it('should get the restored log', function(done) {
+        dbService.getLog(log2Key).then(function(log) {
+            expect(log.key).toBeDefined();
+
+            // To check if _id is converted to key.
+            expect(log._id).toBeUndefined();
+            expect(log2.title).toBe(log.title);
+            expect(log2.content).toBe(log.content);
+            expect(log2.timestamp).toBe(log.timestamp);
+            expect(log2.tags.length).toBe(log.tags.length);
+            for(i = 0; i < log.tags.length; i++) {
+                expect(log2.tags[i]).toBe(log.tags[i]);
+            }
+            expect(log2.is_removed).toBe(log.is_removed);
             done();
         });
 
