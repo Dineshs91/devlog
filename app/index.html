@@ -110,6 +110,7 @@
         <table class="ui celled striped table">
           <thead>
             <tr>
+              <th>S.No</th>
               <th colspan="3">Logs</th>
               <th>Restore</th>
               <th>Delete</th>
@@ -117,6 +118,7 @@
           </thead>
           <tbody>
             <tr ng-repeat="log in remLogs">
+              <td>{{ $index + 1 }}</td>
               <td colspan="3">{{ log.title }}</td>
               <td class="positive"><input type="radio" name="option-{{$index}}" value="restore" ng-model="log.option"></td>
               <td class="negative"><input type="radio" name="option-{{$index}}" value="delete" ng-model="log.option"></td>
