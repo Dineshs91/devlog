@@ -98,7 +98,7 @@
       </div>
     </div>
   </div>
-  
+  <!-- Modal -->
   <div class="ui standard modal" ng-controller="RemovedLogController as remLogCtrl">
     <i class="close icon"></i>
     <div class="header">
@@ -107,31 +107,33 @@
     <div class="content">
       <div class="description">
         <div class="ui header">Deleted logs</div>
-          <div ng-repeat="log in remLogs">
-            <div class="grouped inline field">
-              <div class="ui radio checkbox">
-                <input type="radio" name="option">
-                <label>Restore</label>
-              </div>
-              <div class="ui radio checkbox">
-                <input type="radio" name="option">
-                <label>Delete</label>
-              </div>
-              {{ log.title }}
-            </div>
-          </div>
+        <table class="ui celled striped table">
+          <thead>
+            <tr>
+              <th colspan="3">Logs</th>
+              <th>Restore</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr ng-repeat="log in remLogs">
+              <td colspan="3">{{ log.title }}</td>
+              <td class="positive"><input type="radio" name="option-{{$index}}" value="restore" ng-model="log.option"></td>
+              <td class="negative"><input type="radio" name="option-{{$index}}" value="delete" ng-model="log.option"></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
     <div class="actions">
       <div class="ui black button">
         Cancel
       </div>
-      <div class="ui positive right labeled icon button">
+      <div class="ui positive right labeled icon button" ng-click="remLogCtrl.proceedFn()">
         Save changes
         <i class="checkmark icon"></i>
       </div>
     </div>
   </div>
-  
 </body>
 </html>

@@ -300,6 +300,10 @@ devlog.controller('RemovedLogController', ['$scope', 'dbService', function($scop
         });
     };
     
+    this.proceedFn = function() {
+        //Todo: logic for restore/delete
+    };
+
     var init = function() {
         self.getAllRemovedLogs();
     };
