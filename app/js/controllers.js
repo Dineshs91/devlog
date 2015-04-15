@@ -219,6 +219,15 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
             formedTags = tags.split(re);
         }
 
+        /*
+            'All' tag is implicitly available in all logs.
+            So remove any explicit usage of it.
+        */
+        var remIndex = formedTags.indexOf('all');
+        if(remIndex > -1) {
+            formedTags.splice(remIndex, 1);
+        }
+
         log = {
             'title': $scope.logs[logSelectedIndex].title,
             'content': $scope.logs[logSelectedIndex].content,
@@ -290,6 +299,9 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         });
     };
     
+    /*
+        Initialize when init event is emitted.
+    */
     $scope.$on('init', function(event, args) {
         init();
     });
@@ -310,6 +322,8 @@ devlog.controller('RemovedLogController', ['$scope', '$q', 'dbService', function
         var promise = [];
 
         for(var i = 0; i < $scope.remLogs.length; i++) {
+            // log.option will not be inserted into db.
+            // check updateLog function in services.js
             var option = $scope.remLogs[i].option;
             var log = $scope.remLogs[i];
             log.is_removed = false;
@@ -322,6 +336,8 @@ devlog.controller('RemovedLogController', ['$scope', '$q', 'dbService', function
         }
 
         $q.all(promise).then(function() {
+            // Emit init event, so app is initialized
+            // to reflect the restored logs.
             $scope.$emit('init');
             init();
         }).catch(function(err) {
@@ -333,6 +349,10 @@ devlog.controller('RemovedLogController', ['$scope', '$q', 'dbService', function
         self.getAllRemovedLogs();
     };
 
+    /*
+        If any log is removed, logRemoved event is triggered.
+        Reload removedLogs, which appear in restore/delete modal.
+    */
     $scope.$on('logRemoved', function(event, args) {
         init();
     });
