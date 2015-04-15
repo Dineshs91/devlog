@@ -100,6 +100,8 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     
     this.removeLogFn = function(key) {
         dbService.removeLogAndTag(key).then(function() {
+            $scope.$broadcast('logRemoved');
+
             if(currentSelectedTag !== 'all') {
                 $scope.tagSelectedIndex = findTagIndex($scope.tags, currentSelectedTag);
 
@@ -288,10 +290,14 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         });
     };
     
+    $scope.$on('init', function(event, args) {
+        init();
+    });
+
     init();
 }]);
 
-devlog.controller('RemovedLogController', ['$scope', 'dbService', function($scope, dbService) {
+devlog.controller('RemovedLogController', ['$scope', '$q', 'dbService', function($scope, $q, dbService) {
     var self = this;
     
     this.getAllRemovedLogs = function() {
@@ -301,12 +307,35 @@ devlog.controller('RemovedLogController', ['$scope', 'dbService', function($scop
     };
     
     this.proceedFn = function() {
-        //Todo: logic for restore/delete
+        var promise = [];
+
+        for(var i = 0; i < $scope.remLogs.length; i++) {
+            var option = $scope.remLogs[i].option;
+            var log = $scope.remLogs[i];
+            log.is_removed = false;
+
+            if(option === 'restore') {
+                promise.push(dbService.updateLogAndTag(log));
+            } else if (option === 'delete') {
+                promise.push(dbService.permanentDelete(log.key));
+            }
+        }
+
+        $q.all(promise).then(function() {
+            $scope.$emit('init');
+            init();
+        }).catch(function(err) {
+            console.log(err);
+        });
     };
 
     var init = function() {
         self.getAllRemovedLogs();
     };
-    
+
+    $scope.$on('logRemoved', function(event, args) {
+        init();
+    });
+
     init();
 }]);
