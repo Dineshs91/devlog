@@ -211,7 +211,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
 
         if(tags.length === 0) {
             formedTags = [];
-        } else if(tags.constructor === Array) {
+        } else if(Array.isArray(tags)) {
             formedTags = tags;
         } else {
             tags = tags.trim().toLowerCase();
