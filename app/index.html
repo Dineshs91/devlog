@@ -41,7 +41,7 @@
         <div class="twelve wide right column">
           <!-- display all logs -->
           <div class="ui divided very relaxed animated selection list">
-            <a class="item" ng-repeat="log in logs | orderBy:'-timestamp'" ng-class="{ active: $index == logSelectedIndex }">
+            <a class="item" ng-repeat="log in logs track by log.key | orderBy:'-timestamp'" ng-class="{ active: $index == logSelectedIndex }">
               <div class="right floated date">{{ log.timestamp | date:'MMM dd, yyyy' }}</div>
               <div class="description" ng-click="logCtrl.clickLogFn($index, log)">
                 {{ log.title }}
@@ -117,7 +117,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr ng-repeat="log in remLogs">
+            <tr ng-repeat="log in remLogs track by log.key">
               <td>{{ $index + 1 }}</td>
               <td colspan="3">{{ log.title }}</td>
               <td class="positive"><input type="radio" name="option-{{$index}}" value="restore" ng-model="log.option"></td>
