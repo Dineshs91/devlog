@@ -4,7 +4,7 @@
 ## Devlog
 ### A log book for developers.
 
-Devlog - As the name suggests, is mainly designed to be used as a log book. Log your daily events. It's not just
+Devlog - As the name suggests, it is mainly designed to be used as a log book. Log your daily events. It's not just
 limited to logging, only our imagination is the limit.
 A great app to organize your thoughts. You can also tag your logs, making it easy to group similar logs. Don't worry 
 about your data getting lost, auto save takes care of that. If you have accidentally clicked on remove, relax as the 
@@ -16,7 +16,7 @@ It is built using nw.js (Nodewebkit), angular and nedb. For testing karma and pr
 #### Hacking
 1. git clone 
 2. npm install
-3. npm start (To run the app from source)
+3. npm start (To run the app from source) or npm start --remote-debugging 9222 (To use chrome devtools).
 4. npm test (Complete testing. includes both unittests and e2e tests)
 
 #### Other available commands
