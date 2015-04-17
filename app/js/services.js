@@ -1,7 +1,7 @@
 /*
     An angular service, for all db related transactions.
 */
-devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, db) {
+devlog.service('dbService', ['$q', 'db', function($q, db) {
     /*
         Convert nedb's _id to key to be used in the view.
         nedb still uses _id.
@@ -41,7 +41,6 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
                 deferred.reject(err);
             }
             
-            //$rootScope.$apply();
         });
 
         return deferred.promise;
@@ -58,7 +57,6 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
                 deferred.reject(err);
             }
             
-            //$rootScope.$apply();
         });
 
         return deferred.promise;
@@ -90,7 +88,6 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
                 deferred.reject(err);
             }
             
-            //$rootScope.$apply();
         });
         
         return deferred.promise;
@@ -107,7 +104,6 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
                 deferred.reject(err);
             }
             
-            //$rootScope.$apply();
         });
 
         return deferred.promise;
@@ -125,7 +121,6 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
                 deferred.reject(err);
             }
             
-            //$rootScope.$apply();
         });
 
         return deferred.promise;
@@ -144,7 +139,6 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
                 deferred.reject(err);
             }
             
-            //$rootScope.$apply();
         });
 
         return deferred.promise;
@@ -166,7 +160,6 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
                 deferred.reject(err);
             }
 
-            //$rootScope.$apply();
         });
 
         return deferred.promise;
@@ -186,7 +179,6 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
                 }
             }
             
-            //$rootScope.$apply();
         });
         
         return deferred.promise;
@@ -202,7 +194,6 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
                 deferred.reject(err);
             }
             
-            //$rootScope.$apply();
         });
         
         return deferred.promise;
@@ -218,7 +209,6 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
                 deferred.reject(err);
             }
             
-            //$rootScope.$apply();
         });
         
         return deferred.promise;
@@ -234,7 +224,6 @@ devlog.service('dbService', ['$q', '$rootScope', 'db', function($q, $rootScope, 
                 deferred.reject(err);
             }
             
-            //$rootScope.$apply();
         });
         
         return deferred.promise;
