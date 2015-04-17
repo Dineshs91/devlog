@@ -58,7 +58,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     };
     
     this.addFn = function() {
-        log = {
+        newLog = {
             'title': '',
             'content': '',
             'timestamp': (new Date()).getTime(),
@@ -66,8 +66,16 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
             'tags': []
         };
 
+        for(var i = 0; i < $scope.logs.length; i++) {
+            var log = $scope.logs[i];
+            if(log.key === undefined) {
+                // Since already a new log is present
+                return;
+            }
+        }
+
         logs = $scope.logs;
-        logs.unshift(log);
+        logs.unshift(newLog);
         $scope.logs = logs;
 
         $scope.logSelectedIndex = 0;
@@ -99,6 +107,20 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     };
     
     this.removeLogFn = function(key) {
+
+        // If key is null, then it is a new log
+        // without any data and it has not been
+        // saved.
+        if(key === undefined) {
+            for(var i = 0; i < $scope.logs.length; i++) {
+                var log = $scope.logs[i];
+                if(log.key === undefined) {
+                    $scope.logs.splice(i, 1);
+                    return;
+                }
+            }
+        }
+
         dbService.removeLogAndTag(key).then(function() {
             $scope.$broadcast('logRemoved');
 
