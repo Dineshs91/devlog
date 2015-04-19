@@ -11,7 +11,7 @@ about your data getting lost, auto save takes care of that. If you have accident
 logs are not removed permanently. Go to restore/delete option from options menu, and restore the removed log. It also
 restores the corresponding tags.
 
-It is built using nw.js (Nodewebkit), angular and nedb. For testing karma and protractor is used. 
+It is built using nw.js (Nodewebkit), angular and nedb. For testing karma and protractor are used. 
 
 #### Hacking
 1. git clone 
