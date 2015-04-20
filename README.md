@@ -5,7 +5,7 @@
 ### A log book for developers.
 
 Devlog - As the name suggests, it is mainly designed to be used as a log book. Log your daily events. It's not just
-limited to logging, only our imagination is the limit.
+limited to logging, only your imagination is the limit.
 A great app to organize your thoughts. You can also tag your logs, making it easy to group similar logs. Don't worry 
 about your data getting lost, auto save takes care of that. If you have accidentally clicked on remove, relax as the 
 logs are not removed permanently. Go to restore/delete option from options menu, and restore the removed log. It also
