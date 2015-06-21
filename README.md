@@ -4,14 +4,33 @@
 ## Devlog
 ### A log book for developers.
 
-Devlog - As the name suggests, it is mainly designed to be used as a log book. Log your daily events. It's not just
-limited to logging, only your imagination is the limit.
-A great app to organize your thoughts. You can also tag your logs, making it easy to group similar logs. Don't worry 
-about your data getting lost, auto save takes care of that. If you have accidentally clicked on remove, relax as the 
-logs are not removed permanently. Go to restore/delete option from options menu, and restore the removed log. It also
-restores the corresponding tags.
+Devlog - Devlog is designed to assist you in keeping track of your notes, ideas etc in a simple yet intutive way. 
+![Alt text](https://github.com/satish28/devlog/blob/master/Screenshot.png?raw=true "Sample screenshot") 
 
-It is built using nw.js (Nodewebkit), angular and nedb. For testing karma and protractor are used. 
+<h5> Key Features </h5>
+<em> Index:</em>
+Provides an index of all entries with Title and Date making it easy to find your notes.
+
+![Alt text](https://github.com/satish28/devlog//blob/master/Loglist.png?raw=true "Index")
+
+<em> Tags:</em>
+Tags allow you to group similar log entries together. 
+Ex: Say you are working on a project called "Devlog" and you have identifed additional features to add and issues. Tagging allows you to group similar ideas or notes and selecting the tag from the index displays only relevant tagged entries.
+
+![Alt text](https://github.com/satish28/devlog/blob/master/Tagging.png?raw=true "Tagging")
+
+<h5> Devlog is built using: </h5>
+<ul type="circle">
+<li> <a href="https://github.com/nwjs/nw.js/">NW.js (Node-Webkit)</a> </li>
+<li>  <a href="https://angularjs.org/">ANGULARJS</a> </li>
+<li>  <a href="https://github.com/louischatriot/nedb"> NeDB (Node embedded databse)</a> </li>
+</ul>
+
+<h6>Testing</h6>
+<ul type="circle">
+<li>  <a href = "http://karma-runner.github.io/0.12/index.html">Karma </a> </li>
+<li>  <a href = "https://angular.github.io/protractor/#/"> Protractor </a> </li>
+</ul>
 
 #### Hacking
 1. git clone 
@@ -32,4 +51,3 @@ It is built using nw.js (Nodewebkit), angular and nedb. For testing karma and pr
 - [ ] Import/Export logs.
 - [ ] In app updates.
 - [ ] Draggable logs. 
-
