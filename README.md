@@ -8,23 +8,30 @@ Devlog - Devlog is designed to assist you in keeping track of your notes, ideas 
 ![Alt text](https://github.com/satish28/devlog/blob/master/Screenshot.png?raw=true "Sample screenshot") 
 
 <b><i> Key Features </i></b>
-1. Index: 
-Lists a index of previous entries with Title and Date making it easy to find your notes.
-![Alt text](https://github.com/satish28/devlog//blob/master/Loglist.png?raw=true "Index") 
+<ul type="square">
+<li>Index: </li>
+<p>Lists a index of previous entries with Title and Date making it easy to find your notes.
 
-2. Tags: 
-Tags allow you to group similar log entries together. 
+<center> ![Alt text](https://github.com/satish28/devlog//blob/master/Loglist.png?raw=true "Index") </center></p>
+
+<li>Tags: </li>
+<p>Tags allow you to group similar log entries together. 
 Ex: Say you are working on a project called "Devlog" and you have identifed additional features to add and issues. Tagging allows you to group similar ideas or notes and selecting the tag from the index displays only relevant tagged entries.
 
-![Alt text](https://github.com/satish28/devlog/blob/master/Tagging.png?raw=true "Tagging") 
+<center> ![Alt text](https://github.com/satish28/devlog/blob/master/Tagging.png?raw=true "Tagging") </center></p>
 
 Devlog is built using 
-1. <a href="https://github.com/nwjs/nw.js/">NW.js (Node-Webkit)</a>
-2. <a href="https://angularjs.org/">ANGULARJS</a>
-3. <a href="https://github.com/louischatriot/nedb"> NeDB (Node embedded databse)</a> 
+<ul type="circle">
+<li> <a href="https://github.com/nwjs/nw.js/">NW.js (Node-Webkit)</a> </li>
+<li>  <a href="https://angularjs.org/">ANGULARJS</a> </li>
+<li>  <a href="https://github.com/louischatriot/nedb"> NeDB (Node embedded databse)</a> </li>
+</ul>
+
 <h4>Testing</h4>
-1. <a href = "http://karma-runner.github.io/0.12/index.html">Karma </a>
-2. <a href = "https://angular.github.io/protractor/#/"> Protractor </a>
+<ul type="circle">
+<li>  <a href = "http://karma-runner.github.io/0.12/index.html">Karma </a> </li>
+<li>  <a href = "https://angular.github.io/protractor/#/"> Protractor </a> </li>
+</ul>
 
 #### Hacking
 1. git clone 
