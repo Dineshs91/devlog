@@ -4,14 +4,26 @@
 ## Devlog
 ### A log book for developers.
 
-Devlog - As the name suggests, it is mainly designed to be used as a log book. Log your daily events. It's not just
-limited to logging, only your imagination is the limit.
-A great app to organize your thoughts. You can also tag your logs, making it easy to group similar logs. Don't worry 
-about your data getting lost, auto save takes care of that. If you have accidentally clicked on remove, relax as the 
-logs are not removed permanently. Go to restore/delete option from options menu, and restore the removed log. It also
-restores the corresponding tags.
+Devlog - Devlog is designed to assist you keep track of your ideas, notes, etc in a simple yet intutive way. 
 
-It is built using nw.js (Nodewebkit), angular and nedb. For testing karma and protractor are used. 
+<b><i> Key Features </i></b>
+1. Index: 
+Lists a index of previous entries with Title and Date making it easy to find your notes.
+![Alt text](https://github.com/satish28/devlog/Loglist.png?raw=true "Sample screenshot") 
+
+2. Tags: 
+Tags allow you to group similar log entries together. 
+Ex: Say you are working on a project called "Devlog" and you have identifed additional features to add and issues. Tagging allows you to group similar ideas or notes and selecting the tag from the index displays only relevant tagged entries.
+
+![Alt text](https://github.com/satish28/devlog/Tagging.png?raw=true "Sample screenshot") 
+
+Devlog is built using 
+1. <a href="https://github.com/nwjs/nw.js/">NW.js (Node-Webkit)</a>
+2. <a href="https://angularjs.org/">ANGULARJS</a>
+3. <a href="https://github.com/louischatriot/nedb"> NeDB (Node embedded databse)</a> 
+<h4>Testing</h4>
+1. <a href = "http://karma-runner.github.io/0.12/index.html">Karma </a>
+2. <a href = "https://angular.github.io/protractor/#/"> Protractor </a>
 
 #### Hacking
 1. git clone 
@@ -32,4 +44,3 @@ It is built using nw.js (Nodewebkit), angular and nedb. For testing karma and pr
 - [ ] Import/Export logs.
 - [ ] In app updates.
 - [ ] Draggable logs. 
-
