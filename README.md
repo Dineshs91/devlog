@@ -10,16 +10,16 @@ Devlog - Devlog is designed to assist you in keeping track of your notes, ideas 
 <b><i> Key Features </i></b>
 <ul type="square">
 <li>Index: </li>
-<p>Lists a index of previous entries with Title and Date making it easy to find your notes.
+Lists a index of previous entries with Title and Date making it easy to find your notes.
 
 ![Alt text](https://github.com/satish28/devlog//blob/master/Loglist.png?raw=true "Index")
-</p>
+
 
 <li>Tags: </li>
-<p>Tags allow you to group similar log entries together. 
+Tags allow you to group similar log entries together. 
 Ex: Say you are working on a project called "Devlog" and you have identifed additional features to add and issues. Tagging allows you to group similar ideas or notes and selecting the tag from the index displays only relevant tagged entries.
 
-![Alt text](https://github.com/satish28/devlog/blob/master/Tagging.png?raw=true "Tagging")</p>
+![Alt text](https://github.com/satish28/devlog/blob/master/Tagging.png?raw=true "Tagging")
 
 Devlog is built using 
 <ul type="circle">
