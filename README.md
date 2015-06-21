@@ -7,7 +7,7 @@
 Devlog - Devlog is designed to assist you in keeping track of your notes, ideas etc in a simple yet intutive way. 
 ![Alt text](https://github.com/satish28/devlog/blob/master/Screenshot.png?raw=true "Sample screenshot") 
 
-<b><i> Key Features </i></b>
+<h5> Key Features </h5>
 1. Index:
 Provides an index of all entries with Title and Date making it easy to find your notes.
 
@@ -19,14 +19,14 @@ Ex: Say you are working on a project called "Devlog" and you have identifed addi
 
 ![Alt text](https://github.com/satish28/devlog/blob/master/Tagging.png?raw=true "Tagging")
 
-Devlog is built using 
+<h5> Devlog is built using: </h5>
 <ul type="circle">
 <li> <a href="https://github.com/nwjs/nw.js/">NW.js (Node-Webkit)</a> </li>
 <li>  <a href="https://angularjs.org/">ANGULARJS</a> </li>
 <li>  <a href="https://github.com/louischatriot/nedb"> NeDB (Node embedded databse)</a> </li>
 </ul>
 
-<h4>Testing</h4>
+<h6>Testing</h6>
 <ul type="circle">
 <li>  <a href = "http://karma-runner.github.io/0.12/index.html">Karma </a> </li>
 <li>  <a href = "https://angular.github.io/protractor/#/"> Protractor </a> </li>
