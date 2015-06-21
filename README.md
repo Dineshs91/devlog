@@ -4,18 +4,19 @@
 ## Devlog
 ### A log book for developers.
 
-Devlog - Devlog is designed to assist you keep track of your ideas, notes, etc in a simple yet intutive way. 
+Devlog - Devlog is designed to assist you in keeping track of your notes, ideas etc in a simple yet intutive way. 
+![Alt text](https://github.com/satish28/devlog/blob/master/Screenshot.png?raw=true "Sample screenshot") 
 
 <b><i> Key Features </i></b>
 1. Index: 
 Lists a index of previous entries with Title and Date making it easy to find your notes.
-![Alt text](https://github.com/satish28/devlog/Loglist.png?raw=true "Sample screenshot") 
+![Alt text](https://github.com/satish28/devlog//blob/master/Loglist.png?raw=true "Index") 
 
 2. Tags: 
 Tags allow you to group similar log entries together. 
 Ex: Say you are working on a project called "Devlog" and you have identifed additional features to add and issues. Tagging allows you to group similar ideas or notes and selecting the tag from the index displays only relevant tagged entries.
 
-![Alt text](https://github.com/satish28/devlog/Tagging.png?raw=true "Sample screenshot") 
+![Alt text](https://github.com/satish28/devlog/blob/master/Tagging.png?raw=true "Tagging") 
 
 Devlog is built using 
 1. <a href="https://github.com/nwjs/nw.js/">NW.js (Node-Webkit)</a>
