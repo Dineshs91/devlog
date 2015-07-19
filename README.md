@@ -5,7 +5,7 @@
 ### A log book for developers.
 
 Devlog - Devlog is designed to assist you in keeping track of your notes, ideas etc in a simple yet intutive way. 
-![Alt text](https://github.com/satish28/devlog/blob/master/Screenshot.png?raw=true "Sample screenshot") 
+![Alt text](https://github.com/dineshs91/devlog/blob/master/Demo.gif?raw=true "Sample screenshot")
 
 ##### Key Features #####
 **Index:**
