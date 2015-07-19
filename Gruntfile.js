@@ -103,7 +103,7 @@ module.exports = function(grunt) {
         'exec:build_osx64_release'
     ]);
     
-    grunt.registerTask('build-linux32', [
+    grunt.registerTask('build-linux64', [
         'exec:build_linux64_release'
     ]);
     
