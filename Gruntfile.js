@@ -2,7 +2,7 @@
 
 var pkg = require("./package.json");
 
-var NW_VERSION = "0.11.6";
+var NW_VERSION = "0.12.0";
 
 module.exports = function(grunt) {
     if (grunt.file.exists('tasks')) {
@@ -13,14 +13,14 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-exec');
     grunt.loadNpmTasks('grunt-github-releaser');
-    grunt.loadNpmTasks('grunt-node-webkit-builder');
+    grunt.loadNpmTasks('grunt-nw-builder');
 
     grunt.initConfig({
         pkg: pkg,
         jshint: {
             all: ['app/js/**/*.js', 'test/unit/**/*.js', 'test/e2e/**/*.js']
         },
-    	nodewebkit: {
+    	nwjs: {
 	        options: {
                 appName: 'Devlog',
                 appVersion: pkg.version,
@@ -39,7 +39,9 @@ module.exports = function(grunt) {
                 '!./node_modules/nodewebkit/**',
                 '!./node_modules/protractor/**',
                 '!./test_out/**',
-                '!./cache/**'
+                '!./cache/**',
+                '!./scripts/**',
+                '!./tasks/**'
             ]
     	},
         clean: {
@@ -95,7 +97,7 @@ module.exports = function(grunt) {
     
     grunt.registerTask('default', [
         'clean:build',
-        'nodewebkit'
+        'nwjs'
     ]);
     
     // Release tasks

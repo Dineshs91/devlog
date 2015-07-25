@@ -31,7 +31,7 @@
     "karma-nodewebkit-launcher": "https://github.com/nDmitry/karma-nodewebkit-launcher/tarball/master",
     "lodash": "~2.4.1",
     "nedb": "~1.1.1",
-    "nodewebkit": "~0.11.6",
+    "nw": "~0.12.0",
     "protractor": "~1.0.0",
     "tar.gz": "~0.1.1",
     "underscore": "~1.4.4",
@@ -48,6 +48,6 @@
     "unittest-single-run": "node_modules/karma/bin/karma start test/karma.conf.js --single-run",
     "pretest": "grunt jshint",
     "test": "npm run unittest-single-run && npm run e2e",
-    "start": "node_modules/nodewebkit/bin/nodewebkit"
+    "start": "node_modules/nw/bin/nw"
   }
 }
