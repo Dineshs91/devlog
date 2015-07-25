@@ -32,14 +32,10 @@ module.exports = function(grunt) {
 	        src: [
                 './**/*',
                 '!./test/**',
-                '!./node_modules/grunt-*/**',
-                '!./node_modules/grunt/**',
-                '!./node_modules/karma-*/**',
-                '!./node_modules/karma/**',
-                '!./node_modules/nodewebkit/**',
-                '!./node_modules/protractor/**',
+                '!./node_modules/**',
                 '!./test_out/**',
                 '!./cache/**',
+                '!./config/**',
                 '!./scripts/**',
                 '!./tasks/**'
             ]
