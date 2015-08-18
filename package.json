@@ -28,7 +28,7 @@
     "karma-coverage": "^0.2.6",
     "karma-jasmine": "~0.2.0",
     "karma-junit-reporter": "^0.2.2",
-    "karma-nodewebkit-launcher": "https://github.com/nDmitry/karma-nodewebkit-launcher/tarball/master",
+    "karma-nodewebkit-launcher": "~0.0.12",
     "lodash": "~2.4.1",
     "nedb": "~1.1.1",
     "nw": "~0.12.0",
