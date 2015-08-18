@@ -30,14 +30,9 @@ module.exports = function(grunt) {
                 zip: false
 	        },
 	        src: [
-                './**/*',
-                '!./test/**',
-                '!./node_modules/**',
-                '!./test_out/**',
-                '!./cache/**',
-                '!./config/**',
-                '!./scripts/**',
-                '!./tasks/**'
+                './app/**',
+                './package.json',
+                './node_modules/**'
             ]
     	},
         clean: {
