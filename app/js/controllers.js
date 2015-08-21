@@ -237,6 +237,9 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
             formedTags = tags;
         } else {
             tags = tags.trim().toLowerCase();
+            if(tags.slice(-1) === ',') {
+                tags = tags.substr(0, tags.length - 1);
+            }
             var re = /\s*,\s*/;
             formedTags = tags.split(re);
         }
