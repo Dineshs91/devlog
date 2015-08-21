@@ -3,6 +3,12 @@ body {
     width: 98%;
 }
 
+.ui.list {
+    height: 33em;
+    overflow: auto;
+    padding-right: 10px;
+}
+
 #wrapper {
     margin-bottom: 35px;
 }
