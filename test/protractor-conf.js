@@ -8,6 +8,12 @@ exports.config = {
     specs: ['e2e/**/*.js'],
     baseUrl: 'file://' + path.resolve('app/index.html'),
     rootElement: 'html',
+    capabilities: {
+        browserName: 'chrome',
+        chromeOptions: {
+            binary: process.env.PWD + '/test/support/nwjs.app/Contents/MacOS/nwjs'
+        }
+    },
 
     onPrepare: function() {
 

@@ -5,19 +5,19 @@
     "win64"
   ],
   "chromedriverDownload": [
-      "http://dl.nwjs.io/v0.11.6/chromedriver-nw-v0.11.6-osx-x64.zip",
-      "http://dl.nwjs.io/v0.11.6/chromedriver-nw-v0.11.6-linux-x64.tar.gz",
-      "http://dl.nwjs.io/v0.11.6/chromedriver-nw-v0.11.6-win-x64.zip"
+      "http://dl.nwjs.io/v0.12.0/chromedriver-nw-v0.12.0-osx-x64.zip",
+      "http://dl.nwjs.io/v0.12.0/chromedriver-nw-v0.12.0-linux-x64.tar.gz",
+      "http://dl.nwjs.io/v0.12.0/chromedriver-nw-v0.12.0-win-x64.zip"
   ],
   "devBinary": [
-    "node_modules/nodewebkit/nodewebkit/node-webkit.app/Contents/MacOS/node-webkit",
-    "node_modules/nodewebkit/nodewebkit/nw",
-    "node_modules/nodewebkit/nodewebkit/nw.exe"
+      "node_modules/nw/nwjs/nwjs.app/Contents/MacOS/nwjs",
+      "node_modules/nodewebkit/nodewebkit/nw",
+      "node_modules/nodewebkit/nodewebkit/nw.exe"
   ],
   "devSymlink": [
     {
-      "path": "node_modules/nodewebkit/nodewebkit",
-      "file": "node-webkit.app"
+      "path": "node_modules/nw/nwjs",
+      "file": "nwjs.app"
     },
     {
       "path": "node_modules/nodewebkit/nodewebkit",
