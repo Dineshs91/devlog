@@ -11,8 +11,8 @@
   ],
   "devBinary": [
       "node_modules/nw/nwjs/nwjs.app/Contents/MacOS/nwjs",
-      "node_modules/nodewebkit/nodewebkit/nw",
-      "node_modules/nodewebkit/nodewebkit/nw.exe"
+      "node_modules/nw/nwjs/nwjs",
+      "node_modules/nw/nwjs/nwjs.exe"
   ],
   "devSymlink": [
     {
@@ -20,12 +20,12 @@
       "file": "nwjs.app"
     },
     {
-      "path": "node_modules/nodewebkit/nodewebkit",
-      "file": "nw"
+      "path": "node_modules/nw/nwjs",
+      "file": "nwjs"
     },
     {
-      "path": "node_modules/nodewebkit/nodewebkit",
-      "file": "nw.exe"
+      "path": "node_modules/nw/nwjs",
+      "file": "nwjs.exe"
     }
   ]
 }
