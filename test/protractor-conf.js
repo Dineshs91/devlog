@@ -1,6 +1,8 @@
 'use strict';
 
 var path = require('path');
+var platform = process.platform;
+var config = require('../config/platform-config.js');
 
 exports.config = {
     chromeDriver: './support/chromedriver',
@@ -11,7 +13,7 @@ exports.config = {
     capabilities: {
         browserName: 'chrome',
         chromeOptions: {
-            binary: process.env.PWD + '/test/support/nwjs.app/Contents/MacOS/nwjs'
+            binary: path.resolve(config.devBinary)
         }
     },
 
