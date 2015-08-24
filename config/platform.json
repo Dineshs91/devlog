@@ -8,24 +8,5 @@
       "http://dl.nwjs.io/v0.12.0/chromedriver-nw-v0.12.0-osx-x64.zip",
       "http://dl.nwjs.io/v0.12.0/chromedriver-nw-v0.12.0-linux-x64.tar.gz",
       "http://dl.nwjs.io/v0.12.0/chromedriver-nw-v0.12.0-win-x64.zip"
-  ],
-  "devBinary": [
-      "node_modules/nw/nwjs/nwjs.app/Contents/MacOS/nwjs",
-      "node_modules/nw/nwjs/nwjs",
-      "node_modules/nw/nwjs/nwjs.exe"
-  ],
-  "devSymlink": [
-    {
-      "path": "node_modules/nw/nwjs",
-      "file": "nwjs.app"
-    },
-    {
-      "path": "node_modules/nw/nwjs",
-      "file": "nwjs"
-    },
-    {
-      "path": "node_modules/nw/nwjs",
-      "file": "nwjs.exe"
-    }
   ]
 }

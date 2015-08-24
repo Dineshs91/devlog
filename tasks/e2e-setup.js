@@ -5,7 +5,6 @@ module.exports = function(grunt) {
         var config = require('../config/platform-config.js');
 
         var support_dir = 'test/support';
-        var symLinkDest = path.resolve(support_dir, config.devSymlink.file);
         var chromeDriverFile = path.resolve(support_dir, 'chromedriver');
 
         var supportDirExists = fs.existsSync(support_dir);
@@ -14,9 +13,6 @@ module.exports = function(grunt) {
         var done = this.async();
         var http = require('http');
         var unzip = require('unzip');
-        var symLinkFile = config.devSymlink.file;
-        var symLinkPath = path.normalize(config.devSymlink.path);
-        var symLinkSrc = path.resolve(symLinkPath, symLinkFile);
         var chromeDriverUrl = config.chromedriverDownload;
         var packageName = config.chromedriverDownload.split('/').pop();
         var chromeDriverLocal = path.resolve(support_dir, packageName);
@@ -70,17 +66,6 @@ module.exports = function(grunt) {
         if(!supportDirExists) {
             grunt.log.writeln('Creating support directory.');
             fs.mkdir(support_dir);
-        }
-
-        grunt.log.writeln('Creating symbolic link to node-webkit.');
-        try {
-            fs.symlinkSync(symLinkSrc, symLinkDest);
-        } catch(e) {
-            if(e.code === 'EEXIST') {
-                grunt.log.writeln('Symbolic link to node-webkit already exists');
-            } else {
-                console.log(e);
-            }
         }
 
         if(!chromeDriverExists) {
