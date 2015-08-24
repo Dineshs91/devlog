@@ -1,8 +1,7 @@
 'use strict';
 
 var path = require('path');
-var platform = process.platform;
-var config = require('../config/platform-config.js');
+var nw = require('nw')
 
 exports.config = {
     chromeDriver: './support/chromedriver',
@@ -13,7 +12,7 @@ exports.config = {
     capabilities: {
         browserName: 'chrome',
         chromeOptions: {
-            binary: path.resolve(config.devBinary)
+            binary: nw.findpath()
         }
     },
 
