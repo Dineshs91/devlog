@@ -28,3 +28,7 @@ body {
     margin-top: 10px;
     color: #349160;
 }
+
+.tags-nav {
+    word-wrap: break-word;
+}
