@@ -24,8 +24,8 @@ module.exports = function(grunt) {
 	        options: {
                 appName: 'Devlog',
                 appVersion: pkg.version,
-	            platforms: ['osx64', 'linux64', 'win64'],
-	            buildDir: './build',
+                platforms: ['osx64', 'linux64', 'win64'],
+                buildDir: './build',
                 version: NW_VERSION,
                 zip: false
 	        },
