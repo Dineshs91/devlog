@@ -2,7 +2,7 @@
 
 var pkg = require("./package.json");
 
-var NW_VERSION = "0.12.0";
+var NW_VERSION = require('nw/package.json').version;
 
 module.exports = function(grunt) {
     if (grunt.file.exists('tasks')) {
