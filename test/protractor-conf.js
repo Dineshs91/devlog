@@ -1,7 +1,7 @@
 'use strict';
 
 var path = require('path');
-var nw = require('nw')
+var nw = require('nw');
 
 exports.config = {
     chromeDriver: './support/chromedriver',
