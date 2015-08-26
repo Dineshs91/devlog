@@ -10,6 +10,10 @@ module.exports = function(config) {
             'test/unit/**/*.js'
         ],
 
+        exclude: [
+            'app/js/index.js'
+        ],
+
         autoWatch: true,
 
         frameworks: ['jasmine'],
