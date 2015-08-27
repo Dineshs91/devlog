@@ -18,7 +18,11 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: pkg,
         jshint: {
-            all: ['app/js/**/*.js', 'test/unit/**/*.js', 'test/e2e/**/*.js']
+            all: [
+                'app/js/**/*.js',
+                'test/unit/**/*.js',
+                'test/e2e/**/*.js'
+            ]
         },
     	nwjs: {
 	        options: {
