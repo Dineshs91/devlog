@@ -54,3 +54,5 @@ Entries deleted in Devlog are not permanently deleted. The user has the ability 
 - [ ] In app updates.
 - [ ] Draggable logs. 
 
+#### Changelog
+Find the changelog [here](https://github.com/dineshs91/devlog/blob/master/CHANGELOG.md)
