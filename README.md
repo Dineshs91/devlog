@@ -37,8 +37,11 @@ Entries deleted in Devlog are not permanently deleted. The user has the ability 
 #### Hacking
 1. git clone 
 2. npm install
-3. npm start (To run the app from source) or npm start --remote-debugging 9222 (To use chrome devtools).
+3. npm start (To run the app from source).
 4. npm test (Complete testing. includes both unittests and e2e tests)
+ 
+If you want to use chrome devtools add ```--remote-debugging-port=9222``` to start script in
+package.json
 
 #### Other available commands
 1. grunt jshint (Jshint)
