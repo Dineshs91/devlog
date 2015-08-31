@@ -32,3 +32,8 @@ body {
 .tags-nav {
     word-wrap: break-word;
 }
+
+.empty.logs.message {
+    padding-left: 5%;
+    color: rgba(96, 96, 96, 0.87);
+}
