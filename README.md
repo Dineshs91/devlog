@@ -51,8 +51,6 @@ package.json
 #### Todo
 - [x] Add keyboard bindings.
 - [x] Restore/Delete removed logs.
-- [ ] During first time use, show an introduction log.
-- [ ] Add an option to show all stats, like no. of logs etc.
 - [ ] Import/Export logs.
 - [ ] In app updates.
 - [ ] Draggable logs. 
