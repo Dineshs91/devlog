@@ -5,8 +5,12 @@ body {
 
 .ui.list {
     height: 33em;
-    overflow: auto;
+    overflow: hidden;
     padding-right: 10px;
+}
+
+.ui.list:hover {
+    overflow-y: scroll;
 }
 
 #wrapper {
