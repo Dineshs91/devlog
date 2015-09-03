@@ -101,7 +101,13 @@
         </div>
       </div>
     </div>
+
+    <div class="row">
+        <div class="ui divider"></div>
+        <div class="last-updated">Last updated on: {{ logs[logSelectedIndex].timestamp | date:'MMM dd, yyyy' }}</div>
+    </div>
   </div>
+
   <!-- Modal -->
   <div class="ui standard modal" ng-controller="RemovedLogController as remLogCtrl">
     <i class="close icon"></i>
