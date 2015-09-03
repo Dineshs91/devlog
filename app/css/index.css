@@ -3,6 +3,10 @@ body {
     width: 98%;
 }
 
+.container {
+    padding: 2%;
+}
+
 .ui.list {
     height: 33em;
     overflow: hidden;

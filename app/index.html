@@ -15,12 +15,13 @@
   <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
+  <div class="container">
   <div class="ui divided padded grid" ng-controller="LogController as logCtrl">
     <!-- left float -->
     <div class="seven wide left column">
       <div class="ui vertical">
         <h2 class="ui header">
-        <i class="inbox icon"></i>Logs
+        <i class="idea icon"></i>Logs
         <div class="ui right floated basic button add" ng-click="logCtrl.addFn()">
           Add <i class="plus icon"></i>
         </div>
@@ -106,6 +107,7 @@
         <div class="ui divider"></div>
         <div class="last-updated">Last updated on: {{ logs[logSelectedIndex].timestamp | date:'MMM dd, yyyy' }}</div>
     </div>
+  </div>
   </div>
 
   <!-- Modal -->
