@@ -14,7 +14,7 @@ body {
 }
 
 .ui.list:hover {
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 #wrapper {
