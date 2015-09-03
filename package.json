@@ -12,7 +12,7 @@
   "window": {
     "toolbar": false,
     "width": 1200,
-    "height": 600
+    "height": 650
   },
   "dependencies": {
     "grunt": "^0.4.5",
