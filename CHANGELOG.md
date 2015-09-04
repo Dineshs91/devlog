@@ -6,9 +6,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 - Version is being changed. According to semver the initial version should
   be 0.1.0 not 0.0.1. So the next release would be 0.1.0 not 0.0.3
+- New UI (Lot of improvements)
+- Using semantic-ui 2.1.x
 
 ### Fixed
-- Issue with windows is fixed by using npm@3.0
+- Issue with windows build is fixed by using npm@3.0
 - Unselect all radio buttons in restore/delete modal when cancel button is
   pressed
 
