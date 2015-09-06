@@ -150,6 +150,8 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     this.saveFn = function() {
         log = formLogDoc();
         
+        $scope.isSaving = true;
+        
         // check if selectedTag is present
         // if removed select the first tag
         // in the log
@@ -180,8 +182,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         var timer;
         this.set = function() {
             $scope.isSaved = false;
-            $scope.isSaving = true;
-            timer = $timeout(self.saveFn, 1000);
+            timer = $timeout(self.saveFn, 2000);
         };
 
         this.clear = function() {
@@ -196,7 +197,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         $scope.isSaved = true;
         $timeout(function() {
             $scope.isSaved = false;
-        }, 3000);
+        }, 1000);
 
         self.getAllTags();
         
