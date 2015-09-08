@@ -46,6 +46,11 @@ body {
     color: rgba(96, 96, 96, 0.87);
 }
 
+.empty.rem-logs.message {
+    text-align: center;
+    color: rgba(96, 96, 96, 0.87);
+}
+
 .last-updated {
     float: right;
     color: rgba(0, 0, 0, 0.7);
