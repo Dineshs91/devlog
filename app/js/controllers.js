@@ -168,7 +168,6 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
             });
         } else {
             dbService.insertLogAndTag(log).then(function() {
-                $scope.logs[logSelectedIndex].key = log.key;
                 save();
             });
         }
@@ -203,7 +202,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         self.getAllTags();
         
         
-        /*if(currentSelectedTag === '' || currentSelectedTag === 'all') {
+        if(currentSelectedTag === '' || currentSelectedTag === 'all') {
             self.getAllLogs();
 
             $scope.logSelectedIndex = 0;
@@ -217,7 +216,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
                 $scope.logSelectedIndex = 0;
                 $scope.tagSelectedIndex = findTagIndex($scope.tags, currentSelectedTag);
             });
-        }*/
+        }
     };
     
     var findTagIndex = function(tags, value) {
