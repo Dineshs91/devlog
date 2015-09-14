@@ -2,12 +2,13 @@
 All notable chanages to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [unreleased][unreleased]
+## [0.1.0] - 2015-09-09
 ### Changed
 - Version is being changed. According to semver the initial version should
   be 0.1.0 not 0.0.1. So the next release would be 0.1.0 not 0.0.3
 - New UI (Lot of improvements)
 - Using semantic-ui 2.1.x
+- Autosave now works only in log content and doesn't work in title and tags.
 
 ### Fixed
 - Issue with windows build is fixed by using npm@3.0
