@@ -18,6 +18,8 @@ Provides an index of all entries with Title and Date making it easy to find your
 Tags allow you to group similar log entries together. 
 Ex: Say you are working on a project called "Devlog" and you have identifed additional features to add and issues. Tagging allows you to group similar ideas or notes and selecting the tag from the index displays only relevant tagged entries.
 
+**_Multiple tags are supported, use comma(,) as tag seperator._**
+
 ![Alt text](https://github.com/dineshs91/devlog/blob/master/Tagging.png?raw=true "Tagging")
 
 **Restore or Permanently Delete Notes:**
