@@ -36,7 +36,11 @@ module.exports = function(grunt) {
 	        src: [
                 './app/**',
                 './package.json',
-                './node_modules/**'
+                './node_modules/nedb/**',
+                './node_modules/underscore/**',
+                './node_modules/async/**',
+                './node_modules/binary-search-tree/**',
+                './node_modules/mkdirp/**',
             ]
     	},
         clean: {
