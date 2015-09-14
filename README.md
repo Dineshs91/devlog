@@ -31,6 +31,7 @@ Entries deleted in Devlog are not permanently deleted. The user has the ability 
 *  [NW.js (Node-Webkit)](https://github.com/nwjs/nw.js/)
 *  [ANGULARJS](https://angularjs.org/)
 *  [NeDB (Node embedded databse)](https://github.com/louischatriot/nedb")
+*  [Semantic-UI](http://semantic-ui.com/)
 
 #####Testing#####
 *  [Karma](http://karma-runner.github.io/0.12/index.html)
