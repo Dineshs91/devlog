@@ -6,4 +6,13 @@ $(function() {
     $('.add').click(function() {
         $('.title').focus();
     });
+
+    $('.ui.input')
+      .popup({
+          position: 'bottom left',
+          delay: {
+              show: 100
+          }
+      })
+    ;
 });

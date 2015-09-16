@@ -23,7 +23,8 @@
                     <h2 class="ui header">
                     <i class="idea icon"></i>Logs
                     <div class="ui right floated basic button add" ng-click="logCtrl.addFn()">
-                        Add <i class="plus icon"></i>
+                        <i class="plus icon"></i>
+                        Add
                     </div>
                     </h2>
                     <div class="ui divider"></div>
@@ -69,7 +70,7 @@
                     </div>
         
                     <div id="tags">
-                        <div class="ui right labeled left icon input">
+                        <div class="ui right labeled left icon input" data-title="Tags" data-html="tag seperator: <span style='color: green;'>comma( , )</span>">
                             <i class="tags icon"></i>
                             <input type="text" placeholder="Tags" class="tags" ng-model="logs[logSelectedIndex].tags"/>
                             <div class="ui basic left pointing blue label">
