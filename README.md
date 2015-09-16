@@ -2,7 +2,7 @@
 [![Join the chat at https://gitter.im/Dineshs91/devlog](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/Dineshs91/devlog?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Devlog
-### A log book for developers.
+### A log book.
 
 Devlog - Devlog is designed to assist you in keeping track of your notes, ideas etc in a simple yet intutive way. 
 
