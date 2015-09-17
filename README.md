@@ -30,7 +30,7 @@ Entries deleted in Devlog are not permanently deleted. The user has the ability 
 ##### Devlog is built using: #####
 *  [NW.js (Node-Webkit)](https://github.com/nwjs/nw.js/)
 *  [ANGULARJS](https://angularjs.org/)
-*  [NeDB (Node embedded databse)](https://github.com/louischatriot/nedb")
+*  [NeDB (Node embedded databse)](https://github.com/louischatriot/nedb)
 *  [Semantic-UI](http://semantic-ui.com/)
 
 #####Testing#####
@@ -54,9 +54,7 @@ package.json
 #### Todo
 - [x] Add keyboard bindings.
 - [x] Restore/Delete removed logs.
-- [ ] Import/Export logs.
-- [ ] In app updates.
-- [ ] Draggable logs. 
+- [ ] Desktop icon
 
 #### Changelog
 Find the changelog [here](https://github.com/dineshs91/devlog/blob/master/CHANGELOG.md)
