@@ -12,7 +12,9 @@
   "window": {
     "toolbar": false,
     "width": 1200,
-    "height": 650
+    "height": 700,
+    "frame": false,
+    "show": true
   },
   "dependencies": {
     "grunt": "^0.4.5",
@@ -50,6 +52,6 @@
     "unittest-single-run": "node_modules/karma/bin/karma start test/karma.conf.js --single-run",
     "pretest": "grunt jshint",
     "test": "npm run unittest-single-run && npm run e2e",
-    "start": "node_modules/nw/bin/nw"
+    "start": "node_modules/nw/bin/nw --remote-debugging-port=9222"
   }
 }
