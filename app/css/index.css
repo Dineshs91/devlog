@@ -1,10 +1,26 @@
 body {
+    margin: 0px;
     height: 100%;
-    width: 98%;
+}
+
+.titlebar {
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+    padding-top: 5px;
+    padding-left: 10px;
+    color: #E9EEF0;
+    border-radius: 3px;
+    background-color: #2185d0;
+    height: 30px;
+}
+
+.title {
+    padding-left: 500px;
 }
 
 .container {
     padding: 2%;
+    width: 98%;
 }
 
 .ui.list {
