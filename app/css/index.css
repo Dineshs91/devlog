@@ -4,6 +4,7 @@ body {
 }
 
 .titlebar {
+    position: fixed;
     -webkit-user-select: none;
     -webkit-app-region: drag;
     padding-top: 5px;
@@ -12,6 +13,8 @@ body {
     border-radius: 3px;
     background-color: #2185d0;
     height: 30px;
+    width: 100%;
+    z-index: 10;
 }
 
 .title {
