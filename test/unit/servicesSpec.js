@@ -26,7 +26,8 @@ describe("DevLog Services", function() {
     var log1 = {
         'title': 'log1 title',
         'content': 'log1 content',
-        'timestamp': '12345678',
+        'created_on': '12345678',
+        'updated_on': '12345999',
         'tags': ['log1'],
         'is_removed': false
     };
@@ -42,7 +43,8 @@ describe("DevLog Services", function() {
             expect(log._id).toBeUndefined();
             expect(log1.title).toBe(log.title);
             expect(log1.content).toBe(log.content);
-            expect(log1.timestamp).toBe(log.timestamp);
+            expect(log1.created_on).toBe(log.created_on);
+            expect(log1.updated_on).toBe(log.updated_on);
             expect(log1.tags.length).toBe(log.tags.length);
             for(i = 0; i < log.tags.length; i++) {
                 expect(log1.tags[i]).toBe(log.tags[i]);
@@ -72,7 +74,8 @@ describe("DevLog Services", function() {
             expect(log._id).toBeUndefined();
             expect(log1.title).toBe(log.title);
             expect(log1.content).toBe(log.content);
-            expect(log1.timestamp).toBe(log.timestamp);
+            expect(log1.created_on).toBe(log.created_on);
+            expect(log1.updated_on).toBe(log.updated_on);
             expect(log1.tags.length).toBe(log.tags.length);
             for(i = 0; i < log.tags.length; i++) {
                 expect(log1.tags[i]).toBe(log.tags[i]);
@@ -90,7 +93,7 @@ describe("DevLog Services", function() {
     var log1Update = {
         'title': 'log1 title update',
         'content': 'log1 content update',
-        'timestamp': '123456789',
+        'updated_on': '12346999',
         'tags': ['log1'],
         'is_removed': false
     };
@@ -155,7 +158,11 @@ describe("DevLog Services", function() {
             expect(log._id).toBeUndefined();
             expect(log1Update.title).toBe(log.title);
             expect(log1Update.content).toBe(log.content);
-            expect(log1Update.timestamp).toBe(log.timestamp);
+            expect(log1Update.created_on).toBe(log.created_on);
+
+            // Updated log will have latest updated_on time.
+            // Check with log1 updated_on time.
+            expect(log1.updated_on).toBeLessThan(log.updated_on);
             expect(log1Update.tags.length).toBe(log.tags.length);
             for(i = 0; i < log.tags.length; i++) {
                 expect(log1Update.tags[i]).toBe(log.tags[i]);
@@ -206,7 +213,8 @@ describe("DevLog Services", function() {
     var log2 = {
         'title': 'log2 title',
         'content': 'log2 content',
-        'timestamp': '12345671',
+        'created_on': '12345671',
+        'updated_on': '12345671',
         'tags': ['log1'],
         'is_removed': false
     };
@@ -285,7 +293,8 @@ describe("DevLog Services", function() {
             expect(log._id).toBeUndefined();
             expect(log1.title).toBe(log.title);
             expect(log1.content).toBe(log.content);
-            expect(log1.timestamp).toBe(log.timestamp);
+            expect(log1.created_on).toBe(log.created_on);
+            expect(log1.updated_on).toBe(log.updated_on);
             expect(log1.tags.length).toBe(log.tags.length);
             for(i = 0; i < log.tags.length; i++) {
                 expect(log1.tags[i]).toBe(log.tags[i]);
@@ -352,7 +361,8 @@ describe("DevLog Services", function() {
             expect(log._id).toBeUndefined();
             expect(log2.title).toBe(log.title);
             expect(log2.content).toBe(log.content);
-            expect(log2.timestamp).toBe(log.timestamp);
+            expect(log2.created_on).toBe(log.created_on);
+            expect(log2.updated_on).toBe(log.updated_on);
             expect(log2.tags.length).toBe(log.tags.length);
             for(i = 0; i < log.tags.length; i++) {
                 expect(log2.tags[i]).toBe(log.tags[i]);
