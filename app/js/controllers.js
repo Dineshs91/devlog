@@ -58,10 +58,13 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     };
     
     this.addFn = function() {
+        var time = (new Date()).getTime();
+
         newLog = {
             'title': '',
             'content': '',
-            'timestamp': (new Date()).getTime(),
+            'created_on': time,
+            'updated_on': time,
             'is_removed': false,
             'tags': []
         };
@@ -148,7 +151,15 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     };
     
     this.saveFn = function() {
-        log = formLogDoc();
+        var logSelectedIndex = $scope.logSelectedIndex;
+        var logKey = $scope.logs[logSelectedIndex].key;
+        var action = 'insert';
+
+        if(logKey !== null && logKey !== undefined && logKey.trim() !== '') {
+            action = 'update';
+        }
+
+        log = formLogDoc(action);
         
         $scope.isSaving = true;
         
@@ -158,9 +169,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         if(currentSelectedTag !== 'all' && log.tags.indexOf(currentSelectedTag) === -1) {
             currentSelectedTag = log.tags[0];
         }
-        
-        var logSelectedIndex = $scope.logSelectedIndex;
-        var logKey = $scope.logs[logSelectedIndex].key;
+
         if(logKey !== null && logKey !== undefined && logKey.trim() !== '') {
             log.key = logKey;
             dbService.updateLogAndTag(log).then(function() {
@@ -229,7 +238,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         return -1;
     };
     
-    var formLogDoc = function() {
+    var formLogDoc = function(action) {
         var logSelectedIndex = $scope.logSelectedIndex;
         var tags = $scope.logs[logSelectedIndex].tags;
 
@@ -255,10 +264,18 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
             formedTags.splice(remIndex, 1);
         }
 
+        var created_on = $scope.logs[logSelectedIndex].created_on;
+        var updated_on = (new Date()).getTime();
+
+        if(action === 'insert') {
+            created_on = updated_on;
+        }
+
         log = {
             'title': $scope.logs[logSelectedIndex].title,
             'content': $scope.logs[logSelectedIndex].content,
-            'timestamp': (new Date()).getTime(),
+            'created_on': created_on,
+            'updated_on': updated_on,
             'is_removed': false,
             'tags': formedTags
         };

@@ -57,7 +57,7 @@
                                 You haven't created any logs. Go ahead and create a new log by clicking the add button.
                             </div>
                             <a class="item" ng-repeat="log in logs track by log.key" ng-class="{ active: $index == logSelectedIndex }"ng-click="logCtrl.clickLogFn($index, log)">
-                                <div class="right floated date">{{ log.timestamp | date:'MMM dd, yyyy' }}</div>
+                                <div class="right floated date">{{ log.created_on | date:'MMM dd, yyyy' }}</div>
                                 <div class="description">
                                     {{ log.title }}
                                 </div>
@@ -111,7 +111,8 @@
 
             <div class="row">
                 <div class="ui divider"></div>
-                <div class="last-updated">Last updated on: {{ logs[logSelectedIndex].timestamp | date:'MMM dd, yyyy' }}</div>
+                <div class="created-on">Created on: {{ logs[logSelectedIndex].created_on | date:'MMM dd, yyyy' }}</div>
+                <div class="last-updated">Last updated on: {{ logs[logSelectedIndex].updated_on | date:'MMM dd, yyyy' }}</div>
             </div>
         </div>
   
@@ -137,7 +138,7 @@
                             <tr class="empty rem-logs message" ng-show="remLogs.length == 0">
                                 <td>Nothing to display.</td>
                             </tr>
-                            <tr ng-repeat="log in remLogs | orderBy:'-timestamp' track by log.key">
+                            <tr ng-repeat="log in remLogs | orderBy:'-created_on' track by log.key">
                                 <td>{{ $index + 1 }}</td>
                                 <td colspan="3">{{ log.title }}</td>
                                 <td class="positive"><input type="radio" name="option-{{$index}}" value="restore" ng-model="log.option"></td>
