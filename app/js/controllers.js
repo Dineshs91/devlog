@@ -105,8 +105,13 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         
     };
     
-    this.clickLogFn = function($index, log) {
-        $scope.logSelectedIndex = $index;
+    this.clickLogFn = function(log) {
+        // $index is very error prone. It can be used
+        // if we don't use orderBy or filter. Its best
+        // to use indexOf which works in all the cases.
+        var index = $scope.logs.indexOf(log);
+
+        $scope.logSelectedIndex = index;
     };
     
     this.removeLogFn = function(key) {

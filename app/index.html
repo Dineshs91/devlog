@@ -66,7 +66,7 @@
                             <div class="empty logs message" ng-show="logs.length == 0">
                                 You haven't created any logs. Go ahead and create a new log by clicking the add button.
                             </div>
-                            <a class="item" ng-repeat="log in logs | filter: logSearch track by log.key" ng-class="{ active: $index == logSelectedIndex }" ng-click="logCtrl.clickLogFn($index, log)">
+                            <a class="item" ng-repeat="log in logs | filter: logSearch track by log.key" ng-class="{ active: $index == logSelectedIndex }" ng-click="logCtrl.clickLogFn(log)">
                                 <div class="right floated date">{{ log.created_on | date:'MMM dd, yyyy' }}</div>
                                 <div class="description">
                                     {{ log.title }}
