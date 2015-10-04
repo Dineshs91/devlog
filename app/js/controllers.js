@@ -292,7 +292,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     */
     var sortLogs = function(logs) {
         return logs.sort(function(a, b) {
-            return parseFloat(b.timestamp) - parseFloat(a.timestamp);
+            return parseFloat(b.created_on) - parseFloat(a.created_on);
         });
     };
     
