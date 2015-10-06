@@ -219,15 +219,12 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         if(currentSelectedTag === '' || currentSelectedTag === 'all') {
             self.getAllLogs();
 
-            $scope.logSelectedIndex = 0;
-
             $scope.tagSelectedIndex = findTagIndex($scope.tags, currentSelectedTag);
         } else {
             dbService.getLogsWithTag(currentSelectedTag).then(function(logs) {
                 $scope.logs = logs;
                 logs = sortLogs(logs);
 
-                $scope.logSelectedIndex = 0;
                 $scope.tagSelectedIndex = findTagIndex($scope.tags, currentSelectedTag);
             });
         }
