@@ -1,3 +1,5 @@
+var PrimaryPage = require('./pages/primary.page.js');
+
 var hasClass = function (element, cls) {
     return element.getAttribute('class').then(function (classes) {
         return classes.split(' ').indexOf(cls) !== -1;
@@ -5,6 +7,7 @@ var hasClass = function (element, cls) {
 };
 
 describe('Devlog', function() {
+    var page;
     var log1 = {
         'title': 'e2e test',
         'tags': 'e2e',
@@ -16,56 +19,38 @@ describe('Devlog', function() {
         'tags': 'e2e,test',
         'content': 'e2e test content 2'
     };
+    
+    beforeEach(function() {
+        page = new PrimaryPage();
+    })
 
     it('should add log1', function() {
-        element(by.css('.add')).click();
-        element(by.css('input.title')).sendKeys(log1.title);
-        element(by.css('input.tags')).sendKeys(log1.tags);
-        element(by.css('textarea.content')).sendKeys(log1.content);
-
-        var logs = element.all(by.repeater('log in logs'));
-        expect(logs.count()).toEqual(1);
+        //page.clickAddButton();
+        //browser.wait(1000);
+        element(by.css('.add')).click().then(function() {
+            browser.wait(function() {
+                page.setTitle(log1.title);
+                page.setTags(log1.tags);
+                page.setContent(log1.content);
+        
+                expect(page.getLogCount()).toEqual(1);
+            }, 1000);
+            
+        });
+        
     });
 
     it('should add log2', function() {
-        element(by.css('.add')).click();
-        element(by.css('input.title')).sendKeys(log2.title);
-        element(by.css('input.tags')).sendKeys(log2.tags);
-        element(by.css('textarea.content')).sendKeys(log2.content);
-
-        var logs = element.all(by.repeater('log in logs'));
-        expect(logs.count()).toEqual(2);
-    });
-
-    it('should get all logs in test tag', function() {
-        element.all(by.css('.tags-nav')).get(2).click();
-
-        var logs = element.all(by.repeater('log in logs'));
-        expect(logs.count()).toEqual(1);
-        expect(element(by.css('input.title')).getAttribute('value')).toEqual(log2.title);
-        expect(element(by.css('input.tags')).getAttribute('value')).toEqual(log2.tags);
-        expect(element(by.css('textarea.content')).getAttribute('value')).toEqual(log2.content);
-    });
-
-    it('should remove log2', function() {
-        element(by.css('.trash')).click();
-
-        browser.sleep(100);
-        var allTag = element.all(by.css('.tags-nav')).get(0);
-        expect(hasClass(allTag, 'active')).toBe(true);
-    });
-
-    it('should remove all logs', function() {
-        element.all(by.css('.tags-nav')).get(0).click();
-
-        element.all(by.css('.trash')).then(function(items) {
-            for(var i = 0; i < items.length; i++) {
-                element.all(by.css('.trash')).get(0).click();
-                browser.sleep(200);
-            }
+        //page.clickAddButton();
+        element(by.css('.add')).click().then(function() {
+            browser.wait(function() {
+                page.setTitle(log2.title);
+                page.setTags(log2.tags);
+                page.setContent(log2.content);
+        
+                expect(page.getLogCount()).toEqual(2);
+            }, 1000);
+            
         });
-
-        var logs = element.all(by.repeater('log in logs'));
-        expect(logs.count()).toEqual(0);
     });
 });
