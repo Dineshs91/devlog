@@ -38,7 +38,7 @@
     "lodash": "^2.4.1",
     "protractor": "^2.4.0",
     "tar.gz": "^0.1.1",
-    "underscore": "^1.4.4",
+    "underscore": "^1.8.3",
     "unzip": "^0.1.9"
   },
   "scripts": {
