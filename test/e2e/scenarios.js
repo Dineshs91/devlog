@@ -22,7 +22,7 @@ describe('Devlog', function() {
     
     beforeEach(function() {
         page = new PrimaryPage();
-    })
+    });
 
     it('should add log1', function() {
         page.clickAddButton();

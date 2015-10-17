@@ -23,7 +23,7 @@ var PrimaryPage = function() {
     
     this.getLogCount = function() {
         return logs.count();
-    }
+    };
 };
 
 module.exports = PrimaryPage;
