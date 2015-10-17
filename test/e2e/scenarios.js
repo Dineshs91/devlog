@@ -25,32 +25,24 @@ describe('Devlog', function() {
     })
 
     it('should add log1', function() {
-        //page.clickAddButton();
-        //browser.wait(1000);
-        element(by.css('.add')).click().then(function() {
-            browser.wait(function() {
-                page.setTitle(log1.title);
-                page.setTags(log1.tags);
-                page.setContent(log1.content);
+        page.clickAddButton();
+        browser.sleep(500);
         
-                expect(page.getLogCount()).toEqual(1);
-            }, 1000);
-            
-        });
-        
+        page.setTitle(log1.title);
+        page.setTags(log1.tags);
+        page.setContent(log1.content);
+
+        expect(page.getLogCount()).toEqual(1);
     });
 
     it('should add log2', function() {
-        //page.clickAddButton();
-        element(by.css('.add')).click().then(function() {
-            browser.wait(function() {
-                page.setTitle(log2.title);
-                page.setTags(log2.tags);
-                page.setContent(log2.content);
+        page.clickAddButton();
+        browser.sleep(500);
         
-                expect(page.getLogCount()).toEqual(2);
-            }, 1000);
-            
-        });
+        page.setTitle(log2.title);
+        page.setTags(log2.tags);
+        page.setContent(log2.content);
+
+        expect(page.getLogCount()).toEqual(2);
     });
 });
