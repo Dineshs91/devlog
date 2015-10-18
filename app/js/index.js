@@ -5,7 +5,9 @@ $(function() {
         $('input:radio').prop('checked', false);
     });
 
-    
+    $('.add').click(function() {
+        $('.title').focus();
+    });
 
     $('.quit').click(function() {
         window.close();
