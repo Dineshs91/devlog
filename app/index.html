@@ -21,7 +21,7 @@
             <a class="ui yellow empty circular label minimize"></a>
             <a class="ui green empty circular label maximize"></a>
         </span>
-        <span class="menu">
+        <span class="menu" ng-show="customMenu">
             <!-- Edit menu -->
             <div class="ui dropdown">
               <div class="text">Edit</div>
@@ -48,8 +48,6 @@
                   <span class="description">ctrl + v</span>
                   Paste
                 </div>
-                <div class="item">Delete</div>
-                
                 <div class="item">
                   <span class="description">ctrl + a</span>
                   Select All
