@@ -1,4 +1,4 @@
-devlog.controller('MenuController', ['$scope', function($scope) {
+devlog.controller('MenuController', ['$scope', 'hotkeys', function($scope, hotkeys) {
     $scope.customMenu = true;
     
     $scope.quit = function() {
@@ -11,5 +11,15 @@ devlog.controller('MenuController', ['$scope', function($scope) {
     
     $scope.maximize = function() {
         win.maximize();
+    };
+    
+    function hotKeys() {
+        hotkeys.add({
+            combo: 'ctrl+s',
+            description: 'Save current log',
+            callback: function() {
+                $('.save').click();
+            }
+        });
     };
 }]);
