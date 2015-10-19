@@ -1,4 +1,4 @@
-var devlog = angular.module('devLog', ['cfp.hotkeys']);
+var devlog = angular.module('devLog', []);
 
 devlog.directive('currentTime', ['$interval', 'dateFilter',
     function($interval, dateFilter) {

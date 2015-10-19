@@ -20,6 +20,10 @@ $(function() {
     $('.maximize').click(function() {
         win.maximize();
     });
+    
+    $('.ui.dropdown').dropdown({
+        action: 'hide'
+    });
 
     $('.ui.input')
       .popup({
