@@ -1,0 +1,1 @@
+var devlog = angular.module('devLog', []);

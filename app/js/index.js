@@ -9,18 +9,6 @@ $(function() {
         $('.title').focus();
     });
 
-    $('.quit').click(function() {
-        window.close();
-    });
-
-    $('.minimize').click(function() {
-        win.minimize();
-    });
-
-    $('.maximize').click(function() {
-        win.maximize();
-    });
-    
     $('.ui.dropdown').dropdown({
         action: 'hide'
     });

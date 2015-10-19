@@ -1,33 +1,3 @@
-var devlog = angular.module('devLog', []);
-
-devlog.directive('currentTime', ['$interval', 'dateFilter',
-    function($interval, dateFilter) {
-
-    return function(scope, element, attrs) {
-      var format,  // date format
-          stopTime; // so that we can cancel the time updates
-
-      // used to update the UI
-      function updateTime() {
-        element.text(dateFilter(new Date(), format));
-      }
-
-      // watch the expression, and update the UI on change.
-      scope.$watch(attrs.currentTime, function(value) {
-        format = value;
-        updateTime();
-      });
-
-      stopTime = $interval(updateTime, 1000);
-
-      // listen on DOM destroy (removal) event, and cancel the next UI update
-      // to prevent updating time after the DOM element was removed.
-      element.on('$destroy', function() {
-        $interval.cancel(stopTime);
-      });
-    };
-}]);
-
 devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function($scope, $timeout, dbService) {
     $scope.format = 'M/d/yy hh:mm:ss a';
     $scope.logSelectedIndex = -1;
@@ -349,57 +319,6 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         Initialize when init event is emitted.
     */
     $scope.$on('init', function(event, args) {
-        init();
-    });
-
-    init();
-}]);
-
-devlog.controller('RemovedLogController', ['$scope', '$q', 'dbService', function($scope, $q, dbService) {
-    var self = this;
-    
-    this.getAllRemovedLogs = function() {
-        return dbService.getAllRemovedLogs().then(function(remLogs) {
-            $scope.remLogs = remLogs;
-        });
-    };
-    
-    this.proceedFn = function() {
-        var promise = [];
-
-        for(var i = 0; i < $scope.remLogs.length; i++) {
-            // log.option will not be inserted into db.
-            // check updateLog function in services.js
-            var option = $scope.remLogs[i].option;
-            var log = $scope.remLogs[i];
-            log.is_removed = false;
-
-            if(option === 'restore') {
-                promise.push(dbService.updateLogAndTag(log));
-            } else if (option === 'delete') {
-                promise.push(dbService.permanentDelete(log.key));
-            }
-        }
-
-        $q.all(promise).then(function() {
-            // Emit init event, so app is initialized
-            // to reflect the restored logs.
-            $scope.$emit('init');
-            init();
-        }).catch(function(err) {
-            console.log(err);
-        });
-    };
-
-    var init = function() {
-        self.getAllRemovedLogs();
-    };
-
-    /*
-        If any log is removed, logRemoved event is triggered.
-        Reload removedLogs, which appear in restore/delete modal.
-    */
-    $scope.$on('logRemoved', function(event, args) {
         init();
     });
 

@@ -4,8 +4,12 @@
   <meta charset="utf-8">
   <title>DevLog</title>
   <script src="bower_components/angular/angular.js"></script>
-  <script src="js/controllers.js"></script>
-  <script src="js/services.js"></script>
+  <script src="js/controllers/controllers.js"></script>
+  <script src="js/controllers/MenuController.js"></script>
+  <script src="js/controllers/LogController.js"></script>
+  <script src="js/controllers/RemovedLogController.js"></script>
+  <script src="js/directive/CurrentTimeDirective.js"></script>
+  <script src="js/services/DbService.js"></script>
   <script src="js/db/db.js"></script>
   <script src="js/menu.js"></script>
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
@@ -15,11 +19,11 @@
   <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
-    <div class="titlebar">
+    <div class="titlebar" ng-controller="MenuController">
         <span class="window-controls">
-            <a class="ui red empty circular label quit"></a>
-            <a class="ui yellow empty circular label minimize"></a>
-            <a class="ui green empty circular label maximize"></a>
+            <a class="ui red empty circular label quit" ng-click="quit()"></a>
+            <a class="ui yellow empty circular label minimize" ng-click="minimize()"></a>
+            <a class="ui green empty circular label maximize" ng-click="maximize()"></a>
         </span>
         <span class="menu" ng-show="customMenu">
             <!-- Edit menu -->
