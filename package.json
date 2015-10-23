@@ -33,7 +33,7 @@
     "karma": "^0.12.16",
     "karma-coverage": "~0.5.3",
     "karma-jasmine": "~0.2.0",
-    "karma-junit-reporter": "~0.2.2",
+    "karma-junit-reporter": "~0.3.8",
     "karma-nodewebkit-launcher": "~0.0.12",
     "lodash": "^2.4.1",
     "protractor": "^1.8.0",
