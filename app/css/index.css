@@ -26,7 +26,7 @@ span.menu .dropdown {
     color: black;
 }
 
-.title {
+span.title {
     position: fixed;
     right: 50%;
 }
