@@ -1,4 +1,6 @@
-devlog.controller('RemovedLogController', ['$scope', '$q', 'dbService', function($scope, $q, dbService) {
+devlog.controller('RemovedLogController', ['$scope', '$q', 'dbService', 'hotkeys',
+    function($scope, $q, dbService, hotkeys) {
+
     var self = this;
     
     this.getAllRemovedLogs = function() {
@@ -44,6 +46,15 @@ devlog.controller('RemovedLogController', ['$scope', '$q', 'dbService', function
     */
     $scope.$on('logRemoved', function(event, args) {
         init();
+    });
+
+    hotkeys.add({
+        combo: 'mod+r',
+        description: 'Restore/Delete logs',
+        callback: function() {
+            $('.standard.modal').modal('show');
+        },
+        allowIn: ['INPUT', 'TEXTAREA']
     });
 
     init();

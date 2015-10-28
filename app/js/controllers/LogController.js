@@ -1,4 +1,6 @@
-devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function($scope, $timeout, dbService) {
+devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys',
+    function($scope, $timeout, dbService, hotkeys) {
+
     $scope.format = 'M/d/yy hh:mm:ss a';
     $scope.logSelectedIndex = -1;
     $scope.tagSelectedIndex = -1;
@@ -320,6 +322,24 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     */
     $scope.$on('init', function(event, args) {
         init();
+    });
+
+    hotkeys.add({
+        combo: 'mod+s',
+        description: 'Save current log',
+        callback: function() {
+            self.saveFn();
+        },
+        allowIn: ['INPUT', 'TEXTAREA']
+    });
+
+    hotkeys.add({
+        combo: 'mod+n',
+        description: 'Add new log',
+        callback: function() {
+            self.addFn();
+        },
+        allowIn: ['INPUT', 'TEXTAREA']
     });
 
     init();
