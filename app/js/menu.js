@@ -45,7 +45,7 @@ var customMenu = function() {
     }));
 
     win.menu = menu;
-}
+};
 
 if(process.platform === 'darwin') {
     menu.createMacBuiltin("Devlog");

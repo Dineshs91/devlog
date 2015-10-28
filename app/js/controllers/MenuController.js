@@ -1,5 +1,5 @@
 devlog.controller('MenuController', ['$scope', function($scope) {
-    $scope.os = process.platform
+    $scope.os = process.platform;
     $scope.customMenu = true;
     
     if ($scope.os == 'darwin') {
