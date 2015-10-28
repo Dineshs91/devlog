@@ -21,9 +21,10 @@ span.window-controls a {
     -webkit-app-region: no-drag;
 }
 
-span.menu .dropdown {
+span.custom-menu .dropdown {
     padding-left: 1%;
     color: black;
+    -webkit-app-region: no-drag;
 }
 
 span.title {
