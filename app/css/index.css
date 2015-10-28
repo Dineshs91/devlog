@@ -28,7 +28,8 @@ span.menu .dropdown {
 }
 
 .title {
-    padding-left: 32%;
+    position: fixed;
+    right: 50%;
 }
 
 .container {
