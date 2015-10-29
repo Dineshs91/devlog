@@ -17,4 +17,9 @@ devlog.controller('MenuController', ['$scope', function($scope) {
     $scope.maximize = function() {
         win.maximize();
     };
+
+    // Emit menu events
+    $scope.$emit('save-log');
+    $scope.$emit('add-log');
+    $scope.$emit('restore-log-modal');
 }]);

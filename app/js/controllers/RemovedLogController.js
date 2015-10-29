@@ -48,6 +48,11 @@ devlog.controller('RemovedLogController', ['$scope', '$q', 'dbService', 'hotkeys
         init();
     });
 
+    // Act on menu events (Restore/Delete logs)
+    $scope.$on('restore-log-modal', function(event, args) {
+        $('.standard.modal').modal('show');
+    });
+
     hotkeys.add({
         combo: 'mod+r',
         description: 'Restore/Delete logs',

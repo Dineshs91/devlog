@@ -324,6 +324,15 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
         init();
     });
 
+    // Act on menu events (Save or Add new log)
+    $scope.$on('save-log', function(event, args) {
+        self.saveFn();
+    });
+
+    $scope.$on('add-log', function(event, args) {
+        self.addFn();
+    });
+
     hotkeys.add({
         combo: 'mod+s',
         description: 'Save current log',
