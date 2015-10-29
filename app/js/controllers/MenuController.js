@@ -1,4 +1,4 @@
-devlog.controller('MenuController', ['$scope', function($scope) {
+devlog.controller('MenuController', ['$scope', '$rootScope', function($scope, $rootScope) {
     $scope.os = process.platform;
     $scope.customMenu = true;
     
@@ -18,8 +18,15 @@ devlog.controller('MenuController', ['$scope', function($scope) {
         win.maximize();
     };
 
-    // Emit menu events
-    $scope.$emit('save-log');
-    $scope.$emit('add-log');
-    $scope.$emit('restore-log-modal');
+    $scope.newLogFn = function() {
+        $rootScope.$broadcast('add-log');
+    };
+
+    $scope.saveLogFn = function() {
+        $rootScope.$broadcast('save-log');
+    };
+
+    $scope.restoreLogFn = function() {
+        $rootScope.$broadcast('restore-log-modal');
+    };
 }]);
