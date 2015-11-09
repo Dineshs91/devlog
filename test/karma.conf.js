@@ -7,7 +7,7 @@ module.exports = function(config) {
             'app/bower_components/angular/angular.js',
             'app/bower_components/angular-mocks/angular-mocks.js',
             'app/bower_components/angular-hotkeys/build/hotkeys.min.js',
-            'app/js/controllers/controllers.js',
+            'app/js/modules/BaseModule.js',
             'app/js/**/*.js',
             'test/unit/**/*.js'
         ],
