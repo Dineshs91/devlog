@@ -2,23 +2,20 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
     function($scope, $timeout, dbService, hotkeys) {
 
     $scope.format = 'M/d/yy hh:mm:ss a';
-    $scope.logSelectedIndex = -1;
     $scope.tagSelectedIndex = -1;
+    $scope.logIndex = 0;
     var currentSelectedTag = '';
     
     var self = this;
     
     this.getAllLogs = function() {
         return dbService.getAllLogs().then(function(logs) {
-            logs = sortLogs(logs);
             $scope.logs = logs;
         });
     };
     
     this.getAllTags = function() {
         return dbService.getAllTags().then(function(tags) {
-            tags = sortTags(tags);
-
             var index = tags.map(function(tag) { return tag.tag; }).indexOf('all');
             var allTag = tags[index];
             tags.splice(index, 1);
@@ -53,10 +50,9 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
         logs.unshift(newLog);
         $scope.logs = logs;
 
-        $scope.logSelectedIndex = 0;
-        var logSelectedIndex = $scope.logSelectedIndex;
+        displayLog(newLog);
         if(currentSelectedTag !== ''  && currentSelectedTag !== 'all') {
-            $scope.logs[logSelectedIndex].tags = currentSelectedTag;
+            $scope.currentLog.tags = currentSelectedTag;
         }
     };
     
@@ -64,26 +60,24 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
         currentSelectedTag = $scope.tags[$index].tag;
 
         $scope.tagSelectedIndex = $index;
-        $scope.logSelectedIndex = 0;
 
         if(tagName === 'all') {
-            self.getAllLogs();
+            self.getAllLogs().then(function() {
+                displayLog($scope.logs[0]);
+                $scope.logIndex = 0;
+            });
         } else {
             dbService.getLogsWithTag(tagName).then(function(logs) {
-                logs = sortLogs(logs);
                 $scope.logs = logs;
+                displayLog(logs[0]);
+                $scope.logIndex = 0;
             });
-        }
-        
+        }   
     };
     
-    this.clickLogFn = function(log) {
-        // $index is very error prone. It can be used
-        // if we don't use orderBy or filter. Its best
-        // to use indexOf which works in all the cases.
-        var index = $scope.logs.indexOf(log);
-
-        $scope.logSelectedIndex = index;
+    this.clickLogFn = function($index, log) {
+        $scope.logIndex = $index;
+        displayLog(log);
     };
     
     this.removeLogFn = function(key) {
@@ -112,7 +106,6 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
                         $scope.tagSelectedIndex = 0;
                         self.getAllLogs();
                     } else {
-                        logs = sortLogs(logs);
                         $scope.logs = logs;
                     }
                 });
@@ -121,15 +114,13 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
                 self.getAllLogs();
             }
 
-            $scope.logSelectedIndex = 0;
-
+            displayLog($scope.logs[0]);
             self.getAllTags();
         });
     };
     
     this.saveFn = function() {
-        var logSelectedIndex = $scope.logSelectedIndex;
-        var logKey = $scope.logs[logSelectedIndex].key;
+        var logKey = $scope.currentLog.key;
         var action = 'insert';
 
         if(logKey !== null && logKey !== undefined && logKey.trim() !== '') {
@@ -178,6 +169,10 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
         return this;
     }();
 
+    var displayLog = function(log) {
+        $scope.currentLog = log;
+    };
+
     var save = function() {
         $scope.isSaving = false;
         $scope.isSaved = true;
@@ -213,8 +208,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
     };
     
     var formLogDoc = function(action) {
-        var logSelectedIndex = $scope.logSelectedIndex;
-        var tags = $scope.logs[logSelectedIndex].tags;
+        var tags = $scope.currentLog.tags;
 
         if(tags.length === 0) {
             formedTags = [];
@@ -238,7 +232,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
             formedTags.splice(remIndex, 1);
         }
 
-        var created_on = $scope.logs[logSelectedIndex].created_on;
+        var created_on = $scope.currentLog.created_on;
         var updated_on = (new Date()).getTime();
 
         if(action === 'insert') {
@@ -246,8 +240,8 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
         }
 
         log = {
-            'title': $scope.logs[logSelectedIndex].title,
-            'content': $scope.logs[logSelectedIndex].content,
+            'title': $scope.currentLog.title,
+            'content': $scope.currentLog.content,
             'created_on': created_on,
             'updated_on': updated_on,
             'is_removed': false,
@@ -295,7 +289,6 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
                 return dbService.insertTag(tag);
             }
         });
-
     };
     
     /*
@@ -306,13 +299,13 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
     */
     var init = function() {
         insertAllTag().then(function() {
-            self.getAllLogs().then(function() {
-                $scope.logSelectedIndex = 0;
-            });
-            
             self.getAllTags().then(function() {
                 $scope.tagSelectedIndex = 0;
                 currentSelectedTag = $scope.tags[0].tag;
+            });
+
+            self.getAllLogs().then(function() {
+                displayLog($scope.logs[0]);
             });
         });
     };

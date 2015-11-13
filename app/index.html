@@ -97,7 +97,7 @@
                             <div class="empty logs message" ng-show="logs.length == 0">
                                 You haven't created any logs. Go ahead and create a new log by clicking the add button.
                             </div>
-                            <a class="item" ng-repeat="log in logs | filter: logSearch track by log.key" ng-class="{ active: $index == logSelectedIndex }" ng-click="logCtrl.clickLogFn(log)">
+                            <a class="item" ng-repeat="log in logs | filter: logSearch" ng-class="{ active: $index == logIndex }" ng-click="logCtrl.clickLogFn($index, log)">
                                 <div class="right floated date">{{ log.created_on | date:'MMM dd, yyyy' }}</div>
                                 <div class="description">
                                     {{ log.title }}
@@ -111,10 +111,10 @@
 
             <div class="nine wide right column">
                 <div class="ui vertical">
-                    <input type="hidden" id="logKey" ng-model="logs[logSelectedIndex].key"></input>
+                    <input type="hidden" id="logKey" ng-model="currentLog.key"></input>
 
                     <div class="ui right labeled fluid input">
-                        <input ng-model="logs[logSelectedIndex].title" class="title" placeholder="title..."/>
+                        <input ng-model="currentLog.title" class="title" placeholder="title..."/>
                         <div class="ui basic left pointing blue label">
                             Title
                         </div>
@@ -123,7 +123,7 @@
                     <div id="tags">
                         <div class="ui right labeled left icon input" data-title="Tags" data-html="tag seperator: <span style='color: green;'>comma( , )</span>">
                             <i class="tags icon"></i>
-                            <input type="text" placeholder="Tags" class="tags" ng-model="logs[logSelectedIndex].tags"/>
+                            <input type="text" placeholder="Tags" class="tags" ng-model="currentLog.tags"/>
                             <div class="ui basic left pointing blue label">
                                 Tags
                             </div>
@@ -144,7 +144,7 @@
         
                         <div class="ui form">
                             <div class="field">
-                                <textarea id="logContent" class="content" placeholder="Type something..." ng-model="logs[logSelectedIndex].content" ng-change="logCtrl.changedFn()"></textarea>
+                                <textarea id="logContent" class="content" placeholder="Type something..." ng-model="currentLog.content" ng-change="logCtrl.changedFn()"></textarea>
                             </div>
                         </div>
                     </div>
@@ -152,8 +152,8 @@
 
             <div class="row">
                 <div class="ui divider"></div>
-                <div class="created-on">Created on: {{ logs[logSelectedIndex].created_on | date:'MMM dd, yyyy' }}</div>
-                <div class="last-updated">Last updated on: {{ logs[logSelectedIndex].updated_on | date:'MMM dd, yyyy' }}</div>
+                <div class="created-on">Created on: {{ currentLog.created_on | date:'MMM dd, yyyy' }}</div>
+                <div class="last-updated">Last updated on: {{ currentLog.updated_on | date:'MMM dd, yyyy' }}</div>
             </div>
         </div>
   
