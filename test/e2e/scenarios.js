@@ -73,7 +73,7 @@ describe('Devlog', function() {
         primaryPage.getTrashAll().get(0).click();
         browser.sleep(100);
         
-        var allTag = primaryPage.getTagWithText('all');
+        var allTag = primaryPage.getTagsNav().get(0);
         expect(hasClass(allTag, 'active')).toBe(true);
     });
 
