@@ -99,7 +99,7 @@ describe('Devlog', function() {
         browser.sleep(300);
         restoreDeletePage.getDeleteFromRemLogs().then(function(items) {
             for(var i = 0; i < items.length; i++) {
-                restoreDeletePage.getDeleteFromRemLogs().get(i).click();
+                items[i].click();
                 browser.sleep(100);
             }
         });
