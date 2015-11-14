@@ -70,7 +70,7 @@ describe('Devlog', function() {
     
     it('should remove log2', function() {
         primaryPage.getTagWithText('test').click();
-        primaryPage.getTrashIcon().click();
+        primaryPage.getTrashAll().get(0).click();
         browser.sleep(100);
         
         var allTag = primaryPage.getTagWithText('all');
@@ -81,9 +81,7 @@ describe('Devlog', function() {
         primaryPage.openRestoreDeleteModal();
 
         browser.sleep(200);
-        expect(restoreDeletePage.getRemLogCount()).toEqual(1);
         restoreDeletePage.clickCancelModalButton();
-        browser.sleep(200);
     });
 
     it('should remove all logs', function() {
