@@ -1,4 +1,5 @@
 var PrimaryPage = require('./pages/primary.page.js');
+var RestoreDeletePage = require('./pages/restoreDelete.page.js');
 
 var hasClass = function (element, cls) {
     return element.getAttribute('class').then(function (classes) {
@@ -7,7 +8,9 @@ var hasClass = function (element, cls) {
 };
 
 describe('Devlog', function() {
-    var page;
+    var primaryPage;
+    var restoreDeletePage;
+
     var log1 = {
         'title': 'e2e test',
         'tags': 'e2e',
@@ -21,7 +24,9 @@ describe('Devlog', function() {
     };
     
     beforeEach(function() {
-        page = new PrimaryPage();
+        primaryPage = new PrimaryPage();
+        restoreDeletePage = new RestoreDeletePage();
+
         browser.controlKey = protractor.Key.CONTROL;
         browser.getCapabilities().then(function(capabilities) {
             if(capabilities.caps_.platform === "DARWIN") {
@@ -31,82 +36,78 @@ describe('Devlog', function() {
     });
 
     it('should add log1', function() {
-        page.clickAddButton();
-        browser.sleep(500);
-        
-        page.setTitle(log1.title);
-        page.setTags(log1.tags);
-        page.setContent(log1.content);
+        primaryPage.clickAddButton();
+        browser.sleep(300);
 
-        expect(page.getLogCount()).toEqual(1);
+        primaryPage.addLog(log1);
+
+        expect(primaryPage.getLogCount()).toEqual(1);
     });
 
     it('should add log2', function() {
-        page.clickAddButton();
-        browser.sleep(500);
+        primaryPage.clickAddButton();
+        browser.sleep(300);
         
-        page.setTitle(log2.title);
-        page.setTags(log2.tags);
-        page.setContent(log2.content);
+        primaryPage.addLog(log2);
 
-        expect(page.getLogCount()).toEqual(2);
+        expect(primaryPage.getLogCount()).toEqual(2);
     });
     
     it('should get all logs in test tag', function() {
-        page.getTagsNav().get(2).click();
+        primaryPage.getTagWithText('test').click();
 
-        expect(page.getLogCount()).toEqual(1);
-        expect(page.getTitle().getAttribute('value')).toEqual(log2.title);
-        expect(page.getTags().getAttribute('value')).toEqual(log2.tags);
-        expect(page.getContentInput().getAttribute('value')).toEqual(log2.content);
+        expect(primaryPage.getLogCount()).toEqual(1);
+        expect(primaryPage.getTitle().getAttribute('value')).toEqual(log2.title);
+        expect(primaryPage.getTags().getAttribute('value')).toEqual(log2.tags);
+        expect(primaryPage.getContentInput().getAttribute('value')).toEqual(log2.content);
     });
 
     it('should get all logs in e2e tag', function() {
-        page.getTagsNav().get(1).click();
+        primaryPage.getTagWithText('e2e').click();
 
-        expect(page.getLogCount()).toEqual(2);
+        expect(primaryPage.getLogCount()).toEqual(2);
     });
     
     it('should remove log2', function() {
-        page.getTagsNav().get(2).click();
-        page.getTrashIcon().click();
+        primaryPage.getTagWithText('test').click();
+        primaryPage.getTrashIcon().click();
         browser.sleep(100);
         
-        var allTag = page.getTagsNav().get(0);
+        var allTag = primaryPage.getTagWithText('all');
         expect(hasClass(allTag, 'active')).toBe(true);
     });
 
     it('should open delete/restore modal', function() {
-        browser.actions().sendKeys(protractor.Key.chord(browser.controlKey, 'r')).perform();
+        primaryPage.openRestoreDeleteModal();
 
         browser.sleep(200);
-        expect(page.getRemLogCount()).toEqual(1);
-        page.clickCancelModalButton();
-        browser.sleep(10000);
+        expect(restoreDeletePage.getRemLogCount()).toEqual(1);
+        restoreDeletePage.clickCancelModalButton();
+        browser.sleep(200);
     });
 
     it('should remove all logs', function() {
-        page.getTagsNav().get(0).click();
+        primaryPage.getTagWithText('all').click();
 
-        page.getTrashAll().then(function(items) {
+        primaryPage.getTrashAll().then(function(items) {
             for(var i = 0; i < items.length; i++) {
-                page.getTrashAll().get(0).click();
+                primaryPage.getTrashAll().get(0).click();
                 browser.sleep(200);
             }
         });
 
         // Permanently remove all deleted logs from restore/delete modal.
-        browser.actions().sendKeys(protractor.Key.chord(browser.controlKey, 'r')).perform();
-        browser.sleep(500);
-        page.getDeleteFromRemLogs().then(function(items) {
+        primaryPage.openRestoreDeleteModal();
+        browser.sleep(300);
+        restoreDeletePage.getDeleteFromRemLogs().then(function(items) {
             for(var i = 0; i < items.length; i++) {
-                page.getDeleteFromRemLogs().get(i).click();
+                restoreDeletePage.getDeleteFromRemLogs().get(i).click();
                 browser.sleep(100);
             }
         });
         browser.sleep(100);
-        page.clickSubmitModalButton();
+        restoreDeletePage.clickSubmitModalButton();
         browser.sleep(300);
-        expect(page.getLogCount()).toEqual(0);
+        expect(primaryPage.getLogCount()).toEqual(0);
     });
 });

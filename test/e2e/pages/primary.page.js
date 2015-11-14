@@ -7,10 +7,6 @@ var PrimaryPage = function() {
     var tagsNav = element.all(by.css('.tags-nav'));
     var trashIcon = element(by.css('.trash'));
     var trashAll = element.all(by.css('.trash'));
-    var remLogs = element.all(by.repeater('log in remLogs'));
-    var deleteFromRemLogs = element.all(by.css('.negative input'));
-    var cancelModalButton = element(by.css('.deny.button'));
-    var submitModalButton = element(by.css('.positive.button'));
     
     this.clickAddButton = function() {
         addLog.click();
@@ -47,6 +43,11 @@ var PrimaryPage = function() {
     this.getTagsNav = function() {
         return tagsNav;
     };
+
+    this.getTagWithText = function(text) {
+        var tag = element(by.cssContainingText('.tags-nav .description', text));
+        return tag;
+    };
     
     this.getTrashIcon = function() {
         return trashIcon;
@@ -55,21 +56,16 @@ var PrimaryPage = function() {
     this.getTrashAll = function() {
         return trashAll;
     };
-
-    this.getRemLogCount = function() {
-        return remLogs.count();
+    
+    this.addLog = function(log) {
+        this.setTitle(log.title);
+        this.setTags(log.tags);
+        this.setContent(log.content);  
     };
-
-    this.getDeleteFromRemLogs = function() {
-        return deleteFromRemLogs;
-    };
-
-    this.clickCancelModalButton = function() {
-        cancelModalButton.click();
-    };
-
-    this.clickSubmitModalButton = function() {
-        submitModalButton.click();
+    
+    this.openRestoreDeleteModal = function() {
+        // (cmd / ctrl + r) opens the restore/delete modal
+        browser.actions().sendKeys(protractor.Key.chord(browser.controlKey, 'r')).perform();
     };
 };
 
