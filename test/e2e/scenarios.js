@@ -22,6 +22,12 @@ describe('Devlog', function() {
     
     beforeEach(function() {
         page = new PrimaryPage();
+        browser.controlKey = protractor.Key.CONTROL;
+        browser.getCapabilities().then(function(capabilities) {
+            if(capabilities.caps_.platform === "DARWIN") {
+                browser.controlKey = protractor.Key.COMMAND;
+            }
+        });
     });
 
     it('should add log1', function() {
@@ -54,13 +60,29 @@ describe('Devlog', function() {
         expect(page.getTags().getAttribute('value')).toEqual(log2.tags);
         expect(page.getContentInput().getAttribute('value')).toEqual(log2.content);
     });
+
+    it('should get all logs in e2e tag', function() {
+        page.getTagsNav().get(1).click();
+
+        expect(page.getLogCount()).toEqual(2);
+    });
     
     it('should remove log2', function() {
+        page.getTagsNav().get(2).click();
         page.getTrashIcon().click();
         browser.sleep(100);
         
         var allTag = page.getTagsNav().get(0);
         expect(hasClass(allTag, 'active')).toBe(true);
+    });
+
+    it('should open delete/restore modal', function() {
+        browser.actions().sendKeys(protractor.Key.chord(browser.controlKey, 'r')).perform();
+
+        browser.sleep(200);
+        expect(page.getRemLogCount()).toEqual(1);
+        page.clickCancelModalButton();
+        browser.sleep(10000);
     });
 
     it('should remove all logs', function() {
@@ -73,6 +95,18 @@ describe('Devlog', function() {
             }
         });
 
+        // Permanently remove all deleted logs from restore/delete modal.
+        browser.actions().sendKeys(protractor.Key.chord(browser.controlKey, 'r')).perform();
+        browser.sleep(500);
+        page.getDeleteFromRemLogs().then(function(items) {
+            for(var i = 0; i < items.length; i++) {
+                page.getDeleteFromRemLogs().get(i).click();
+                browser.sleep(100);
+            }
+        });
+        browser.sleep(100);
+        page.clickSubmitModalButton();
+        browser.sleep(300);
         expect(page.getLogCount()).toEqual(0);
     });
 });
