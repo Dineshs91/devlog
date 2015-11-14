@@ -1,6 +1,6 @@
 var RestoreDeletePage = function() {
     var remLogs = element.all(by.repeater('log in remLogs'));
-    var deleteFromRemLogs = element.all(by.css('.negative input'));
+    var deleteFromRemLogs = element.all(by.css('td.negative input'));
     var cancelModalButton = element(by.css('.deny.button'));
     var submitModalButton = element(by.css('.positive.button'));
 
