@@ -51,6 +51,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
         $scope.logs = logs;
 
         displayLog(newLog);
+        $scope.logIndex = 0;
         if(currentSelectedTag !== ''  && currentSelectedTag !== 'all') {
             $scope.currentLog.tags = currentSelectedTag;
         }
@@ -90,6 +91,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
                 var log = $scope.logs[i];
                 if(log.key === undefined) {
                     $scope.logs.splice(i, 1);
+                    displayLog($scope.logs[0]);
                     return;
                 }
             }
@@ -108,13 +110,17 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
                     } else {
                         $scope.logs = logs;
                     }
+                    $scope.logIndex = 0;
+                    displayLog(logs[0]);
                 });
             } else {
                 $scope.tagSelectedIndex = 0;
-                self.getAllLogs();
+                self.getAllLogs().then(function() {
+                    $scope.logIndex = 0;
+                    displayLog($scope.logs[0]);
+                });
             }
 
-            displayLog($scope.logs[0]);
             self.getAllTags();
         });
     };
