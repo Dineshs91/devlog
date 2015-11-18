@@ -28,5 +28,8 @@ exports.config = {
         // before Protractor have redirected node-webkit to resetUrl.
         browser.driver.get('file://');
         browser.driver.get('file://' + path.resolve('app/index.html'));
+        
+        // Set size of window. If it's too small protractor is unable to click on elements
+        browser.manage().window().setSize(1600, 1000);
     }
 };
