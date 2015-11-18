@@ -77,11 +77,21 @@ describe('Devlog', function() {
         expect(hasClass(allTag, 'active')).toBe(true);
     });
 
+    it('should remove log1', function() {
+        primaryPage.getTagWithText('e2e').click();
+        primaryPage.getTrashAll().get(0).click();
+        browser.sleep(100);
+
+        var allTag = primaryPage.getTagsNav().get(0);
+        expect(hasClass(allTag, 'active')).toBe(true);
+    });
+
     it('should open delete/restore modal', function() {
         primaryPage.openRestoreDeleteModal();
 
         browser.sleep(200);
         restoreDeletePage.clickCancelModalButton();
+        browser.sleep(200);
     });
 
     it('should remove all logs', function() {
