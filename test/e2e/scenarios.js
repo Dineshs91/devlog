@@ -95,6 +95,8 @@ describe('Devlog', function() {
     });
 
     it('should remove all logs', function() {
+        primaryPage.maximizeWindow();
+        browser.sleep(200);
         primaryPage.getTagWithText('all').click();
 
         primaryPage.getTrashAll().then(function(items) {

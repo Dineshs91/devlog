@@ -7,6 +7,7 @@ var PrimaryPage = function() {
     var tagsNav = element.all(by.css('.tags-nav'));
     var trashIcon = element(by.css('.trash'));
     var trashAll = element.all(by.css('.trash'));
+    var maximizeButton = element(by.css('.maximize'));
     
     this.clickAddButton = function() {
         addLog.click();
@@ -66,6 +67,10 @@ var PrimaryPage = function() {
     this.openRestoreDeleteModal = function() {
         // (cmd / ctrl + r) opens the restore/delete modal
         browser.actions().sendKeys(protractor.Key.chord(browser.controlKey, 'r')).perform();
+    };
+
+    this.maximizeWindow = function() {
+        maximizeButton.click();
     };
 };
 
