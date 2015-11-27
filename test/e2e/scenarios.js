@@ -36,6 +36,9 @@ describe('Devlog', function() {
     });
 
     it('should add log1', function() {
+        primaryPage.maximizeWindow();
+        browser.sleep(200);
+
         primaryPage.clickAddButton();
         browser.sleep(300);
 
