@@ -33,12 +33,12 @@ describe('Devlog', function() {
                 browser.controlKey = protractor.Key.COMMAND;
             }
         });
+
+        primaryPage.maximizeWindow();
+        browser.sleep(200);
     });
 
     it('should add log1', function() {
-        primaryPage.maximizeWindow();
-        browser.sleep(200);
-
         primaryPage.clickAddButton();
         browser.sleep(300);
 
@@ -98,8 +98,6 @@ describe('Devlog', function() {
     });
 
     it('should remove all logs', function() {
-        primaryPage.maximizeWindow();
-        browser.sleep(200);
         primaryPage.getTagWithText('all').click();
 
         primaryPage.getTrashAll().then(function(items) {
