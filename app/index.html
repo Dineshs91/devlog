@@ -73,13 +73,13 @@
                 <div class="ui divided padded grid">
                     <div class="five wide left column">
                         <div class="ui fluid mini icon input">
-                          <input type="text" placeholder="Search tags..." ng-model="tagSearch">
+                          <input type="text" placeholder="Search tags..." ng-model="tagSearch" ng-change="logCtrl.tagChange()">
                           <i class="inverted circular search link icon"></i>
                         </div>
                         <div class="ui divider"></div>
                         <!-- display all tags -->
                         <div class="ui divided very relaxed animated selection list">
-                            <a class="item tags-nav" ng-repeat="tag in tags | filter: tagSearch" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: $index == tagSelectedIndex }">
+                            <a class="item tags-nav" ng-repeat="tag in (filteredTags = (tags | filter: tagSearch))" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: $index == tagSelectedIndex }">
                                 <div class="description">
                                     {{ tag.tag }}
                                 </div>
@@ -88,7 +88,7 @@
                     </div>
                     <div class="eleven wide right column">
                         <div class="ui fluid icon mini input">
-                          <input type="text" placeholder="Search logs..." ng-model="logSearch">
+                          <input type="text" placeholder="Search logs..." ng-model="logSearch" ng-change="logCtrl.logChange()">
                           <i class="inverted circular search link icon"></i>
                         </div>
                         <div class="ui divider"></div>
@@ -97,7 +97,7 @@
                             <div class="empty logs message" ng-show="logs.length == 0">
                                 You haven't created any logs. Go ahead and create a new log by clicking the add button.
                             </div>
-                            <a class="item" ng-repeat="log in logs | filter: logSearch" ng-class="{ active: $index == logIndex }" ng-click="logCtrl.clickLogFn($index, log)">
+                            <a class="item" ng-repeat="log in (filteredLogs = (logs | filter: logSearch))" ng-class="{ active: $index == logIndex }" ng-click="logCtrl.clickLogFn($index, log)">
                                 <div class="right floated date">{{ log.created_on | date:'MMM dd, yyyy' }}</div>
                                 <div class="description">
                                     {{ log.title }}

@@ -1,5 +1,5 @@
-devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys',
-    function($scope, $timeout, dbService, hotkeys) {
+devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService', 'hotkeys',
+    function($scope, $timeout, $filter, dbService, hotkeys) {
 
     $scope.format = 'M/d/yy hh:mm:ss a';
     $scope.tagSelectedIndex = -1;
@@ -58,9 +58,12 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
     };
     
     this.clickTagFn = function($index, tagName) {
-        currentSelectedTag = $scope.tags[$index].tag;
+        clickTagHelper($index, tagName);
+    };
 
-        $scope.tagSelectedIndex = $index;
+    var clickTagHelper = function(index, tagName) {
+        currentSelectedTag = $scope.tags[index].tag;
+        $scope.tagSelectedIndex = index;
 
         if(tagName === 'all') {
             self.getAllLogs().then(function() {
@@ -75,7 +78,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
             });
         }   
     };
-    
+
     this.clickLogFn = function($index, log) {
         $scope.logIndex = $index;
         displayLog(log);
@@ -155,6 +158,27 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', 'hotkeys'
             });
         }
     };
+
+    var tagChange = function() {
+        var filteredTags = $filter('filter')($scope.tags, $scope.tagSearch);
+        var index = 0;
+
+        if(filteredTags !== null && filteredTags !== undefined && filteredTags.length !== 0) {
+            tagName = filteredTags[index].tag;
+            clickTagHelper(index, tagName);
+        }
+        logChange();
+    };
+
+    var logChange = function() {
+        var filteredLogs = $filter('filter')($scope.logs, $scope.logSearch);
+        if(filteredLogs !== null && filteredLogs !== undefined && filteredLogs.length !== 0) {
+            displayLog(filteredLogs[0]);
+        }
+    };
+
+    $scope.$watch('tagSearch', tagChange);
+    $scope.$watch('logSearch', logChange);
     
     this.changedFn = function() {
         myTimer.clear();
