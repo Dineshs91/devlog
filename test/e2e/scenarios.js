@@ -33,9 +33,6 @@ describe('Devlog', function() {
                 browser.controlKey = protractor.Key.COMMAND;
             }
         });
-
-        primaryPage.maximizeWindow();
-        browser.sleep(200);
     });
 
     it('should add log1', function() {
