@@ -173,6 +173,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     var logChange = function() {
         var filteredLogs = $filter('filter')($scope.logs, $scope.logSearch);
         if(filteredLogs !== null && filteredLogs !== undefined && filteredLogs.length !== 0) {
+            $scope.logIndex = 0;
             displayLog(filteredLogs[0]);
         }
     };
