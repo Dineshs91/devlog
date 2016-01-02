@@ -10,7 +10,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     
     this.getAllLogs = function() {
         return dbService.getAllLogs().then(function(logs) {
-            $scope.logs = logs;
+            $scope.logs = sortLogs(logs);
         });
     };
     
