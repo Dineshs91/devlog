@@ -11,7 +11,6 @@ body {
     padding-top: 5px;
     padding-left: 10px;
     color: #E9EEF0;
-    border-radius: 3px;
     background-color: #2185d0;
     height: 30px;
     width: 100%;
@@ -22,8 +21,15 @@ span.window-controls a {
     -webkit-app-region: no-drag;
 }
 
-.title {
-    padding-left: 44%;
+span.custom-menu .dropdown {
+    padding-left: 1%;
+    color: black;
+    -webkit-app-region: no-drag;
+}
+
+span.title {
+    position: fixed;
+    right: 50%;
 }
 
 .container {

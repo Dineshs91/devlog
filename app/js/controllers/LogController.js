@@ -1,52 +1,21 @@
-var devlog = angular.module('devLog', []);
+devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService', 'hotkeys',
+    function($scope, $timeout, $filter, dbService, hotkeys) {
 
-devlog.directive('currentTime', ['$interval', 'dateFilter',
-    function($interval, dateFilter) {
-
-    return function(scope, element, attrs) {
-      var format,  // date format
-          stopTime; // so that we can cancel the time updates
-
-      // used to update the UI
-      function updateTime() {
-        element.text(dateFilter(new Date(), format));
-      }
-
-      // watch the expression, and update the UI on change.
-      scope.$watch(attrs.currentTime, function(value) {
-        format = value;
-        updateTime();
-      });
-
-      stopTime = $interval(updateTime, 1000);
-
-      // listen on DOM destroy (removal) event, and cancel the next UI update
-      // to prevent updating time after the DOM element was removed.
-      element.on('$destroy', function() {
-        $interval.cancel(stopTime);
-      });
-    };
-}]);
-
-devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function($scope, $timeout, dbService) {
     $scope.format = 'M/d/yy hh:mm:ss a';
-    $scope.logSelectedIndex = -1;
     $scope.tagSelectedIndex = -1;
+    $scope.logIndex = 0;
     var currentSelectedTag = '';
     
     var self = this;
     
     this.getAllLogs = function() {
         return dbService.getAllLogs().then(function(logs) {
-            logs = sortLogs(logs);
-            $scope.logs = logs;
+            $scope.logs = sortLogs(logs);
         });
     };
     
     this.getAllTags = function() {
         return dbService.getAllTags().then(function(tags) {
-            tags = sortTags(tags);
-
             var index = tags.map(function(tag) { return tag.tag; }).indexOf('all');
             var allTag = tags[index];
             tags.splice(index, 1);
@@ -81,37 +50,38 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         logs.unshift(newLog);
         $scope.logs = logs;
 
-        $scope.logSelectedIndex = 0;
-        var logSelectedIndex = $scope.logSelectedIndex;
+        displayLog(newLog);
+        $scope.logIndex = 0;
         if(currentSelectedTag !== ''  && currentSelectedTag !== 'all') {
-            $scope.logs[logSelectedIndex].tags = currentSelectedTag;
+            $scope.currentLog.tags = currentSelectedTag;
         }
     };
     
     this.clickTagFn = function($index, tagName) {
-        currentSelectedTag = $scope.tags[$index].tag;
+        clickTagHelper($index, tagName);
+    };
 
-        $scope.tagSelectedIndex = $index;
-        $scope.logSelectedIndex = 0;
+    var clickTagHelper = function(index, tagName) {
+        currentSelectedTag = $scope.tags[index].tag;
+        $scope.tagSelectedIndex = index;
 
         if(tagName === 'all') {
-            self.getAllLogs();
+            self.getAllLogs().then(function() {
+                displayLog($scope.logs[0]);
+                $scope.logIndex = 0;
+            });
         } else {
             dbService.getLogsWithTag(tagName).then(function(logs) {
-                logs = sortLogs(logs);
                 $scope.logs = logs;
+                displayLog(logs[0]);
+                $scope.logIndex = 0;
             });
-        }
-        
+        }   
     };
-    
-    this.clickLogFn = function(log) {
-        // $index is very error prone. It can be used
-        // if we don't use orderBy or filter. Its best
-        // to use indexOf which works in all the cases.
-        var index = $scope.logs.indexOf(log);
 
-        $scope.logSelectedIndex = index;
+    this.clickLogFn = function($index, log) {
+        $scope.logIndex = $index;
+        displayLog(log);
     };
     
     this.removeLogFn = function(key) {
@@ -124,6 +94,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
                 var log = $scope.logs[i];
                 if(log.key === undefined) {
                     $scope.logs.splice(i, 1);
+                    displayLog($scope.logs[0]);
                     return;
                 }
             }
@@ -140,24 +111,25 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
                         $scope.tagSelectedIndex = 0;
                         self.getAllLogs();
                     } else {
-                        logs = sortLogs(logs);
                         $scope.logs = logs;
                     }
+                    $scope.logIndex = 0;
+                    displayLog(logs[0]);
                 });
             } else {
                 $scope.tagSelectedIndex = 0;
-                self.getAllLogs();
+                self.getAllLogs().then(function() {
+                    $scope.logIndex = 0;
+                    displayLog($scope.logs[0]);
+                });
             }
-
-            $scope.logSelectedIndex = 0;
 
             self.getAllTags();
         });
     };
     
     this.saveFn = function() {
-        var logSelectedIndex = $scope.logSelectedIndex;
-        var logKey = $scope.logs[logSelectedIndex].key;
+        var logKey = $scope.currentLog.key;
         var action = 'insert';
 
         if(logKey !== null && logKey !== undefined && logKey.trim() !== '') {
@@ -186,6 +158,28 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
             });
         }
     };
+
+    var tagChange = function() {
+        var filteredTags = $filter('filter')($scope.tags, $scope.tagSearch);
+        var index = 0;
+
+        if(filteredTags !== null && filteredTags !== undefined && filteredTags.length !== 0) {
+            tagName = filteredTags[index].tag;
+            clickTagHelper(index, tagName);
+        }
+        logChange();
+    };
+
+    var logChange = function() {
+        var filteredLogs = $filter('filter')($scope.logs, $scope.logSearch);
+        if(filteredLogs !== null && filteredLogs !== undefined && filteredLogs.length !== 0) {
+            $scope.logIndex = 0;
+            displayLog(filteredLogs[0]);
+        }
+    };
+
+    $scope.$watch('tagSearch', tagChange);
+    $scope.$watch('logSearch', logChange);
     
     this.changedFn = function() {
         myTimer.clear();
@@ -205,6 +199,10 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
 
         return this;
     }();
+
+    var displayLog = function(log) {
+        $scope.currentLog = log;
+    };
 
     var save = function() {
         $scope.isSaving = false;
@@ -241,8 +239,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     };
     
     var formLogDoc = function(action) {
-        var logSelectedIndex = $scope.logSelectedIndex;
-        var tags = $scope.logs[logSelectedIndex].tags;
+        var tags = $scope.currentLog.tags;
 
         if(tags.length === 0) {
             formedTags = [];
@@ -266,7 +263,7 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
             formedTags.splice(remIndex, 1);
         }
 
-        var created_on = $scope.logs[logSelectedIndex].created_on;
+        var created_on = $scope.currentLog.created_on;
         var updated_on = (new Date()).getTime();
 
         if(action === 'insert') {
@@ -274,8 +271,8 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         }
 
         log = {
-            'title': $scope.logs[logSelectedIndex].title,
-            'content': $scope.logs[logSelectedIndex].content,
+            'title': $scope.currentLog.title,
+            'content': $scope.currentLog.content,
             'created_on': created_on,
             'updated_on': updated_on,
             'is_removed': false,
@@ -323,7 +320,6 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
                 return dbService.insertTag(tag);
             }
         });
-
     };
     
     /*
@@ -334,13 +330,13 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
     */
     var init = function() {
         insertAllTag().then(function() {
-            self.getAllLogs().then(function() {
-                $scope.logSelectedIndex = 0;
-            });
-            
             self.getAllTags().then(function() {
                 $scope.tagSelectedIndex = 0;
                 currentSelectedTag = $scope.tags[0].tag;
+            });
+
+            self.getAllLogs().then(function() {
+                displayLog($scope.logs[0]);
             });
         });
     };
@@ -352,55 +348,31 @@ devlog.controller('LogController', ['$scope', '$timeout', 'dbService', function(
         init();
     });
 
-    init();
-}]);
+    // Act on menu events (Save or Add new log)
+    $scope.$on('save-log', function(event, args) {
+        self.saveFn();
+    });
 
-devlog.controller('RemovedLogController', ['$scope', '$q', 'dbService', function($scope, $q, dbService) {
-    var self = this;
-    
-    this.getAllRemovedLogs = function() {
-        return dbService.getAllRemovedLogs().then(function(remLogs) {
-            $scope.remLogs = remLogs;
-        });
-    };
-    
-    this.proceedFn = function() {
-        var promise = [];
+    $scope.$on('add-log', function(event, args) {
+        self.addFn();
+    });
 
-        for(var i = 0; i < $scope.remLogs.length; i++) {
-            // log.option will not be inserted into db.
-            // check updateLog function in services.js
-            var option = $scope.remLogs[i].option;
-            var log = $scope.remLogs[i];
-            log.is_removed = false;
+    hotkeys.add({
+        combo: 'mod+s',
+        description: 'Save current log',
+        callback: function() {
+            self.saveFn();
+        },
+        allowIn: ['INPUT', 'TEXTAREA']
+    });
 
-            if(option === 'restore') {
-                promise.push(dbService.updateLogAndTag(log));
-            } else if (option === 'delete') {
-                promise.push(dbService.permanentDelete(log.key));
-            }
-        }
-
-        $q.all(promise).then(function() {
-            // Emit init event, so app is initialized
-            // to reflect the restored logs.
-            $scope.$emit('init');
-            init();
-        }).catch(function(err) {
-            console.log(err);
-        });
-    };
-
-    var init = function() {
-        self.getAllRemovedLogs();
-    };
-
-    /*
-        If any log is removed, logRemoved event is triggered.
-        Reload removedLogs, which appear in restore/delete modal.
-    */
-    $scope.$on('logRemoved', function(event, args) {
-        init();
+    hotkeys.add({
+        combo: 'mod+n',
+        description: 'Add new log',
+        callback: function() {
+            self.addFn();
+        },
+        allowIn: ['INPUT', 'TEXTAREA']
     });
 
     init();
