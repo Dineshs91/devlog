@@ -48,6 +48,11 @@ span.title {
     overflow-y: auto;
 }
 
+.remove.icon {
+    cursor: pointer !important;
+    pointer-events: all !important;
+}
+
 #wrapper {
     margin-bottom: 35px;
 }

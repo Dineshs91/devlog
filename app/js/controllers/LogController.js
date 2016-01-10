@@ -159,6 +159,14 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
         }
     };
 
+    this.clearTagSearch = function() {
+        $scope.tagSearch = '';
+    };
+
+    this.clearLogSearch = function() {
+        $scope.logSearch = '';
+    };
+
     var tagChange = function() {
         var filteredTags = $filter('filter')($scope.tags, $scope.tagSearch);
         var index = 0;

@@ -62,7 +62,7 @@
             <div class="seven wide left column">
                 <div class="ui vertical">
                     <h2 class="ui header">
-                    <i class="idea icon"></i>Logs
+                    <i class="lab icon"></i>Logs
                     <div ng-click="logCtrl.addFn()" class="ui right floated basic button add">
                         <i class="plus icon"></i>
                         Add
@@ -74,7 +74,7 @@
                     <div class="five wide left column">
                         <div class="ui fluid mini icon input">
                           <input type="text" placeholder="Search tags..." ng-model="tagSearch" ng-change="logCtrl.tagChange()">
-                          <i class="inverted circular search link icon"></i>
+                          <i class="remove icon" ng-click="logCtrl.clearTagSearch()"></i>
                         </div>
                         <div class="ui divider"></div>
                         <!-- display all tags -->
@@ -89,7 +89,7 @@
                     <div class="eleven wide right column">
                         <div class="ui fluid icon mini input">
                           <input type="text" placeholder="Search logs..." ng-model="logSearch" ng-change="logCtrl.logChange()">
-                          <i class="inverted circular search link icon"></i>
+                          <i class="remove icon" ng-click="logCtrl.clearLogSearch()"></i>
                         </div>
                         <div class="ui divider"></div>
                         <!-- display all logs -->
