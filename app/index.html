@@ -5,6 +5,7 @@
   <title>DevLog</title>
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-hotkeys/build/hotkeys.min.js"></script>
+  <script src='bower_components/dragular/dist/dragular.js'></script>
   <script src="js/modules/BaseModule.js"></script>
   <script src="js/controllers/MenuController.js"></script>
   <script src="js/controllers/LogController.js"></script>
@@ -16,6 +17,7 @@
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/semantic-ui/dist/semantic.js"></script>
   <script src="js/index.js"></script>
+  <link rel="stylesheet" type="text/css" href="bower_components/dragular/dist/dragular.css">
   <link rel="stylesheet" type="text/css" href="bower_components/semantic-ui/dist/semantic.css">
   <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
@@ -78,8 +80,8 @@
                         </div>
                         <div class="ui divider"></div>
                         <!-- display all tags -->
-                        <div class="ui divided very relaxed animated selection list">
-                            <a class="item tags-nav" ng-repeat="tag in (filteredTags = (tags | filter: tagSearch))" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: $index == tagSelectedIndex }">
+                        <div class="ui divided very relaxed animated selection list drag-tags">
+                            <a class="item tags-nav" ng-repeat="tag in (filteredTags = (tags | orderBy: 'pos' | filter: tagSearch))" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: $index == tagSelectedIndex }">
                                 <div class="description">
                                     {{ tag.tag }}
                                 </div>

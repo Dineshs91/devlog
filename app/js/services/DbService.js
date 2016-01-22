@@ -199,6 +199,39 @@ devlog.service('dbService', ['$q', 'db', function($q, db) {
         
         return deferred.promise;
     };
+
+    this.updateTag = function(tag) {
+        var deferred = $q.defer();
+
+        db.tags.update({_id: tag.id}, {$set: {pos: tag.pos}}, {},
+        function(err, numReplaced) {
+            if(!err) {
+                deferred.resolve(numReplaced);
+            } else {
+                deferred.reject(err);
+            }
+        });
+
+        return deferred.promise;
+    };
+
+    this.updateTags = function(tags) {
+        var deferred = $q.defer();
+
+        var updateTagPromises = [];
+        for(var i = 0; i < tags.length; i++) {
+            var tag = tags[i];
+            updateTagPromises.push(this.updateTag(tag));
+        }
+
+        $q.all(updateTagPromises).then(function(numReplaced) {
+            deferred.resolve(numReplaced);
+        }).catch(function(err) {
+            deferred.reject(err);
+        });
+
+        return deferred.promise;
+    }
     
     this.removeTag = function(tag) {
         var deferred = $q.defer();

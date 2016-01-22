@@ -1,5 +1,12 @@
-devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService', 'hotkeys',
-    function($scope, $timeout, $filter, dbService, hotkeys) {
+devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService', 'hotkeys', 'dragularService',
+    function($scope, $timeout, $filter, dbService, hotkeys, dragularService) {
+
+    dragularService('.drag-tags', {
+        scope: $scope,
+        classes: {
+            mirror: 'custom-green-mirror'
+        }
+    });
 
     $scope.format = 'M/d/yy hh:mm:ss a';
     $scope.tagSelectedIndex = -1;
@@ -288,6 +295,16 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
         };
         return log;
     };
+
+    var indexTags = function(tags) {
+        console.log('tags' + tags[0]);
+        for(var i = 0; i < tags.length; i++) {
+            tags[i].pos = i;
+        }
+        console.dir(tags[1]);
+
+        return tags;
+    };
     
     /*
         Sorting logs in descending order based on timestamp.
@@ -320,7 +337,8 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     */
     var insertAllTag = function() {
         var tag = {
-            'tag': 'all'
+            'tag': 'all',
+            pos: 0
         };
         
         return dbService.findTag('all').then(function(tags) {
@@ -348,6 +366,16 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
             });
         });
     };
+
+    /*
+        Handle onDrag event from dragular
+    */
+    $scope.$on('dragulardrop', function(e, el) {
+        //e.stopPropagation();
+        var tags = $scope.tags;
+        $scope.tags = indexTags(tags);
+        console.log('drop event');
+    });
     
     /*
         Initialize when init event is emitted.

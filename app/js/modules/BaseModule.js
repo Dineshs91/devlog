@@ -1,1 +1,1 @@
-var devlog = angular.module('devLog', ['cfp.hotkeys']);
+var devlog = angular.module('devLog', ['cfp.hotkeys', 'dragularModule']);
