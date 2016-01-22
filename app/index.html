@@ -80,8 +80,8 @@
                         </div>
                         <div class="ui divider"></div>
                         <!-- display all tags -->
-                        <div class="ui divided very relaxed animated selection list drag-tags">
-                            <a class="item tags-nav" ng-repeat="tag in (filteredTags = (tags | orderBy: 'pos' | filter: tagSearch))" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: $index == tagSelectedIndex }">
+                        <div class="ui divided very relaxed animated selection list" id="drag-tags">
+                            <a class="item tags-nav" ng-repeat="tag in filteredTags = (tags | orderBy: 'pos' | filter: tagSearch)" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: $index == tagSelectedIndex }">
                                 <div class="description">
                                     {{ tag.tag }}
                                 </div>

@@ -203,7 +203,7 @@ devlog.service('dbService', ['$q', 'db', function($q, db) {
     this.updateTag = function(tag) {
         var deferred = $q.defer();
 
-        db.tags.update({_id: tag.id}, {$set: {pos: tag.pos}}, {},
+        db.tags.update({_id: tag._id}, {$set: {pos: tag.pos}}, {},
         function(err, numReplaced) {
             if(!err) {
                 deferred.resolve(numReplaced);
@@ -272,7 +272,10 @@ devlog.service('dbService', ['$q', 'db', function($q, db) {
     var formTagDoc = function(tags) {
         formedTags = [];
         for (var i = 0; i < tags.length; i++) {
-            formedTags.push({'tag': tags[i]});
+            formedTags.push({
+                'tag': tags[i],
+                pos: 1
+            });
         }
         return formedTags;
     };

@@ -1,17 +1,11 @@
-devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService', 'hotkeys', 'dragularService',
-    function($scope, $timeout, $filter, dbService, hotkeys, dragularService) {
-
-    dragularService('.drag-tags', {
-        scope: $scope,
-        classes: {
-            mirror: 'custom-green-mirror'
-        }
-    });
+devlog.controller('LogController', ['$scope', '$timeout', '$filter', '$element', 'dbService', 'hotkeys', 'dragularService',
+    function($scope, $timeout, $filter, $element, dbService, hotkeys, dragularService) {
 
     $scope.format = 'M/d/yy hh:mm:ss a';
     $scope.tagSelectedIndex = -1;
     $scope.logIndex = 0;
     var currentSelectedTag = '';
+    $scope.tags = [];
     
     var self = this;
     
@@ -29,7 +23,10 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
 
             // Move 'ALL' tag to the beginning.
             tags.unshift(allTag);
-            $scope.tags = tags;
+            $scope.tags.length = 0;
+            for(var i = 0; i < tags.length; i++) {
+                $scope.tags.push(tags[i]);
+            }
         });
     };
     
@@ -297,11 +294,9 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     };
 
     var indexTags = function(tags) {
-        console.log('tags' + tags[0]);
         for(var i = 0; i < tags.length; i++) {
             tags[i].pos = i;
         }
-        console.dir(tags[1]);
 
         return tags;
     };
@@ -374,7 +369,11 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
         //e.stopPropagation();
         var tags = $scope.tags;
         $scope.tags = indexTags(tags);
-        console.log('drop event');
+        dbService.updateTags(tags)
+                 .then(function() {})
+                 .catch(function(err) {
+                    console.log(err);
+                 });
     });
     
     /*
@@ -412,4 +411,9 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     });
 
     init();
+
+    dragularService('#drag-tags', {
+        scope: $scope,
+        containersModel: [$scope.tags]
+    });
 }]);
