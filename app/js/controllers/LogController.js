@@ -111,6 +111,11 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', '$element',
                 $scope.tagSelectedIndex = findTagIndex($scope.tags, currentSelectedTag);
 
                 dbService.getLogsWithTag(currentSelectedTag).then(function(logs) {
+                    /*
+                        If logs are empty, then there are no logs.
+                        So select the tag at pos: 0 and display
+                        the first log in that tag.
+                    */
                     if(logs.length === 0) {
                         $scope.tagSelectedIndex = 0;
                         self.getAllLogs();
