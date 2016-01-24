@@ -231,7 +231,7 @@ devlog.service('dbService', ['$q', 'db', function($q, db) {
         });
 
         return deferred.promise;
-    }
+    };
     
     this.removeTag = function(tag) {
         var deferred = $q.defer();
