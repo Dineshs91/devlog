@@ -72,7 +72,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
             });
         } else {
             dbService.getLogsWithTag(tagName).then(function(logs) {
-                $scope.logs = logs;
+                $scope.logs = sortLogs(logs);
                 displayLog(logs[0]);
                 $scope.logIndex = 0;
             });

@@ -15,8 +15,11 @@
   <script src="js/menu.js"></script>
   <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/semantic-ui/dist/semantic.js"></script>
+  <script src="bower_components/trix/dist/trix.js"></script>
+  <script src="bower_components/angular-trix/dist/angular-trix.min.js"></script>
   <script src="js/index.js"></script>
   <link rel="stylesheet" type="text/css" href="bower_components/semantic-ui/dist/semantic.css">
+  <link rel="stylesheet" type="text/css" href="bower_components/trix/dist/trix.css">
   <link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
@@ -144,7 +147,7 @@
         
                         <div class="ui form">
                             <div class="field">
-                                <textarea id="logContent" class="content" placeholder="Type something..." ng-model="currentLog.content" ng-change="logCtrl.changedFn()"></textarea>
+                                <trix-editor id="logContent" class="content" angular-trix ng-model="currentLog.content" ng-change="logCtrl.changedFn()"></trix-editor>
                             </div>
                         </div>
                     </div>
