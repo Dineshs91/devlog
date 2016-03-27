@@ -38,6 +38,10 @@ span.title {
     width: 98%;
 }
 
+.ui.vertical.menu.tags {
+    width: 8em;
+}
+
 .ui.list {
     height: 28em;
     overflow: hidden;

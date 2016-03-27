@@ -249,7 +249,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     var formLogDoc = function(action) {
         var tags = $scope.currentLog.tags;
 
-        if(tags.length === 0) {
+        if(tags === undefined || tags.length === 0) {
             formedTags = [];
         } else if(Array.isArray(tags)) {
             formedTags = tags;

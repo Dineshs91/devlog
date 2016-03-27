@@ -60,7 +60,7 @@
         </span>
     </div>
     <div class="container">
-        <div class="ui divided padded grid" ng-controller="LogController as logCtrl">
+        <div class="ui padded grid" ng-controller="LogController as logCtrl">
             <!-- left float -->
             <div class="seven wide left column">
                 <div class="ui vertical">
@@ -73,7 +73,7 @@
                     </h2>
                     <div class="ui divider"></div>
                 </div>
-                <div class="ui divided padded grid">
+                <div class="ui padded grid">
                     <div class="five wide left column">
                         <div class="ui fluid mini icon input">
                           <input type="text" placeholder="Search tags..." ng-model="tagSearch" ng-change="logCtrl.tagChange()">
@@ -81,7 +81,7 @@
                         </div>
                         <div class="ui divider"></div>
                         <!-- display all tags -->
-                        <div class="ui divided very relaxed animated selection list">
+                        <div class="ui vertical menu tags">
                             <a class="item tags-nav" ng-repeat="tag in (filteredTags = (tags | filter: tagSearch))" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: $index == tagSelectedIndex }">
                                 <div class="description">
                                     {{ tag.tag }}
