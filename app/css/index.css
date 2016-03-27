@@ -42,6 +42,11 @@ span.title {
     width: 8em;
 }
 
+.ui.menu {
+    height: 28em;
+    overflow: scroll;
+}
+
 .ui.list {
     height: 28em;
     overflow: hidden;
