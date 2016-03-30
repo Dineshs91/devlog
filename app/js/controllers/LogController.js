@@ -6,6 +6,17 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     $scope.currentSelectedLogKey = '';
     
     var self = this;
+
+    var selectAndDisplay = function(sdLog, sdTagName, sdAction) {
+        // Selection of tag and log.
+        $scope.currentSelectedTag = sdTagName;
+        $scope.currentSelectedLogKey = sdLog.key;
+
+        // Logic based on actions.
+
+        // Display log.
+        displayLog(sdLog);
+    };
     
     this.getAllLogs = function() {
         return dbService.getAllLogs().then(function(logs) {
@@ -49,9 +60,16 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
         logs.unshift(newLog);
         $scope.logs = logs;
 
-        displayLog(newLog);
-        $scope.currentSelectedLogKey = undefined;
         var currentSelectedTag = $scope.currentSelectedTag;
+
+        var sdLog = newLog;
+        var sdTagName = currentSelectedTag;
+        var sdAction = "ADD_LOG";
+        selectAndDisplay(sdLog, sdTagName, sdAction);
+
+        // If a new log is added from a tag other than all
+        // the selected tag will be added by default to
+        // the new log.
         if(currentSelectedTag !== ''  && currentSelectedTag !== 'all') {
             $scope.currentLog.tags = currentSelectedTag;
         }
@@ -62,30 +80,33 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     };
 
     var clickTagHelper = function(index, tagName) {
-        //currentSelectedTag = $scope.tags[index].tag;
-        $scope.currentSelectedTag = tagName;
+        var action = "CLICK_TAG";
 
         if(tagName === 'all') {
             self.getAllLogs().then(function() {
-                var currentLog = $scope.logs[0];
-                displayLog(currentLog);
-                $scope.currentSelectedLogKey = currentLog.key;
+                var sdLog = $scope.logs[0];
+                selectAndDisplay(sdLog, tagName, action);
             });
         } else {
             dbService.getLogsWithTag(tagName).then(function(logs) {
                 $scope.logs = sortLogs(logs);
-                displayLog(logs[0]);
-                $scope.currentSelectedLogKey = logs[0].key;
+
+                var sdLog = logs[0];
+                selectAndDisplay(sdLog, tagName, action);
             });
         }   
     };
 
     this.clickLogFn = function($index, log) {
-        $scope.currentSelectedLogKey = log.key;
-        displayLog(log);
+        var sdLog = log;
+        var sdTag = $scope.currentSelectedTag;
+        var action = "CLICK_LOG";
+
+        selectAndDisplay(sdLog, sdTag, action);
     };
     
     this.removeLogFn = function(key) {
+        var currentSelectedTag = $scope.currentSelectedTag;
 
         // If key is null, then it is a new log
         // without any data and it has not been
@@ -104,28 +125,30 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
 
         dbService.removeLogAndTag(key).then(function() {
             $scope.$broadcast('logRemoved');
+            var action = "LOG_REMOVE";
 
             if(currentSelectedTag !== 'all') {
                 $scope.tagSelectedIndex = findTagIndex($scope.tags, currentSelectedTag);
 
                 dbService.getLogsWithTag(currentSelectedTag).then(function(logs) {
                     if(logs.length === 0) {
-                        $scope.currentSelectedTag = 'all';
-                        self.getAllLogs();
+                        self.getAllLogs().then(function() {
+                            var sdLog = $scope.logs[0];
+                            var sdTag = 'all';
+                            selectAndDisplay(sdLog, sdTag, action);
+                        });
                     } else {
                         $scope.logs = logs;
+                        var sdLog = $scope.logs[0];
+                        var sdTag = currentSelectedTag;
+                        selectAndDisplay(sdLog, sdTag, action);
                     }
-
-                    var log = logs[0];
-                    $scope.currentSelectedLogKey = log.key;
-                    displayLog(log);
                 });
             } else {
-                $scope.currentSelectedTag = 'all';
                 self.getAllLogs().then(function() {
-                    var log = $scope.logs[0];
-                    $scope.currentSelectedLogKey = log.key;
-                    displayLog(log);
+                    var sdLog = $scope.logs[0];
+                    var sdTag = 'all';
+                    selectAndDisplay(sdLog, sdTag, action);
                 });
             }
 
@@ -135,10 +158,10 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     
     this.saveFn = function() {
         var logKey = $scope.currentLog.key;
-        var action = 'insert';
+        var action = 'INSERT_LOG';
 
         if(logKey !== null && logKey !== undefined && logKey.trim() !== '') {
-            action = 'update';
+            action = 'UPDATE_LOG';
         }
 
         log = formLogDoc(action);
@@ -147,23 +170,21 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
         
         // check if selectedTag is present
         // if removed select the first tag
-        // in the log
+        // in the log.
         var currentSelectedTag = $scope.currentSelectedTag;
         if(currentSelectedTag !== 'all' && log.tags.indexOf(currentSelectedTag) === -1) {
             currentSelectedTag = log.tags[0];
         }
 
-        if(logKey !== null && logKey !== undefined && logKey.trim() !== '') {
+        if(action === 'UPDATE_LOG') {
             log.key = logKey;
             dbService.updateLogAndTag(log).then(function() {
-                $scope.currentSelectedLogKey = log.key;
-                $scope.currentSelectedTag = currentSelectedTag;
+                selectAndDisplay(log, currentSelectedTag, action);
                 save();
             });
         } else {
             dbService.insertLogAndTag(log).then(function(insertedLog) {
-                $scope.currentLog.key = insertedLog.key;
-                $scope.currentSelectedLogKey = insertedLog.key;
+                selectAndDisplay(insertedLog, currentSelectedTag, action);
                 save();
             });
         }
@@ -189,11 +210,13 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     };
 
     var logChange = function() {
+        var action = "FILTER_LOG";
+
         var filteredLogs = $filter('filter')($scope.logs, $scope.logSearch);
         if(filteredLogs !== null && filteredLogs !== undefined && filteredLogs.length !== 0) {
             var filterLog = filteredLogs[0];
-            $scope.currentSelectedLogKey = filterLog.key;
-            displayLog(filterLog);
+            var sdTag = $scope.currentSelectedTag;
+            selectAndDisplay(filterLog, sdTag, action);
         }
     };
 
@@ -281,7 +304,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
         var created_on = $scope.currentLog.created_on;
         var updated_on = (new Date()).getTime();
 
-        if(action === 'insert') {
+        if(action === 'INSERT_LOG') {
             created_on = updated_on;
         }
 
@@ -344,16 +367,19 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
         Used only when the app starts.
     */
     var init = function() {
+        var currentSelectedTag = 'all';
+
         insertAllTag().then(function() {
             self.getAllTags().then(function() {
                 currentSelectedTag = $scope.tags[0].tag;
-                $scope.currentSelectedTag = currentSelectedTag;
-            });
-
-            self.getAllLogs().then(function() {
+                return self.getAllLogs();
+            }).then(function() {
                 var currentLog = $scope.logs[0];
-                $scope.currentSelectedLogKey = currentLog.key;
-                displayLog(currentLog);
+
+                var sdLog = currentLog;
+                var sdTagName = currentSelectedTag;
+                var sdAction = "INIT";
+                selectAndDisplay(sdLog, sdTagName, sdAction);
             });
         });
     };
