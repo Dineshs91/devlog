@@ -82,7 +82,7 @@
                         <div class="ui divider"></div>
                         <!-- display all tags -->
                         <div class="ui vertical menu tags">
-                            <a class="item tags-nav" ng-repeat="tag in (filteredTags = (tags | filter: tagSearch))" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: $index == tagSelectedIndex }">
+                            <a class="item tags-nav" ng-repeat="tag in (filteredTags = (tags | filter: tagSearch))" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: tag.tag == currentSelectedTag }">
                                 <div class="description">
                                     {{ tag.tag }}
                                 </div>
@@ -100,7 +100,7 @@
                             <div class="empty logs message" ng-show="logs.length == 0">
                                 You haven't created any logs. Go ahead and create a new log by clicking the add button.
                             </div>
-                            <a class="item logs-list" ng-repeat="log in (filteredLogs = (logs | orderBy: '-created_on' | filter: logSearch))" ng-class="{ active: $index == logIndex }" ng-click="logCtrl.clickLogFn($index, log)">
+                            <a class="item logs-list" ng-repeat="log in (filteredLogs = (logs | orderBy: '-created_on' | filter: logSearch))" ng-class="{ active: log.key == currentSelectedLogKey }" ng-click="logCtrl.clickLogFn($index, log)">
                                 <div class="right floated date">{{ log.created_on | date:'MMM dd, yyyy' }}</div>
                                 <div class="description">
                                     {{ log.title }}

@@ -2,9 +2,8 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     function($scope, $timeout, $filter, dbService, hotkeys) {
 
     $scope.format = 'M/d/yy hh:mm:ss a';
-    $scope.tagSelectedIndex = -1;
-    $scope.logIndex = 0;
-    var currentSelectedTag = '';
+    $scope.currentSelectedTag = '';
+    $scope.currentSelectedLogKey = '';
     
     var self = this;
     
@@ -51,7 +50,8 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
         $scope.logs = logs;
 
         displayLog(newLog);
-        $scope.logIndex = 0;
+        $scope.currentSelectedLogKey = undefined;
+        var currentSelectedTag = $scope.currentSelectedTag;
         if(currentSelectedTag !== ''  && currentSelectedTag !== 'all') {
             $scope.currentLog.tags = currentSelectedTag;
         }
@@ -62,25 +62,26 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     };
 
     var clickTagHelper = function(index, tagName) {
-        currentSelectedTag = $scope.tags[index].tag;
-        $scope.tagSelectedIndex = index;
+        //currentSelectedTag = $scope.tags[index].tag;
+        $scope.currentSelectedTag = tagName;
 
         if(tagName === 'all') {
             self.getAllLogs().then(function() {
-                displayLog($scope.logs[0]);
-                $scope.logIndex = 0;
+                var currentLog = $scope.logs[0];
+                displayLog(currentLog);
+                $scope.currentSelectedLogKey = currentLog.key;
             });
         } else {
             dbService.getLogsWithTag(tagName).then(function(logs) {
                 $scope.logs = sortLogs(logs);
                 displayLog(logs[0]);
-                $scope.logIndex = 0;
+                $scope.currentSelectedLogKey = logs[0].key;
             });
         }   
     };
 
     this.clickLogFn = function($index, log) {
-        $scope.logIndex = $index;
+        $scope.currentSelectedLogKey = log.key;
         displayLog(log);
     };
     
@@ -94,6 +95,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
                 var log = $scope.logs[i];
                 if(log.key === undefined) {
                     $scope.logs.splice(i, 1);
+                    $scope.currentSelectedLogKey = $scope.logs[0].key;
                     displayLog($scope.logs[0]);
                     return;
                 }
@@ -108,19 +110,22 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
 
                 dbService.getLogsWithTag(currentSelectedTag).then(function(logs) {
                     if(logs.length === 0) {
-                        $scope.tagSelectedIndex = 0;
+                        $scope.currentSelectedTag = 'all';
                         self.getAllLogs();
                     } else {
                         $scope.logs = logs;
                     }
-                    $scope.logIndex = 0;
-                    displayLog(logs[0]);
+
+                    var log = logs[0];
+                    $scope.currentSelectedLogKey = log.key;
+                    displayLog(log);
                 });
             } else {
-                $scope.tagSelectedIndex = 0;
+                $scope.currentSelectedTag = 'all';
                 self.getAllLogs().then(function() {
-                    $scope.logIndex = 0;
-                    displayLog($scope.logs[0]);
+                    var log = $scope.logs[0];
+                    $scope.currentSelectedLogKey = log.key;
+                    displayLog(log);
                 });
             }
 
@@ -143,6 +148,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
         // check if selectedTag is present
         // if removed select the first tag
         // in the log
+        var currentSelectedTag = $scope.currentSelectedTag;
         if(currentSelectedTag !== 'all' && log.tags.indexOf(currentSelectedTag) === -1) {
             currentSelectedTag = log.tags[0];
         }
@@ -150,10 +156,14 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
         if(logKey !== null && logKey !== undefined && logKey.trim() !== '') {
             log.key = logKey;
             dbService.updateLogAndTag(log).then(function() {
+                $scope.currentSelectedLogKey = log.key;
+                $scope.currentSelectedTag = currentSelectedTag;
                 save();
             });
         } else {
-            dbService.insertLogAndTag(log).then(function() {
+            dbService.insertLogAndTag(log).then(function(insertedLog) {
+                $scope.currentLog.key = insertedLog.key;
+                $scope.currentSelectedLogKey = insertedLog.key;
                 save();
             });
         }
@@ -181,8 +191,9 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     var logChange = function() {
         var filteredLogs = $filter('filter')($scope.logs, $scope.logSearch);
         if(filteredLogs !== null && filteredLogs !== undefined && filteredLogs.length !== 0) {
-            $scope.logIndex = 0;
-            displayLog(filteredLogs[0]);
+            var filterLog = filteredLogs[0];
+            $scope.currentSelectedLogKey = filterLog.key;
+            displayLog(filterLog);
         }
     };
 
@@ -221,17 +232,13 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
 
         self.getAllTags();
         
-        
+        var currentSelectedTag = $scope.currentSelectedTag;
         if(currentSelectedTag === '' || currentSelectedTag === 'all') {
             self.getAllLogs();
-
-            $scope.tagSelectedIndex = findTagIndex($scope.tags, currentSelectedTag);
         } else {
             dbService.getLogsWithTag(currentSelectedTag).then(function(logs) {
                 $scope.logs = logs;
                 logs = sortLogs(logs);
-
-                $scope.tagSelectedIndex = findTagIndex($scope.tags, currentSelectedTag);
             });
         }
     };
@@ -339,12 +346,14 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     var init = function() {
         insertAllTag().then(function() {
             self.getAllTags().then(function() {
-                $scope.tagSelectedIndex = 0;
                 currentSelectedTag = $scope.tags[0].tag;
+                $scope.currentSelectedTag = currentSelectedTag;
             });
 
             self.getAllLogs().then(function() {
-                displayLog($scope.logs[0]);
+                var currentLog = $scope.logs[0];
+                $scope.currentSelectedLogKey = currentLog.key;
+                displayLog(currentLog);
             });
         });
     };
