@@ -108,6 +108,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     };
     
     this.removeLogFn = function(key) {
+        var action = "LOG_REMOVE";
         var currentSelectedTag = $scope.currentSelectedTag;
 
         // If key is null, then it is a new log
@@ -118,8 +119,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
                 var log = $scope.logs[i];
                 if(log.key === undefined) {
                     $scope.logs.splice(i, 1);
-                    $scope.currentSelectedLogKey = $scope.logs[0].key;
-                    displayLog($scope.logs[0]);
+                    selectAndDisplay(undefined, currentSelectedTag, action);
                     return;
                 }
             }
@@ -127,7 +127,6 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
 
         dbService.removeLogAndTag(key).then(function() {
             $scope.$broadcast('logRemoved');
-            var action = "LOG_REMOVE";
 
             if(currentSelectedTag !== 'all') {
                 dbService.getLogsWithTag(currentSelectedTag).then(function(logs) {
