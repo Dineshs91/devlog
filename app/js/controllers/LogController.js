@@ -2,17 +2,22 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     function($scope, $timeout, $filter, dbService, hotkeys) {
 
     $scope.format = 'M/d/yy hh:mm:ss a';
+    $scope.logOrder = 'created_on';
     $scope.currentSelectedTag = '';
     $scope.currentSelectedLogKey = '';
     
     var self = this;
 
     var selectAndDisplay = function(sdLog, sdTagName, sdAction) {
+        // Logic based on actions.
+        if(sdAction === "LOG_REMOVE" || sdAction === "INIT" || sdAction === "CLICK_TAG") {
+            var orderedLogs = $filter('orderBy')($scope.logs, $scope.logOrder);
+            sdLog = orderedLogs[0];
+        }
+
         // Selection of tag and log.
         $scope.currentSelectedTag = sdTagName;
         $scope.currentSelectedLogKey = sdLog.key;
-
-        // Logic based on actions.
 
         // Display log.
         displayLog(sdLog);
@@ -84,15 +89,12 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
 
         if(tagName === 'all') {
             self.getAllLogs().then(function() {
-                var sdLog = $scope.logs[0];
-                selectAndDisplay(sdLog, tagName, action);
+                selectAndDisplay(undefined, tagName, action);
             });
         } else {
             dbService.getLogsWithTag(tagName).then(function(logs) {
                 $scope.logs = sortLogs(logs);
-
-                var sdLog = logs[0];
-                selectAndDisplay(sdLog, tagName, action);
+                selectAndDisplay(undefined, tagName, action);
             });
         }   
     };
@@ -131,22 +133,19 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
                 dbService.getLogsWithTag(currentSelectedTag).then(function(logs) {
                     if(logs.length === 0) {
                         self.getAllLogs().then(function() {
-                            var sdLog = $scope.logs[0];
                             var sdTag = 'all';
-                            selectAndDisplay(sdLog, sdTag, action);
+                            selectAndDisplay(undefined, sdTag, action);
                         });
                     } else {
                         $scope.logs = logs;
-                        var sdLog = $scope.logs[0];
                         var sdTag = currentSelectedTag;
-                        selectAndDisplay(sdLog, sdTag, action);
+                        selectAndDisplay(undefined, sdTag, action);
                     }
                 });
             } else {
                 self.getAllLogs().then(function() {
-                    var sdLog = $scope.logs[0];
                     var sdTag = 'all';
-                    selectAndDisplay(sdLog, sdTag, action);
+                    selectAndDisplay(undefined, sdTag, action);
                 });
             }
 
@@ -212,7 +211,8 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
 
         var filteredLogs = $filter('filter')($scope.logs, $scope.logSearch);
         if(filteredLogs !== null && filteredLogs !== undefined && filteredLogs.length !== 0) {
-            var filterLog = filteredLogs[0];
+            var orderedLogs = $filter('orderBy')(filteredLogs, $scope.logOrder);
+            var filterLog = orderedLogs[0];
             var sdTag = $scope.currentSelectedTag;
             selectAndDisplay(filterLog, sdTag, action);
         }
@@ -362,12 +362,9 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
                 currentSelectedTag = $scope.tags[0].tag;
                 return self.getAllLogs();
             }).then(function() {
-                var currentLog = $scope.logs[0];
-
-                var sdLog = currentLog;
                 var sdTagName = currentSelectedTag;
                 var sdAction = "INIT";
-                selectAndDisplay(sdLog, sdTagName, sdAction);
+                selectAndDisplay(undefined, sdTagName, sdAction);
             });
         });
     };
