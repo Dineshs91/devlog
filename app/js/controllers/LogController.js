@@ -128,8 +128,6 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
             var action = "LOG_REMOVE";
 
             if(currentSelectedTag !== 'all') {
-                $scope.tagSelectedIndex = findTagIndex($scope.tags, currentSelectedTag);
-
                 dbService.getLogsWithTag(currentSelectedTag).then(function(logs) {
                     if(logs.length === 0) {
                         self.getAllLogs().then(function() {
@@ -265,17 +263,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
             });
         }
     };
-    
-    var findTagIndex = function(tags, value) {
-        for(var i = 0; i < tags.length; i++) {
-            if(tags[i].tag === value) {
-                return i;
-            }
-        }
-        
-        return -1;
-    };
-    
+
     var formLogDoc = function(action) {
         var tags = $scope.currentLog.tags;
 
