@@ -28,7 +28,7 @@
     "nw": "~0.12.0"
   },
   "devDependencies": {
-    "bower": "^1.6.7",
+    "bower": "^1.7.9",
     "jshint": "^2.9.1",
     "karma": "^0.13.17",
     "karma-coverage": "~0.5.3",
