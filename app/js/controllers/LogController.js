@@ -2,7 +2,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     function($scope, $timeout, $filter, dbService, hotkeys) {
 
     $scope.format = 'M/d/yy hh:mm:ss a';
-    $scope.logOrder = 'created_on';
+    $scope.logOrder = '-created_on';
     $scope.currentSelectedTag = '';
     $scope.currentSelectedLogKey = '';
     
@@ -17,7 +17,9 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
 
         // Selection of tag and log.
         $scope.currentSelectedTag = sdTagName;
-        $scope.currentSelectedLogKey = sdLog.key;
+
+        if (sdLog !== undefined)
+            $scope.currentSelectedLogKey = sdLog.key;
 
         // Display log.
         displayLog(sdLog);
