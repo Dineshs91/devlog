@@ -59,107 +59,94 @@
             DevLog
         </span>
     </div>
-    <div class="container">
-        <div class="ui padded grid" ng-controller="LogController as logCtrl">
-            <!-- left float -->
-            <div class="seven wide left column">
-                <div class="ui vertical">
-                    <h2 class="ui header">
-                    <i class="lab icon"></i>Logs
-                    <div ng-click="logCtrl.addFn()" class="ui right floated basic button add">
-                        <i class="plus icon"></i>
-                        Add
+    <div class="container" ng-controller="LogController as logCtrl">
+        <!-- tags -->
+        <div class="ui left vertical inverted relaxed menu">
+          <div class="item">
+            <div class="menu">
+              <div class="item">
+                <div class="ui fluid mini icon input">
+                    <input type="text" placeholder="Search tags..." ng-model="tagSearch" ng-change="logCtrl.tagChange()">
+                    <i class="remove icon" ng-click="logCtrl.clearTagSearch()"></i>
+                </div>
+              </div>
+              <div class="ui divider"></div>
+              <a class="item tags-nav" ng-repeat="tag in (filteredTags = (tags | filter: tagSearch))" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: tag.tag == currentSelectedTag }">
+                    <div class="description">
+                        {{ tag.tag }}
                     </div>
-                    </h2>
+                </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- logs -->
+        <div class="logs">
+            <div class="ui divided very relaxed selection list" style="width: 25rem;">
+                <div class="item">
+                    <div class="ui fluid icon mini input">
+                        <input type="text" placeholder="Search logs..." ng-model="logSearch" ng-change="logCtrl.logChange()">
+                        <i class="remove icon" ng-click="logCtrl.clearLogSearch()"></i>
+                    </div>
+                </div>
+                <div class="empty logs message" ng-show="logs.length == 0">
+                    You haven't created any logs. Go ahead and create a new log by clicking the add button.
+                </div>
+                <a class="item logs-list" ng-repeat="log in (filteredLogs = (logs | orderBy: logOrder | filter: logSearch))" ng-class="{ active: log.key == currentSelectedLogKey }" ng-click="logCtrl.clickLogFn($index, log)">
+                    <div class="right floated date">{{ log.created_on | date:'MMM dd, yyyy' }}</div>
+                    <div class="description">
+                        {{ log.title }}
+                    </div>
+                    <i class="right floated trash icon" ng-click="logCtrl.removeLogFn(log.key)"></i>
+                </a>
+            </div>
+            <button class="ui right floated circular icon add yellow button" ng-click="logCtrl.addFn()">
+                <i class="plus icon"></i>
+            </button>
+        </div>
+
+        <!-- editor -->
+        <div class="editor">
+            <div class="ui piled segment">
+                <input type="hidden" ng-model="currentLog.key"></input>
+
+                <div class="ui fluid input">
+                    <input ng-model="currentLog.title" class="title" placeholder="title..."/>
+                </div>
+
+                <div class="ui left icon input log-title" data-title="Tags" data-html="tag seperator: <span style='color: green;'>comma( , )</span>">
+                    <i class="tags icon"></i>
+                    <input type="text" placeholder="Tags" class="tags" ng-model="currentLog.tags"/>
+                </div>
+
+                <div id="wrapper">
+                    <span class="ui left floated date" current-time="format"></span>
+                        
+                    <button class="ui right floated green icon button" ng-click="logCtrl.saveFn()" ng-class="{ loading: isSaving }">
+                      <i class="save icon"></i>
+                    </button>
+
+                    <div class="save-status">
+                        <span ng-show="isSaving">Saving...</span>
+                        <span ng-show="isSaved">Saved</span>
+                    </div>
+
                     <div class="ui divider"></div>
-                </div>
-                <div class="ui padded grid">
-                    <div class="five wide left column">
-                        <div class="ui fluid mini icon input">
-                          <input type="text" placeholder="Search tags..." ng-model="tagSearch" ng-change="logCtrl.tagChange()">
-                          <i class="remove icon" ng-click="logCtrl.clearTagSearch()"></i>
-                        </div>
-                        <div class="ui divider"></div>
-                        <!-- display all tags -->
-                        <div class="ui vertical menu tags">
-                            <a class="item tags-nav" ng-repeat="tag in (filteredTags = (tags | filter: tagSearch))" ng-click="logCtrl.clickTagFn($index, tag.tag)" ng-class="{ active: tag.tag == currentSelectedTag }">
-                                <div class="description">
-                                    {{ tag.tag }}
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="eleven wide right column">
-                        <div class="ui fluid icon mini input">
-                          <input type="text" placeholder="Search logs..." ng-model="logSearch" ng-change="logCtrl.logChange()">
-                          <i class="remove icon" ng-click="logCtrl.clearLogSearch()"></i>
-                        </div>
-                        <div class="ui divider"></div>
-                        <!-- display all logs -->
-                        <div class="ui divided very relaxed animated selection list">
-                            <div class="empty logs message" ng-show="logs.length == 0">
-                                You haven't created any logs. Go ahead and create a new log by clicking the add button.
-                            </div>
-                            <a class="item logs-list" ng-repeat="log in (filteredLogs = (logs | orderBy: logOrder | filter: logSearch))" ng-class="{ active: log.key == currentSelectedLogKey }" ng-click="logCtrl.clickLogFn($index, log)">
-                                <div class="right floated date">{{ log.created_on | date:'MMM dd, yyyy' }}</div>
-                                <div class="description">
-                                    {{ log.title }}
-                                </div>
-                                <i class="right floated trash icon" ng-click="logCtrl.removeLogFn(log.key)"></i>
-                            </a>
+                    <div class="ui form">
+                        <div class="field">
+                            <trix-editor class="log content" angular-trix ng-model="currentLog.content" ng-change="logCtrl.changedFn()"></trix-editor>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="nine wide right column">
-                <div class="ui vertical">
-                    <input type="hidden" id="logKey" ng-model="currentLog.key"></input>
 
-                    <div class="ui right labeled fluid input">
-                        <input ng-model="currentLog.title" class="title" placeholder="title..."/>
-                        <div class="ui basic left pointing blue label">
-                            Title
-                        </div>
-                    </div>
-        
-                    <div id="tags">
-                        <div class="ui right labeled left icon input" data-title="Tags" data-html="tag seperator: <span style='color: green;'>comma( , )</span>">
-                            <i class="tags icon"></i>
-                            <input type="text" placeholder="Tags" class="tags" ng-model="currentLog.tags"/>
-                            <div class="ui basic left pointing blue label">
-                                Tags
-                            </div>
-                        </div>
-                    </div>
-        
-                    <div id="wrapper">
-                        <span class="ui left floated date" current-time="format"></span>
-                        <span class="ui right floated orange save button" ng-click="logCtrl.saveFn()" ng-class="{ loading: isSaving }">Save</span>
-          
-                        <div id="saveStatus">
-                            <span ng-show="isSaving">Saving...</span>
-                            <span ng-show="isSaved">Saved</span>
-                        </div>
-        
-                        <div class="ui divider"></div>
-                        <div class="ui vertical"></div>
-        
-                        <div class="ui form">
-                            <div class="field">
-                                <trix-editor id="logContent" class="content" angular-trix ng-model="currentLog.content" ng-change="logCtrl.changedFn()"></trix-editor>
-                            </div>
-                        </div>
-                    </div>
-            </div>
-
-            <div class="row">
-                <div class="ui divider"></div>
-                <div class="created-on">Created on: {{ currentLog.created_on | date:'MMM dd, yyyy' }}</div>
-                <div class="last-updated">Last updated on: {{ currentLog.updated_on | date:'MMM dd, yyyy' }}</div>
+                <div class="row">
+                    <div class="created-on">Created on: {{ currentLog.created_on | date:'MMM dd, yyyy' }}</div>
+                    <div class="last-updated">Last updated on: {{ currentLog.updated_on | date:'MMM dd, yyyy' }}</div>
+                </div>
             </div>
         </div>
-  
+
         <!-- Modal -->
         <div class="ui standard modal" ng-controller="RemovedLogController as remLogCtrl">
             <i class="close icon"></i>
