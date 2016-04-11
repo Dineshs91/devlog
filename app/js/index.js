@@ -7,6 +7,8 @@ $(function() {
 
     $('.add').click(function() {
         $('.title').focus();
+        var container = $('.ui.list');
+        scrollTo(container);
     });
 
     $('.ui.dropdown').dropdown({
@@ -21,4 +23,19 @@ $(function() {
           }
       })
     ;
+
+    $(document).on('click', '.trash.icon', function() {
+        var container = $('.ui.list');
+        scrollTo(container);
+    });
 });
+
+function scrollTo(container) {
+    $('.logs-list').each(function(index) {
+        if($(this).hasClass('active')) {
+            container.animate({
+                scrollTop: $(this).offset().top - container.offset().top + container.scrollTop()
+            })
+        }
+    });
+}
