@@ -1,13 +1,13 @@
 var win = gui.Window.get();
 
 $(function() {
+    var container = $('.ui.list');
     $('.deny.button').click(function() {
         $('input:radio').prop('checked', false);
     });
 
     $('.add').click(function() {
         $('.title').focus();
-        var container = $('.ui.list');
         scrollTo(container);
     });
 
@@ -25,7 +25,6 @@ $(function() {
     ;
 
     $(document).on('click', '.trash.icon', function() {
-        var container = $('.ui.list');
         scrollTo(container);
     });
 });
