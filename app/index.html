@@ -6,6 +6,7 @@
   <link rel="stylesheet" type="text/css" href="bower_components/semantic-ui/dist/semantic.css">
   <link rel="stylesheet" type="text/css" href="bower_components/trix/dist/trix.css">
   <link rel="stylesheet" type="text/css" href="css/index.css">
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/angular/angular.js"></script>
   <script src="bower_components/angular-hotkeys/build/hotkeys.min.js"></script>
   <script src="js/modules/BaseModule.js"></script>
@@ -17,7 +18,6 @@
   <script src="js/services/DbService.js"></script>
   <script src="js/db/db.js"></script>
   <script src="js/menu.js"></script>
-  <script src="bower_components/jquery/dist/jquery.min.js"></script>
   <script src="bower_components/semantic-ui/dist/semantic.js"></script>
   <script src="bower_components/trix/dist/trix.js"></script>
   <script src="bower_components/angular-trix/dist/angular-trix.min.js"></script>
@@ -115,15 +115,7 @@
                     <input ng-model="currentLog.title" class="title" placeholder="title..."/>
                 </div>
 
-                <div class="ui fluid multiple search selection dropdown">
-                  <input name="tags" type="hidden" ng-model="currentLog.tags" semantic-tag>
-                  <div class="default text">Tags...</div>
-                  <div class="menu"></div>
-                </div>
-                <!-- <div class="ui left icon input log-title" data-title="Tags" data-html="tag seperator: <span style='color: green;'>comma( , )</span>">
-                    <i class="tags icon"></i>
-                    <input type="text" placeholder="Tags" class="tags" ng-model="currentLog.tags"/>
-                </div> -->
+                <semantic-tag ng-model="currentLog.tags"></semantic-tag>
 
                 <div id="wrapper">
                     <span class="ui left floated date" current-time="format"></span>

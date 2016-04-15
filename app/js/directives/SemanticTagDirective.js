@@ -1,18 +1,27 @@
 devlog.directive('semanticTag', function() {
-    function link(scope, element, attrs, ngModel) {
-        $('.search').bind('keyup', function(event) {
-            ngModel.$setViewValue(element.val());
-        });
-
-        ngModel.$render = function() {
-            $('.ui.dropdown.search.selection').dropdown('clear');
-            $('.ui.dropdown.search.selection').dropdown('set selected', ngModel.$modelValue);
-        }
-    }
-
     return {
-        restrict: 'A',
+        restrict: 'E',
         require: 'ngModel',
-        link: link
+        template: '<div class="ui fluid multiple search selection dropdown">' +
+                      '<input name="tags" type="hidden">' +
+                      '<div class="default text">Tags...</div>' +
+                    '</div>',
+        replace: true,
+        link: {
+            post: function(scope, element, attrs, ngModel) {
+                element = $(element[0]);
+                var input = $(element).find("input");
+                var search = angular.element('.search');
+
+                search.bind('keyup', function(event) {
+                    ngModel.$setViewValue(input.val());
+                });
+
+                ngModel.$render = function() {
+                    element.dropdown('clear');
+                    element.dropdown('set selected', ngModel.$modelValue);
+                }
+            }
+        }
     };
 });
