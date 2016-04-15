@@ -15,6 +15,11 @@ $(function() {
         action: 'hide'
     });
 
+    $('.ui.dropdown.search.selection').dropdown({
+        allowAdditions: true,
+        duration: 50
+    });
+
     $('.ui.input')
       .popup({
           position: 'bottom left',
