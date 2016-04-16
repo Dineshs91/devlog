@@ -1,5 +1,3 @@
-var win = gui.Window.get();
-
 $(function() {
     var container = $('.ui.list');
     $('.deny.button').click(function() {
