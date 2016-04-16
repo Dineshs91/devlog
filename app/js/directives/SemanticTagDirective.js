@@ -9,11 +9,13 @@ devlog.directive('semanticTag', function() {
         replace: true,
         link: {
             post: function(scope, element, attrs, ngModel) {
+                // Jquery is loaded before angular
+                // So angular uses it instead of jqLite.
                 element = $(element[0]);
                 var input = $(element).find("input");
-                var search = angular.element('.search');
 
-                search.bind('keyup', function(event) {
+                scope.$on('log-saved', function() {
+                    console.log("log-saved");
                     ngModel.$setViewValue(input.val());
                 });
 

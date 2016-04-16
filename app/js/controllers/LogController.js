@@ -155,6 +155,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     };
     
     this.saveFn = function() {
+        $scope.$broadcast('log-saved');
         var logKey = $scope.currentLog.key;
         var action = 'INSERT_LOG';
 
