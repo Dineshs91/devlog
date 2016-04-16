@@ -2,7 +2,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     function($scope, $timeout, $filter, dbService, hotkeys) {
 
     $scope.format = 'M/d/yy hh:mm:ss a';
-    $scope.logOrder = 'created_on';
+    $scope.logOrder = '-created_on';
     $scope.currentSelectedTag = '';
     $scope.currentSelectedLogKey = '';
     
@@ -17,7 +17,9 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
 
         // Selection of tag and log.
         $scope.currentSelectedTag = sdTagName;
-        $scope.currentSelectedLogKey = sdLog.key;
+
+        if (sdLog !== undefined)
+            $scope.currentSelectedLogKey = sdLog.key;
 
         // Display log.
         displayLog(sdLog);
@@ -126,7 +128,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
         }
 
         dbService.removeLogAndTag(key).then(function() {
-            $scope.$broadcast('logRemoved');
+            $scope.$broadcast('log-removed');
 
             if(currentSelectedTag !== 'all') {
                 dbService.getLogsWithTag(currentSelectedTag).then(function(logs) {
@@ -153,6 +155,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
     };
     
     this.saveFn = function() {
+        $scope.$broadcast('log-saved');
         var logKey = $scope.currentLog.key;
         var action = 'INSERT_LOG';
 

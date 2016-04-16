@@ -1,0 +1,141 @@
+// Titlebar
+@titlebarColor: #E9EEF0;
+@titlebarBackgroundColor: #333466;
+
+// Editor
+@saveStatusColor: #349160;
+@emptyLogsMessageColor: rgba(96, 96, 96, 0.87);
+@editorBackgroundColor: rgba(0, 0, 0, 0.05);
+@timeColor: rgba(0, 0, 0, 0.7);
+
+
+// Styling
+
+body {
+    margin: 0px;
+    height: 100%;
+    overflow: hidden;
+}
+
+.titlebar {
+    position: fixed;
+    -webkit-user-select: none;
+    -webkit-app-region: drag;
+    padding-top: 5px;
+    padding-left: 10px;
+    color: @titlebarColor;
+    background-color: @titlebarBackgroundColor;
+    height: 30px;
+    width: 100%;
+    z-index: 10;
+}
+
+span.window-controls a {
+    -webkit-app-region: no-drag;
+}
+
+span.custom-menu .dropdown {
+    padding-left: 1%;
+    color: black;
+    -webkit-app-region: no-drag;
+}
+
+span.title {
+    position: fixed;
+    right: 50%;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    padding-top: 1.9rem;
+    width: 100%;
+    height: 100%
+}
+
+.ui.vertical.menu {
+    height: 100%;
+}
+
+.ui.menu {
+    height: 28em;
+    overflow: scroll;
+}
+
+.ui.list {
+    height: 35em;
+    overflow: hidden;
+}
+
+.ui.list:hover {
+    overflow-y: auto;
+}
+
+.remove.icon {
+    cursor: pointer !important;
+    pointer-events: all !important;
+}
+
+.ui.add.circular.button {
+    margin-right: 1rem;
+}
+
+.logs {
+    margin-top: 2rem;
+    padding: 1.2rem 0 0 2rem;
+}
+
+.log.content {
+    height: 23em;
+}
+
+.save-status {
+    height: 1em;
+    text-align: center;
+    margin-top: 10px;
+    color: @saveStatusColor;
+}
+
+.tags-nav {
+    word-wrap: break-word;
+}
+
+.empty.logs.message {
+    padding-left: 5%;
+    color: @emptyLogsMessageColor;
+}
+
+.empty.rem-logs.message {
+    text-align: center;
+    color: @emptyLogsMessageColor;
+}
+
+.green.button {
+    margin-top: 0.5rem;
+}
+
+.editor {
+    width: 50rem;
+    padding-top: 3rem;
+    background-color: @editorBackgroundColor;
+}
+
+.ui.piled.segment {
+    margin: 1rem 2rem 0 2rem;
+    height: 42rem;
+    z-index: 10;
+}
+
+.log-title {
+    margin: 0 0 0.5rem 0;
+}
+
+.last-updated {
+    float: right;
+    color: @timeColor;
+}
+
+.created-on {
+    float: left;
+    color: @timeColor;
+}
