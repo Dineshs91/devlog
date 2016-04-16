@@ -79,6 +79,9 @@ span.title {
   text-align: center;
   color: rgba(96, 96, 96, 0.87);
 }
+.green.button {
+  margin-top: 0.5rem;
+}
 .editor {
   width: 50rem;
   padding-top: 3rem;
@@ -90,7 +93,7 @@ span.title {
   z-index: 10;
 }
 .log-title {
-  margin: 0 0 1rem 0;
+  margin: 0 0 0.5rem 0;
 }
 .last-updated {
   float: right;
