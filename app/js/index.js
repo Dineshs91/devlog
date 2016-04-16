@@ -37,7 +37,7 @@ function scrollTo(container) {
         if($(this).hasClass('active')) {
             container.animate({
                 scrollTop: $(this).offset().top - container.offset().top + container.scrollTop()
-            })
+            });
         }
     });
 }

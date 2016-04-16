@@ -22,7 +22,7 @@ devlog.directive('semanticTag', function() {
                 ngModel.$render = function() {
                     element.dropdown('clear');
                     element.dropdown('set selected', ngModel.$modelValue);
-                }
+                };
             }
         }
     };
