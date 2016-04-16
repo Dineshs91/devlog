@@ -44,7 +44,7 @@ devlog.controller('RemovedLogController', ['$scope', '$q', 'dbService', 'hotkeys
         If any log is removed, logRemoved event is triggered.
         Reload removedLogs, which appear in restore/delete modal.
     */
-    $scope.$on('logRemoved', function(event, args) {
+    $scope.$on('log-removed', function(event, args) {
         init();
     });
 

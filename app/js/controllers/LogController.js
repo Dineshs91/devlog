@@ -128,7 +128,7 @@ devlog.controller('LogController', ['$scope', '$timeout', '$filter', 'dbService'
         }
 
         dbService.removeLogAndTag(key).then(function() {
-            $scope.$broadcast('logRemoved');
+            $scope.$broadcast('log-removed');
 
             if(currentSelectedTag !== 'all') {
                 dbService.getLogsWithTag(currentSelectedTag).then(function(logs) {
