@@ -30,6 +30,10 @@ $(function() {
     $(document).on('click', '.trash.icon', function() {
         scrollTo(container);
     });
+
+    // Using tab should not focus on trix-toolbar editor buttons like bold
+    // italic etc. So add tabindex=-1 to all button elements
+    $(':button').attr('tabindex', '-1');
 });
 
 function scrollTo(container) {
