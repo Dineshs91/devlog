@@ -5,6 +5,9 @@ devlog.directive('semanticTag', function() {
         template: '<div class="ui fluid multiple search selection dropdown">' +
                       '<input name="tags" type="hidden">' +
                       '<div class="default text">Tags...</div>' +
+                      '<div class="menu">' +
+                          '<div class="item" ng-repeat="tag in tags" data-value="{{ tag.tag }}">' + '{{ tag.tag }}' + '</div>' +
+                      '</div>' +
                     '</div>',
         replace: true,
         link: {
