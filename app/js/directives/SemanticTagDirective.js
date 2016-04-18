@@ -18,7 +18,6 @@ devlog.directive('semanticTag', function() {
                 var input = $(element).find("input");
 
                 scope.$on('log-saved', function() {
-                    console.log("log-saved");
                     ngModel.$setViewValue(input.val());
                 });
 
