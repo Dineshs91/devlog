@@ -43,6 +43,7 @@ span.title {
 }
 .ui.list {
   height: 38em;
+  width: 25rem;
   overflow: hidden;
 }
 .ui.list:hover {
