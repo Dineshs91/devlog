@@ -85,16 +85,19 @@ span.title {
 }
 .editor {
   width: 50rem;
-  padding-top: 3rem;
-  background-color: rgba(0, 0, 0, 0.05);
+  padding-top: 2rem;
+  background-color: rgba(0, 0, 0, 0.1);
 }
 .ui.piled.segment {
-  margin: 1rem 2rem 0 2rem;
-  height: 42rem;
+  margin: 1rem 2rem 1rem 2rem;
+  height: 45rem;
   z-index: 10;
 }
 .log-title {
   margin: 0 0 0.5rem 0;
+}
+.row {
+  margin-top: 2rem;
 }
 .last-updated {
   float: right;
