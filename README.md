@@ -42,6 +42,9 @@ Entries deleted in Devlog are not permanently deleted. The user has the ability 
 2. npm install
 3. npm start (To run the app from source).
 4. npm test (Complete testing. includes both unittests and e2e tests)
+
+#### Theming
+For theming check this [repo](https://github.com/Dineshs91/Semantic-UI) devlog theme.
  
 If you want to use chrome devtools add ```--remote-debugging-port=9222``` to start script in
 package.json
