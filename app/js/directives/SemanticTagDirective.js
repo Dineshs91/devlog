@@ -17,7 +17,8 @@ devlog.directive('semanticTag', function() {
                 element = $(element[0]);
                 var input = $(element).find("input");
 
-                scope.$on('log-saved', function() {
+                // log-save event is broadcasted just before saving.
+                scope.$on('log-save', function() {
                     ngModel.$setViewValue(input.val());
                 });
 
