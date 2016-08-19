@@ -56,5 +56,8 @@ package.json
 - [x] Restore/Delete removed logs.
 - [ ] Desktop icon
 
+**Note:**
+Check [next](https://github.com/Dineshs91/devlog/tree/next) branch for next version.
+
 #### Changelog
 Find the changelog [here](https://github.com/dineshs91/devlog/blob/master/CHANGELOG.md)
