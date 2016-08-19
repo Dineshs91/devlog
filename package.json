@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "bower": "^1.6.7",
-    "jshint": "^2.9.1",
+    "jshint": "^2.9.3",
     "karma": "^0.13.17",
     "karma-coverage": "~0.5.3",
     "karma-jasmine": "~0.3.6",
