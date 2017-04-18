@@ -38,7 +38,7 @@
     "less": "^2.6.1",
     "lodash": "^2.4.1",
     "protractor": "^1.8.0",
-    "tar.gz": "^0.1.1",
+    "tar.gz": "^1.0.5",
     "underscore": "^1.8.3",
     "unzip": "^0.1.9"
   },
