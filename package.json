@@ -1,6 +1,6 @@
 {
   "name": "devlog",
-  "version": "1.0.0",
+  "version": "0.2.0-rc.1",
   "description": "A log book for developers",
   "repository": {
     "type": "git",
